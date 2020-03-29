@@ -15,12 +15,10 @@ namespace ChatApp
     public partial class Client : Form
     {
         string IP;
-        string Port;
-
-
-        TcpClient socket = new TcpClient();
-        NetworkStream server = default(NetworkStream);
-        string message = null;
+        int Port;
+        TcpClient tcp;
+        
+        string message = "Hello I'm the client";
 
 
         public Client()
@@ -37,7 +35,23 @@ namespace ChatApp
         private void button1_Click(object sender, EventArgs e)
         {
             IP = textBox1.Text;
-            Port = textBox2.Text;
+            Port = Int32.Parse(textBox2.Text);
+
+            tcp = new TcpClient(IP, Port);
+            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(message);
+
+            //---send the text---
+            Console.WriteLine("Sending : " + message);
+            NetworkStream nwStream = tcp.GetStream();
+            nwStream.Write(bytesToSend, 0, bytesToSend.Length);
+
+            //---read back the text---
+            byte[] bytesToRead = new byte[tcp.ReceiveBufferSize];
+            int bytesRead = nwStream.Read(bytesToRead, 0, tcp.ReceiveBufferSize);
+            Console.WriteLine("Received : " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
+            Console.ReadLine();
+            tcp.Close();
+
         }
 
         
