@@ -22,7 +22,7 @@ namespace ChatApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Client());
+            Application.Run(MainForm.Instance);
         }
 
         private static void StablishConnection()

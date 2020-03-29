@@ -61,5 +61,10 @@ namespace ChatApp
         {
             
         }
+
+        private void Client_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MainForm.Instance.Close();
+        }
     }
 }
