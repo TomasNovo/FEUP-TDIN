@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace ChatApp
 {
@@ -19,7 +21,23 @@ namespace ChatApp
         public Register()
         {
             InitializeComponent();
+
+            var client = new MongoClient();
+            var db = client.GetDatabase("chatime");
+            var coll = db.GetCollection<Users>("Users");
+
+            var users = coll.Find(x => x.name == "Zé");
+
+            Console.WriteLine("Users" + users);
         }
+
+        public class Users
+        {
+            public string id { get; set; }
+            public string name { get; set; }
+            public string password { get; set; }
+        }
+
 
         private void Login_Load(object sender, EventArgs e)
         {
@@ -31,9 +49,10 @@ namespace ChatApp
             MainForm.Instance.Close();
         }
 
+           //Register
         private void button2_Click(object sender, EventArgs e)
         {
-            MainForm.Instance.Login();
+            //MainForm.Instance.Login();
         }
     }
 }

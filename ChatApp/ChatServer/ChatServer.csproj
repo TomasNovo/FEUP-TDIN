@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RemoteObjects\RemoteObjects.csproj" />
   </ItemGroup>
 
