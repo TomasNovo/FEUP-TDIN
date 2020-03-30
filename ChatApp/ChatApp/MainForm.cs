@@ -16,6 +16,7 @@ namespace ChatApp
 
         private Login _loginForm;
         private Client _clientForm;
+        private Register _registerForm;
 
         public static MainForm Instance
         {
@@ -38,13 +39,16 @@ namespace ChatApp
 
             _loginForm = new Login();
             _clientForm = new Client();
+            _registerForm = new Register();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.Size = new Size(0, 0);
 
-            _loginForm.Show();
+            //_loginForm.Show();
+
+            _registerForm.Show();
 
             // _loginForm.Close();
         }
@@ -59,6 +63,16 @@ namespace ChatApp
             _loginForm.Hide();
 
             _clientForm.Show();
+        }
+
+        public void Register()
+        {
+            var Username = _registerForm.Username;
+            var Password = _registerForm.Password;
+
+            //_loginForm.Hide();
+
+            //_registerForm.Show();
         }
 
     }

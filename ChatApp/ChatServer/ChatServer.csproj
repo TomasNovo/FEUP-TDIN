@@ -55,6 +55,11 @@
       <Project>{2ac87331-ea80-4ac4-b5fa-7b4fe3542331}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <PackageReference Include="MongoDB.Driver" Version="2.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RemoteObjects\RemoteObjects.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
