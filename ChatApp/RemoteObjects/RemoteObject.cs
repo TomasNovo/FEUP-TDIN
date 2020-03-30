@@ -2,24 +2,21 @@
 
 namespace RemoteObjects
 {
+    public delegate void CallBack(String message);
+
     public class RemoteObject : MarshalByRefObject
     {
-        String msg = "";
+        public ServerInterface serverInterface = null;
+        public int a = 0;
 
         public RemoteObject()
         {
 
         }
 
-        public void SetMessage(string message)
-        {
-            msg = message;
-        }
+        public override object InitializeLifetimeService() { return (null); }
 
 
-        public String GetMessage()
-        {
-            return msg;
-        }
+
     }
 }
