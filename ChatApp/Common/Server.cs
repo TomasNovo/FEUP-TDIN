@@ -1,51 +1,54 @@
-﻿using RemoteObjects;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
-namespace RemoteObjects
+namespace Common
 {
-    public class Server : ServerInterface
+    public class Server : MarshalByRefObject
     {
-        public String ServerName;
-        public List<String> UserList;
-        public Client client;
+        public string ServerName;
+        private Dictionary<string, User> users;
+
+        private Database db;
 
         public Server()
         {
-            UserList = new List<string>();
+            users = new Dictionary<String, User>();
+
+            db = new Database();
+            db.StartMongo();
+
+            Console.WriteLine("Server is running");
         }
 
-        public override bool AddUser(String username)
+
+        public bool Register(string username, string password, string realname, Client client)
         {
-            UserList.Add(username);
+            if (!db.Register(username, password, realname))
+                return false;
 
-            Console.WriteLine($"Added user '{username}'! Total user count:{UserList.Count}");
-
-            return true;
-        }
-
-        public override void ShowUsers()
-        {
-            Console.WriteLine("Showing users:");
-
-            for (int i = 0; i < UserList.Count; i++)
+            foreach (KeyValuePair<string, User> entry in users) // Notify all other users on user register
             {
-                Console.WriteLine(UserList[i]);
+                entry.Value.client.ReceiveMessage($"User '{entry.Key}' has entered the chat");
             }
-        }
 
-        public bool Register(String username, String password, String RealName, Client client)
-        {
-            //TODO: tests
+            User newUser = new User(new UserInfo(username, password, realname));
+            newUser.client = client;
 
-            this.client = client;
+            client.ReceiveMessage("Registered successfully");
 
             Console.WriteLine($"User '{username}' registered.");
-
             return true;
         }
+
+        public Client GetUser(string username)
+        {
+            return users[username].client;
+        }
+
+        
     }
 }

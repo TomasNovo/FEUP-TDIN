@@ -22,21 +22,15 @@ namespace ChatApp
         {
             InitializeComponent();
 
-            var client = new MongoClient();
-            var db = client.GetDatabase("chatime");
-            var coll = db.GetCollection<Users>("Users");
+            //var client = new MongoClient();
+            //var db = client.GetDatabase("chatime");
+            //var coll = db.GetCollection<Users>("Users");
 
-            var users = coll.Find(x => x.name == "Zé");
+            //var users = coll.Find(x => x.name == "Zé");
 
-            Console.WriteLine("Users" + users);
+            //Console.WriteLine("Users" + users);
         }
 
-        public class Users
-        {
-            public string id { get; set; }
-            public string name { get; set; }
-            public string password { get; set; }
-        }
 
 
         private void Login_Load(object sender, EventArgs e)

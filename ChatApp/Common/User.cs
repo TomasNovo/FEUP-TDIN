@@ -6,8 +6,22 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-    public class User
+    class User
     {
+        public UserInfo userInfo;
+        public Client client;
 
+        public string IP;
+        public string port;
+
+        public User()
+        {
+
+        }
+
+        public User(UserInfo info)
+        {
+            this.userInfo = info;
+        }
     }
 }

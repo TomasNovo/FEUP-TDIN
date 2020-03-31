@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Remoting.Channels;
-using RemoteObjects;
 using System.Collections;
 using System.Runtime.Serialization.Formatters;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using Common;
 
 namespace ChatServer
 {
@@ -18,11 +20,9 @@ namespace ChatServer
         {
             var serverProvider = new BinaryServerFormatterSinkProvider();
             serverProvider.TypeFilterLevel = TypeFilterLevel.Full;
-
             var clientProvider = new BinaryClientFormatterSinkProvider();
 
             var properties = new Hashtable();
-
             properties.Add("port", 8080);
 
             String endpoint = "server";
@@ -33,10 +33,9 @@ namespace ChatServer
 
             RemotingServices.Marshal(server, endpoint);
 
-            Console.WriteLine("Server is running");
             Console.ReadKey();
 
-            server.client.ReceiveMessage("Hello from the server side");
+            //server.clients..ReceiveMessage("Hello from the server side");
 
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();

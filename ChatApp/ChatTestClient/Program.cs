@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
-using RemoteObjects;
 using System.Threading;
+using Common;
 
 namespace ChatClient
 {
     class Program
     {
-
         static void Main(string[] args)
         {
 
@@ -21,10 +20,23 @@ namespace ChatClient
             //Console.WriteLine("Waiting...");
             //Console.ReadKey();
 
-            Client client = new Client("localhost", 8080, "server");
-            String username = DateTime.Now.ToString();
-            client.Register(username, "", "");
-            //Console.WriteLine($"Added user '{username}'! Total user count:{server.UserList.Count}");
+            if (args[0] == "a")
+            {
+                Client client = new Client("localhost", 8080, "server");
+                String username = "a";
+
+                client.Register(username, "", "");
+            }
+
+            else if (args[0] == "b")
+            {
+                Client client = new Client("localhost", 8080, "server");
+                String username = "b";
+
+                client.Register(username, "", "");
+
+                client.server.GetUser("a").ReceiveMessage("Hello from b!");
+            }
 
             Console.WriteLine("Done");
             Console.ReadKey();

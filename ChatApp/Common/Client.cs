@@ -7,11 +7,10 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Serialization.Formatters;
 using System.Collections;
 
-namespace RemoteObjects
+namespace Common
 {
     public class Client : MarshalByRefObject
     {
-
         public String IP;
         public int Port;
         public String EndPoint;
@@ -35,11 +34,9 @@ namespace RemoteObjects
         {
             var serverProvider = new BinaryServerFormatterSinkProvider();
             serverProvider.TypeFilterLevel = TypeFilterLevel.Full;
-
             var clientProvider = new BinaryClientFormatterSinkProvider();
 
             var properties = new Hashtable();
-
             properties.Add("port", 0);
 
             TcpChannel channel = new TcpChannel(properties, clientProvider, serverProvider);
@@ -47,13 +44,19 @@ namespace RemoteObjects
             this.server = (Server)Activator.GetObject(
               typeof(Server), $"tcp://{this.IP}:{this.Port}/" + this.EndPoint);
 
-
-
         }
 
-        public void Register(String username, String password, String RealName)
+        public bool Register(String username, String password, String RealName)
         {
-            server.Register(username, password, RealName, this);
+            if (!server.Register(username, password, RealName, this))
+            {
+                Console.WriteLine("username is taken!");
+                return false;
+            }
+
+            // TODO asssign username, etc
+
+            return true;
         }
 
 
