@@ -23,7 +23,8 @@ namespace Common
                 database = mongo.GetDatabase("server");
                 users = database.GetCollection<UserInfo>("users");
 
-                users.DeleteMany(x => true);
+                // Empties collection
+                //users.DeleteMany(x => true);
             }
             catch (Exception e)
             {
@@ -35,7 +36,7 @@ namespace Common
             return true;
         }
 
-        public bool Register(String username, String password, String realname)
+        public bool Register(string username, string password, string realname)
         {
             if (UsernameExists(username))
                 return false;
@@ -45,7 +46,17 @@ namespace Common
             return true;
         }
 
-        public bool UsernameExists(String username)
+        public UserInfo Login(string username, string password)
+        {
+            var userList = users.Find(x => (x.username == username && x.password == password)).ToList();
+
+            if (userList.Count != 1)
+                return null;
+
+            return userList.First();
+        }
+
+        public bool UsernameExists(string username)
         {
             return (users.Find(x => x.username == username).ToList().Count == 1);
         }

@@ -18,6 +18,18 @@ namespace ChatServer
     {
         static void Main(string[] args)
         {
+            PublishServer();
+
+            //Console.ReadKey();
+
+            //server.clients..ReceiveMessage("Hello from the server side");
+
+            Console.WriteLine("Press any key to exit");
+            Console.ReadKey();
+        }
+
+        static void PublishServer()
+        {
             var serverProvider = new BinaryServerFormatterSinkProvider();
             serverProvider.TypeFilterLevel = TypeFilterLevel.Full;
             var clientProvider = new BinaryClientFormatterSinkProvider();
@@ -32,18 +44,7 @@ namespace ChatServer
             Server server = new Server();
 
             RemotingServices.Marshal(server, endpoint);
-
-            Console.ReadKey();
-
-            //server.clients..ReceiveMessage("Hello from the server side");
-
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
         }
 
-        static void ReceiveMessage(String msg)
-        {
-            Console.WriteLine(msg);
-        }
     }
 }

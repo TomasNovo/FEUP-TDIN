@@ -31,24 +31,49 @@ namespace Common
                 return false;
 
             foreach (KeyValuePair<string, User> entry in users) // Notify all other users on user register
-            {
-                entry.Value.client.ReceiveMessage($"User '{entry.Key}' has entered the chat");
-            }
+                entry.Value.client.Message($"User '{username}' has entered the chat");
 
             User newUser = new User(new UserInfo(username, password, realname));
             newUser.client = client;
 
-            client.ReceiveMessage("Registered successfully");
-
+            users.Add(username, newUser);
+            client.Message("Registered successfully");
             Console.WriteLine($"User '{username}' registered.");
+
             return true;
         }
 
-        public Client GetUser(string username)
+        public bool Login(string username, string password, Client client)
         {
-            return users[username].client;
+            UserInfo userInfo = db.Login(username, password);
+            
+            if (userInfo == null)
+                return false;
+
+            User newUser = new User(userInfo);
+            newUser.client = client;
+
+            users.Add(username, newUser);
+            Console.WriteLine($"User '{username}' has logged in");
+            client.Message("Logged in successfully");
+
+            return true;
         }
 
-        
+        public Client GetUserClient(string username)
+        {
+            return (users.TryGetValue(username, out User us)) ? us.client : null;
+        }
+
+        public User GetUser(string username)
+        {
+            return (users.TryGetValue(username, out User us)) ? us : null;
+        }
+
+        public void AskUserForChat(string username)
+        {
+            //users.
+        }
+                
     }
 }

@@ -57,9 +57,5 @@
     </ProjectReference>
     <PackageReference Include="MongoDB.Driver" Version="2.10.2" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\RemoteObjects\RemoteObjects.csproj" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,42 +11,54 @@ namespace Common
 {
     public class Client : MarshalByRefObject
     {
-        public String IP;
+        public string IP;
         public int Port;
-        public String EndPoint;
+        public string EndPoint;
 
-        public String UserName;
-        public String Password;
-        public String RealName;
+        public string UserName;
+        public string RealName;
 
         public Server server;
+        public Client otherUser;
 
-        public Client(String IP, int port, String endpoint)
+        public Client()
         {
+
+        }
+
+        public bool Connect(string IP, int port, string endpoint)
+        {
+            string link = $"tcp://{IP}:{port}/{endpoint}";
+
+            try
+            {
+                var serverProvider = new BinaryServerFormatterSinkProvider();
+                serverProvider.TypeFilterLevel = TypeFilterLevel.Full;
+                var clientProvider = new BinaryClientFormatterSinkProvider();
+
+                var properties = new Hashtable();
+                properties.Add("port", 0);
+
+                TcpChannel channel = new TcpChannel(properties, clientProvider, serverProvider);
+                ChannelServices.RegisterChannel(channel, false);
+                this.server = (Server)Activator.GetObject(
+                  typeof(Server), link );
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to connect to {link}");
+                return false;
+            }
+            
+
             this.IP = IP;
             this.Port = port;
             this.EndPoint = endpoint;
 
-            this.Start();
+            return true;
         }
 
-        public void Start()
-        {
-            var serverProvider = new BinaryServerFormatterSinkProvider();
-            serverProvider.TypeFilterLevel = TypeFilterLevel.Full;
-            var clientProvider = new BinaryClientFormatterSinkProvider();
-
-            var properties = new Hashtable();
-            properties.Add("port", 0);
-
-            TcpChannel channel = new TcpChannel(properties, clientProvider, serverProvider);
-            ChannelServices.RegisterChannel(channel, false);
-            this.server = (Server)Activator.GetObject(
-              typeof(Server), $"tcp://{this.IP}:{this.Port}/" + this.EndPoint);
-
-        }
-
-        public bool Register(String username, String password, String RealName)
+        public bool Register(string username, string password, string RealName)
         {
             if (!server.Register(username, password, RealName, this))
             {
@@ -54,15 +66,39 @@ namespace Common
                 return false;
             }
 
-            // TODO asssign username, etc
+            this.UserName = username;
+            this.RealName = RealName;
+
+            return true;
+        }
+
+        public bool Login(string username, string password)
+        {
+            if (!server.Login(username, password ,this))
+            {
+                Console.WriteLine("Invalid login!");
+                return false;
+            }
 
             return true;
         }
 
 
-        public void ReceiveMessage(String msg)
+        public void Message(string msg)
         {
             Console.WriteLine($"Received message:{msg}");
+        }
+
+        public bool StartChatWithUser(string username)
+        {
+            Client cl = server.GetUserClient(username);
+
+            if (cl == null)
+                return false;
+
+            otherUser = cl;
+
+            return true;
         }
 
     }

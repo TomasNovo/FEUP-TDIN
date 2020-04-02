@@ -22,29 +22,45 @@ namespace ChatClient
 
             if (args[0] == "a")
             {
-                Client client = new Client("localhost", 8080, "server");
+                Client client = new Client();
+                client.Connect("localhost", 8080, "server");
                 String username = "a";
 
-                client.Register(username, "", "");
+                client.Login(username, "");
+                Console.ReadKey();
+
+                client.StartChatWithUser("b");
+                //client.otherUser.Message("Hello from a!");
+
+                ChatLoop(client);
             }
 
             else if (args[0] == "b")
             {
-                Client client = new Client("localhost", 8080, "server");
+                Client client = new Client();
+                client.Connect("localhost", 8080, "server");
                 String username = "b";
 
-                client.Register(username, "", "");
+                client.Login(username, "");
+                client.StartChatWithUser("a");
 
-                client.server.GetUser("a").ReceiveMessage("Hello from b!");
+                ChatLoop(client);
             }
 
             Console.WriteLine("Done");
             Console.ReadKey();
         }
 
-        public void ReceiveMessage(String msg)
+        public static void ChatLoop(Client client)
         {
-            Console.WriteLine(msg);
+            Console.WriteLine("Chatting...");
+
+            while (true)
+            {
+                string line = Console.ReadLine();
+
+                client.otherUser.Message(line);
+            }
         }
     }
 }
