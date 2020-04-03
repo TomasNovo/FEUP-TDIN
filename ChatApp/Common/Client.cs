@@ -116,7 +116,7 @@ namespace Common
 
                 for (int i = 0; i < clients.Count; i++)
                 {
-                    clients[i].Message(id, UserName, message);
+                    clients[i].Message(UserName, message);
                 }
             }
             catch(Exception e)
@@ -142,9 +142,9 @@ namespace Common
 
         //-----------------------------------Remote methods-----------------------------------
 
-        public void Message(int id, string username, string msg)
+        public void Message(string username, string msg)
         {
-            Console.WriteLine($"{username}:{msg}");
+            Console.WriteLine($"{username}: {msg}");
         }
 
         public void ServerMessage(string msg)
