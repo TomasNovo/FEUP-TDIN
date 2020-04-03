@@ -19,12 +19,16 @@ namespace Common
         public string RealName;
 
         public Server server;
-        public Client otherUser;
+        
+        public Dictionary<int, List<Client>> chatRooms;
+        public List<int> chronologicalIds;
 
         public Client()
         {
 
         }
+
+        //-----------------------------------Local methods-----------------------------------
 
         public bool Connect(string IP, int port, string endpoint)
         {
@@ -32,6 +36,10 @@ namespace Common
 
             try
             {
+                chatRooms = new Dictionary<int, List<Client>>();
+
+                chronologicalIds = new List<int>();
+
                 var serverProvider = new BinaryServerFormatterSinkProvider();
                 serverProvider.TypeFilterLevel = TypeFilterLevel.Full;
                 var clientProvider = new BinaryClientFormatterSinkProvider();
@@ -66,6 +74,8 @@ namespace Common
                 return false;
             }
 
+            ServerMessage("Registered successfully");
+
             this.UserName = username;
             this.RealName = RealName;
 
@@ -80,23 +90,81 @@ namespace Common
                 return false;
             }
 
+            this.UserName = username;
+
+            ServerMessage("Logged in successfully");
+
             return true;
         }
 
 
-        public void Message(string msg)
+        public int StartGroupChat(string[] usernames)
         {
-            Console.WriteLine($"Received message:{msg}");
+            return server.StartGroupChat(usernames);
         }
 
-        public bool StartChatWithUser(string username)
+        public int StartChatWithUser(string username)
         {
-            Client cl = server.GetUserClient(username);
+            return server.StartChatWithUser(username);
+        }
 
-            if (cl == null)
+        public bool SendMessage(int id, string message)
+        {
+            try
+            {
+                List<Client> clients = chatRooms[id];
+
+                for (int i = 0; i < clients.Count; i++)
+                {
+                    clients[i].Message(id, UserName, message);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
                 return false;
+            }
 
-            otherUser = cl;
+            return true;
+        }
+
+        public void ChatLoop(int id)
+        {
+            Console.WriteLine("Chatting...");
+
+            while (true)
+            {
+                string line = Console.ReadLine();
+                SendMessage(id, line);
+            }
+        }
+
+
+        //-----------------------------------Remote methods-----------------------------------
+
+        public void Message(int id, string username, string msg)
+        {
+            Console.WriteLine($"{username}:{msg}");
+        }
+
+        public void ServerMessage(string msg)
+        {
+            Console.WriteLine($"Server:{msg}");
+        }
+
+        public bool JoinChatRoom(int id, string[] usernames, List<Client> clients)
+        {
+            List<Client> userList = new List<Client>();
+            for (int i = 0; i < usernames.Length; i++)
+            {
+                if (usernames[i] == UserName)
+                    continue;
+
+                userList.Add(clients[i]);
+            }
+
+            chatRooms.Add(id, userList);
+            chronologicalIds.Add(id);
 
             return true;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
@@ -14,9 +15,13 @@ namespace Common
 
         private Database db;
 
+        private Random rng;
+
         public Server()
         {
             users = new Dictionary<String, User>();
+            
+            rng = new Random();
 
             db = new Database();
             db.StartMongo();
@@ -24,20 +29,19 @@ namespace Common
             Console.WriteLine("Server is running");
         }
 
+        //-----------------------------------Remote methods-----------------------------------
 
         public bool Register(string username, string password, string realname, Client client)
         {
             if (!db.Register(username, password, realname))
                 return false;
 
-            foreach (KeyValuePair<string, User> entry in users) // Notify all other users on user register
-                entry.Value.client.Message($"User '{username}' has entered the chat");
+            NotifyUserLogin(username);
 
             User newUser = new User(new UserInfo(username, password, realname));
             newUser.client = client;
 
             users.Add(username, newUser);
-            client.Message("Registered successfully");
             Console.WriteLine($"User '{username}' registered.");
 
             return true;
@@ -55,9 +59,18 @@ namespace Common
 
             users.Add(username, newUser);
             Console.WriteLine($"User '{username}' has logged in");
-            client.Message("Logged in successfully");
+            NotifyUserLogin(username);
 
             return true;
+        }
+
+        public void NotifyUserLogin(string username)
+        {
+            foreach (KeyValuePair<string, User> entry in users) // Notify all other users on user register
+            {
+                if (entry.Key != username)
+                    entry.Value.client.ServerMessage($"User '{username}' has entered the chat");
+            }
         }
 
         public Client GetUserClient(string username)
@@ -65,15 +78,58 @@ namespace Common
             return (users.TryGetValue(username, out User us)) ? us.client : null;
         }
 
-        public User GetUser(string username)
+        public int StartChatWithUser(string username)
         {
-            return (users.TryGetValue(username, out User us)) ? us : null;
+            string[] arr = { username };
+            return StartGroupChat(arr);
         }
 
-        public void AskUserForChat(string username)
+        // TODO: Check for duplicate chats
+        public int StartGroupChat(string[] usernames)
         {
-            //users.
+            List<Client> clients = new List<Client>();
+            int roomId = rng.Next();
+
+            // Check for wrong usernames
+            for (int i = 0; i < usernames.Length; i++)
+            {
+                Client cl = GetUserClient(usernames[i]);
+
+                if (cl == null)
+                    return -1;
+
+                clients.Add(cl);
+            }
+
+            for (int i = 0; i < clients.Count; i++)
+            {
+                clients[i].JoinChatRoom(roomId, usernames, clients);
+            }
+
+            return roomId;
         }
-                
+
+
+        static string Hash()
+        {
+            return Hash(DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString());
+        }
+
+        static string Hash(string input)
+        {
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    // can be "x2" if you want lowercase
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+        }
     }
 }

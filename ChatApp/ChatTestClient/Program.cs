@@ -15,11 +15,6 @@ namespace ChatClient
     {
         static void Main(string[] args)
         {
-
-
-            //Console.WriteLine("Waiting...");
-            //Console.ReadKey();
-
             if (args[0] == "a")
             {
                 Client client = new Client();
@@ -27,12 +22,13 @@ namespace ChatClient
                 String username = "a";
 
                 client.Login(username, "");
+                
+                // User "a" starts the group chat with user "b" and "c"
                 Console.ReadKey();
+                string[] groupUsers = { "a", "b", "c" };
+                int id = client.StartGroupChat(groupUsers);
 
-                client.StartChatWithUser("b");
-                //client.otherUser.Message("Hello from a!");
-
-                ChatLoop(client);
+                client.ChatLoop(id);
             }
 
             else if (args[0] == "b")
@@ -42,25 +38,24 @@ namespace ChatClient
                 String username = "b";
 
                 client.Login(username, "");
-                client.StartChatWithUser("a");
 
-                ChatLoop(client);
+                Console.ReadKey();
+                client.ChatLoop(client.chronologicalIds.FirstOrDefault());
             }
 
-            Console.WriteLine("Done");
-            Console.ReadKey();
-        }
-
-        public static void ChatLoop(Client client)
-        {
-            Console.WriteLine("Chatting...");
-
-            while (true)
+            else if (args[0] == "c")
             {
-                string line = Console.ReadLine();
+                Client client = new Client();
+                client.Connect("localhost", 8080, "server");
+                String username = "c";
 
-                client.otherUser.Message(line);
+                client.Login(username, "");
+
+                Console.ReadKey();
+                client.ChatLoop(client.chronologicalIds.FirstOrDefault());
             }
         }
+
+        
     }
 }
