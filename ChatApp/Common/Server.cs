@@ -36,12 +36,11 @@ namespace Common
             if (!db.Register(username, password, realname))
                 return false;
 
-            NotifyUserLogin(username);
+            //NotifyUserLogin(username);
+            //User newUser = new User(new UserInfo(username, password, realname));
+            //newUser.client = client;
+            //users.Add(username, newUser);
 
-            User newUser = new User(new UserInfo(username, password, realname));
-            newUser.client = client;
-
-            users.Add(username, newUser);
             Console.WriteLine($"User '{username}' registered.");
 
             return true;

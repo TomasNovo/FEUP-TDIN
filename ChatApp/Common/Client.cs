@@ -6,6 +6,7 @@ using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Serialization.Formatters;
 using System.Collections;
+using System.Security.Cryptography;
 
 namespace Common
 {
@@ -68,7 +69,7 @@ namespace Common
 
         public bool Register(string username, string password, string RealName)
         {
-            if (!server.Register(username, password, RealName, this))
+            if (!server.Register(username, HashString(password), RealName, this))
             {
                 Console.WriteLine("username is taken!");
                 return false;
@@ -84,7 +85,7 @@ namespace Common
 
         public bool Login(string username, string password)
         {
-            if (!server.Login(username, password ,this))
+            if (!server.Login(username, HashString(password),this))
             {
                 Console.WriteLine("Invalid login!");
                 return false;
@@ -169,5 +170,21 @@ namespace Common
             return true;
         }
 
+
+        //------------Hashing Functions-----------------
+        public static byte[] GetHash(string inputString)
+        {
+            using (HashAlgorithm algorithm = SHA256.Create())
+                return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
+        }
+
+        public static string HashString(string inputString)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in GetHash(inputString))
+                sb.Append(b.ToString("X2"));
+
+            return sb.ToString();
+        }
     }
 }

@@ -62,7 +62,7 @@
             this.TBUsername.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TBUsername.Name = "TBUsername";
             this.TBUsername.Size = new System.Drawing.Size(199, 21);
-            this.TBUsername.TabIndex = 0;
+            this.TBUsername.TabIndex = 2;
             this.TBUsername.Text = "Enter Username";
             this.TBUsername.Enter += new System.EventHandler(this.TBUsername_Enter);
             this.TBUsername.Leave += new System.EventHandler(this.TBUsername_Leave);
@@ -125,11 +125,11 @@
             this.BLogin.BackColor = System.Drawing.Color.Brown;
             this.BLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BLogin.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.BLogin.Location = new System.Drawing.Point(213, 401);
+            this.BLogin.Location = new System.Drawing.Point(212, 398);
             this.BLogin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BLogin.Name = "BLogin";
             this.BLogin.Size = new System.Drawing.Size(95, 41);
-            this.BLogin.TabIndex = 10;
+            this.BLogin.TabIndex = 6;
             this.BLogin.Text = "Login";
             this.BLogin.UseVisualStyleBackColor = false;
             this.BLogin.Click += new System.EventHandler(this.BLogin_Click);
@@ -143,7 +143,7 @@
             this.BRegister.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BRegister.Name = "BRegister";
             this.BRegister.Size = new System.Drawing.Size(256, 41);
-            this.BRegister.TabIndex = 7;
+            this.BRegister.TabIndex = 5;
             this.BRegister.Text = "Register";
             this.BRegister.UseVisualStyleBackColor = false;
             this.BRegister.Click += new System.EventHandler(this.BRegister_Click);
@@ -163,13 +163,14 @@
             // 
             this.textBox3.BackColor = System.Drawing.Color.Brown;
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox3.ForeColor = System.Drawing.SystemColors.Window;
-            this.textBox3.Location = new System.Drawing.Point(54, 415);
+            this.textBox3.Location = new System.Drawing.Point(51, 412);
             this.textBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(199, 15);
-            this.textBox3.TabIndex = 9;
+            this.textBox3.Size = new System.Drawing.Size(199, 14);
+            this.textBox3.TabIndex = 9999;
+            this.textBox3.TabStop = false;
             this.textBox3.Text = "Already have an account ?";
             // 
             // pictureBox4
@@ -201,7 +202,7 @@
             this.TBPassConfirm.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TBPassConfirm.Name = "TBPassConfirm";
             this.TBPassConfirm.Size = new System.Drawing.Size(199, 21);
-            this.TBPassConfirm.TabIndex = 11;
+            this.TBPassConfirm.TabIndex = 4;
             this.TBPassConfirm.Text = "Confirm Password";
             this.TBPassConfirm.Enter += new System.EventHandler(this.TBPassConfirm_Enter);
             this.TBPassConfirm.Leave += new System.EventHandler(this.TBPassConfirm_Leave);
@@ -235,7 +236,7 @@
             this.TBRealname.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TBRealname.Name = "TBRealname";
             this.TBRealname.Size = new System.Drawing.Size(208, 21);
-            this.TBRealname.TabIndex = 0;
+            this.TBRealname.TabIndex = 1;
             this.TBRealname.Text = "Enter Real Name";
             this.TBRealname.Enter += new System.EventHandler(this.TBRealname_Enter);
             this.TBRealname.Leave += new System.EventHandler(this.TBRealname_Leave);

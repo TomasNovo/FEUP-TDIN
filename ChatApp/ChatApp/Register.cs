@@ -17,13 +17,10 @@ namespace ChatApp
         public String Username;
         public String Password;
         public String RealName;
-
-        public Client client;
-
+        
         public Register()
         {
             InitializeComponent();
-
         }
 
         //Real Name Placeholder
@@ -115,17 +112,10 @@ namespace ChatApp
         {
             MainForm.Instance.Close();
         }
-
-        //Register
-        private void button2_Click(object sender, EventArgs e)
-        {
-            
-            
-        }
         
         private void BLogin_Click(object sender, EventArgs e)
         {
-            MainForm.Instance.Login();
+            MainForm.Instance.SwitchToLogin();
         }
 
         private void BRegister_Click(object sender, EventArgs e)
@@ -135,11 +125,21 @@ namespace ChatApp
             Password = TBPass.Text;
             String confirm = TBPassConfirm.Text;
 
-            Console.WriteLine(RealName);
-            Console.WriteLine(Username);
-            Console.WriteLine(Password);
+            if(Password != confirm)
+            {
+                MessageBox.Show("Passwords must be equal !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            MessageBox.Show("Wrong Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if(!MainForm.Instance.client.Register(Username, Password, RealName))
+            {
+                MessageBox.Show("Username already exists !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBox.Show("Registered with success !");
+
+            MainForm.Instance.SwitchToLogin();
         }
     }
 }

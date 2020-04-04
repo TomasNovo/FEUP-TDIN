@@ -18,6 +18,8 @@ namespace ChatApp
         private Client _clientForm;
         private Register _registerForm;
 
+        public Common.Client client;
+
         public static MainForm Instance
         {
             get
@@ -34,6 +36,9 @@ namespace ChatApp
         {
             InitializeComponent();
 
+            client = new Common.Client();
+            client.Connect("localhost", 8080, "server");
+
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.ShowInTaskbar = false;
 
@@ -47,10 +52,6 @@ namespace ChatApp
             this.Size = new Size(0, 0);
 
             _loginForm.Show();
-
-            //_registerForm.Show();
-
-            // _loginForm.Close();
         }
 
         // Changes forms
@@ -58,21 +59,22 @@ namespace ChatApp
         {
             var Username = _loginForm.Username;
             var Password = _loginForm.Password;
-            var RealName = _loginForm.RealName;
 
             _loginForm.Hide();
 
             _clientForm.Show();
         }
 
-        public void Register()
+        public void SwitchToLogin()
         {
-            var Username = _registerForm.Username;
-            var Password = _registerForm.Password;
+            _registerForm.Hide();
+            _loginForm.Show();
+        }
 
-            //_loginForm.Hide();
-
-            //_registerForm.Show();
+        public void SwitchToRegister()
+        {
+            _loginForm.Hide();
+            _registerForm.Show();
         }
 
     }

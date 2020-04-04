@@ -72,15 +72,21 @@ namespace ChatApp
             }
         }
 
-        //private void button2_Click(object sender, EventArgs e)
-        //{
-        //    MainForm.Instance.Login();
-        //}
-
         private void BLogin_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Wrong Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            if (!MainForm.Instance.client.Login(TBUsername.Text, TBPass.Text))
+            {
+                MessageBox.Show("Wrong Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             MainForm.Instance.Login();
+        }
+
+        private void BRegister_Click(object sender, EventArgs e)
+        {
+            MainForm.Instance.SwitchToRegister();
         }
     }
 }
