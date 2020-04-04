@@ -46,9 +46,9 @@ namespace ChatApp
         {
             this.Size = new Size(0, 0);
 
-            //_loginForm.Show();
+            _loginForm.Show();
 
-            _registerForm.Show();
+            //_registerForm.Show();
 
             // _loginForm.Close();
         }

@@ -18,20 +18,93 @@ namespace ChatApp
         public String Password;
         public String RealName;
 
+        public Client client;
+
         public Register()
         {
             InitializeComponent();
 
-            //var client = new MongoClient();
-            //var db = client.GetDatabase("chatime");
-            //var coll = db.GetCollection<Users>("Users");
-
-            //var users = coll.Find(x => x.name == "Zé");
-
-            //Console.WriteLine("Users" + users);
         }
 
+        //Real Name Placeholder
+        private void TBRealname_Enter(object sender, EventArgs e)
+        {
+            if(TBRealname.Text == "Enter Real Name")
+            {
+                TBRealname.Text = "";
+                TBRealname.ForeColor = Color.White;
+            }
+        }
 
+        private void TBRealname_Leave(object sender, EventArgs e)
+        {
+            if (TBRealname.Text == "")
+            {
+                TBRealname.Text = "Enter Real Name";
+                TBRealname.ForeColor = Color.Silver;
+            }
+        }
+
+        //User Name Placeholder
+        private void TBUsername_Enter(object sender, EventArgs e)
+        {
+            if (TBUsername.Text == "Enter Username")
+            {
+                TBUsername.Text = "";
+                TBUsername.ForeColor = Color.White;
+            }
+        }
+
+        private void TBUsername_Leave(object sender, EventArgs e)
+        {
+            if (TBUsername.Text == "")
+            {
+                TBUsername.Text = "Enter Username";
+                TBUsername.ForeColor = Color.Silver;
+            }
+        }
+
+        //Password Placeholder
+        private void TBPass_Enter(object sender, EventArgs e)
+        {
+            if (TBPass.Text == "Enter Password")
+            {
+                TBPass.Text = "";
+                TBPass.ForeColor = Color.White;
+                TBPass.PasswordChar = '*';
+            }
+        }
+
+        private void TBPass_Leave(object sender, EventArgs e)
+        {
+            if (TBPass.Text == "")
+            {
+                TBPass.Text = "Enter Password";
+                TBPass.ForeColor = Color.Silver;
+                TBPass.PasswordChar = '\0';
+            }
+        }
+
+        //Confirm Password Placeholder
+        private void TBPassConfirm_Enter(object sender, EventArgs e)
+        {
+            if (TBPassConfirm.Text == "Confirm Password")
+            {
+                TBPassConfirm.Text = "";
+                TBPassConfirm.ForeColor = Color.White;
+                TBPassConfirm.PasswordChar = '*';
+            }
+        }
+
+        private void TBPassConfirm_Leave(object sender, EventArgs e)
+        {
+            if (TBPassConfirm.Text == "")
+            {
+                TBPassConfirm.Text = "Confirm Password";
+                TBPassConfirm.ForeColor = Color.Silver;
+                TBPassConfirm.PasswordChar = '\0';
+            }
+        }
 
         private void Login_Load(object sender, EventArgs e)
         {
@@ -43,10 +116,30 @@ namespace ChatApp
             MainForm.Instance.Close();
         }
 
-           //Register
+        //Register
         private void button2_Click(object sender, EventArgs e)
         {
-            //MainForm.Instance.Login();
+            
+            
+        }
+        
+        private void BLogin_Click(object sender, EventArgs e)
+        {
+            MainForm.Instance.Login();
+        }
+
+        private void BRegister_Click(object sender, EventArgs e)
+        {
+            RealName = TBRealname.Text;
+            Username = TBUsername.Text;
+            Password = TBPass.Text;
+            String confirm = TBPassConfirm.Text;
+
+            Console.WriteLine(RealName);
+            Console.WriteLine(Username);
+            Console.WriteLine(Password);
+
+            MessageBox.Show("Wrong Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

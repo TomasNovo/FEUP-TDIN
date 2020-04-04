@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TBUsername = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.TBPass = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -44,18 +44,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
-            // textBox1
+            // TBUsername
             // 
-            this.textBox1.BackColor = System.Drawing.Color.Brown;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.SystemColors.Window;
-            this.textBox1.Location = new System.Drawing.Point(93, 166);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(199, 21);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Username";
+            this.TBUsername.BackColor = System.Drawing.Color.Brown;
+            this.TBUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TBUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TBUsername.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.TBUsername.Location = new System.Drawing.Point(110, 168);
+            this.TBUsername.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TBUsername.Name = "TBUsername";
+            this.TBUsername.Size = new System.Drawing.Size(199, 21);
+            this.TBUsername.TabIndex = 0;
+            this.TBUsername.Text = "Username";
+            this.TBUsername.Enter += new System.EventHandler(this.TBUsername_Enter);
+            this.TBUsername.Leave += new System.EventHandler(this.TBUsername_Leave);
             // 
             // panel1
             // 
@@ -69,20 +71,20 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(56, 162);
+            this.pictureBox1.Location = new System.Drawing.Point(56, 157);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox1.Size = new System.Drawing.Size(48, 32);
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(56, 214);
+            this.pictureBox2.Location = new System.Drawing.Point(55, 206);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox2.Size = new System.Drawing.Size(49, 40);
             this.pictureBox2.TabIndex = 5;
             this.pictureBox2.TabStop = false;
             // 
@@ -95,18 +97,20 @@
             this.panel2.Size = new System.Drawing.Size(253, 5);
             this.panel2.TabIndex = 4;
             // 
-            // textBox2
+            // TBPass
             // 
-            this.textBox2.BackColor = System.Drawing.Color.Brown;
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.ForeColor = System.Drawing.SystemColors.Window;
-            this.textBox2.Location = new System.Drawing.Point(93, 225);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(199, 21);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "Password";
+            this.TBPass.BackColor = System.Drawing.Color.Brown;
+            this.TBPass.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TBPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TBPass.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.TBPass.Location = new System.Drawing.Point(110, 225);
+            this.TBPass.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TBPass.Name = "TBPass";
+            this.TBPass.Size = new System.Drawing.Size(199, 21);
+            this.TBPass.TabIndex = 3;
+            this.TBPass.Text = "Password";
+            this.TBPass.Enter += new System.EventHandler(this.TBPass_Enter);
+            this.TBPass.Leave += new System.EventHandler(this.TBPass_Leave);
             // 
             // button1
             // 
@@ -133,12 +137,12 @@
             this.button2.TabIndex = 7;
             this.button2.Text = "Login";
             this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.BLogin_Click);
             // 
             // pictureBox3
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(125, 30);
+            this.pictureBox3.Location = new System.Drawing.Point(110, 23);
             this.pictureBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(100, 100);
@@ -170,10 +174,10 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.TBPass);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.TBUsername);
             this.Controls.Add(this.textBox3);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Login";
@@ -190,12 +194,12 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox TBUsername;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox TBPass;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.PictureBox pictureBox3;
