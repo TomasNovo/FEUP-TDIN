@@ -9,7 +9,7 @@ using System.Runtime.Remoting.Channels.Tcp;
 using System.Threading;
 using Common;
 
-namespace ChatClient
+namespace ChatTestClient
 {
     class Program
     {
