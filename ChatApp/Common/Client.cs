@@ -98,6 +98,10 @@ namespace Common
             return true;
         }
 
+        public ArrayList GetUsers()
+        {
+            return server.GetDatabaseUsers();
+        }
 
         public int StartGroupChat(string[] usernames)
         {

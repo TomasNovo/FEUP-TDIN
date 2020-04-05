@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -108,7 +109,13 @@ namespace Common
             return roomId;
         }
 
+        public ArrayList GetDatabaseUsers()
+        {
+            return db.GetUsersArraylist();
+        }
 
+
+        //--------------- Hashing Methods -------------------------------------
         static string Hash()
         {
             return Hash(DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString());

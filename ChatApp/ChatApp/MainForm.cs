@@ -15,7 +15,7 @@ namespace ChatApp
         private static MainForm instance = null;
 
         private Login _loginForm;
-        private Client _clientForm;
+        private Index _indexForm;
         private Register _registerForm;
 
         public Common.Client client;
@@ -43,7 +43,7 @@ namespace ChatApp
             this.ShowInTaskbar = false;
 
             _loginForm = new Login();
-            _clientForm = new Client();
+            _indexForm = new Index();
             _registerForm = new Register();
         }
 
@@ -62,7 +62,7 @@ namespace ChatApp
 
             _loginForm.Hide();
 
-            _clientForm.Show();
+            _indexForm.Show();
         }
 
         public void SwitchToLogin()

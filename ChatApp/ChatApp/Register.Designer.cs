@@ -54,7 +54,7 @@
             // 
             // TBUsername
             // 
-            this.TBUsername.BackColor = System.Drawing.Color.Brown;
+            this.TBUsername.BackColor = System.Drawing.Color.Gray;
             this.TBUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TBUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TBUsername.ForeColor = System.Drawing.SystemColors.InactiveCaption;
@@ -107,7 +107,7 @@
             // 
             // TBPass
             // 
-            this.TBPass.BackColor = System.Drawing.Color.Brown;
+            this.TBPass.BackColor = System.Drawing.Color.Gray;
             this.TBPass.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TBPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TBPass.ForeColor = System.Drawing.SystemColors.InactiveCaption;
@@ -122,7 +122,7 @@
             // 
             // BLogin
             // 
-            this.BLogin.BackColor = System.Drawing.Color.Brown;
+            this.BLogin.BackColor = System.Drawing.Color.Blue;
             this.BLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BLogin.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.BLogin.Location = new System.Drawing.Point(212, 398);
@@ -161,7 +161,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.BackColor = System.Drawing.Color.Brown;
+            this.textBox3.BackColor = System.Drawing.Color.Gray;
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox3.ForeColor = System.Drawing.SystemColors.Window;
@@ -194,7 +194,7 @@
             // 
             // TBPassConfirm
             // 
-            this.TBPassConfirm.BackColor = System.Drawing.Color.Brown;
+            this.TBPassConfirm.BackColor = System.Drawing.Color.Gray;
             this.TBPassConfirm.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TBPassConfirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TBPassConfirm.ForeColor = System.Drawing.SystemColors.InactiveCaption;
@@ -228,7 +228,7 @@
             // 
             // TBRealname
             // 
-            this.TBRealname.BackColor = System.Drawing.Color.Brown;
+            this.TBRealname.BackColor = System.Drawing.Color.Gray;
             this.TBRealname.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TBRealname.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TBRealname.ForeColor = System.Drawing.SystemColors.InactiveCaption;
@@ -245,7 +245,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Brown;
+            this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(340, 450);
             this.Controls.Add(this.pictureBox5);
             this.Controls.Add(this.panel4);

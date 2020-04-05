@@ -46,7 +46,7 @@
             // 
             // TBUsername
             // 
-            this.TBUsername.BackColor = System.Drawing.Color.Brown;
+            this.TBUsername.BackColor = System.Drawing.Color.Gray;
             this.TBUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TBUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TBUsername.ForeColor = System.Drawing.SystemColors.InactiveCaption;
@@ -99,7 +99,7 @@
             // 
             // TBPass
             // 
-            this.TBPass.BackColor = System.Drawing.Color.Brown;
+            this.TBPass.BackColor = System.Drawing.Color.Gray;
             this.TBPass.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TBPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TBPass.ForeColor = System.Drawing.SystemColors.InactiveCaption;
@@ -114,7 +114,7 @@
             // 
             // BRegister
             // 
-            this.BRegister.BackColor = System.Drawing.Color.Brown;
+            this.BRegister.BackColor = System.Drawing.Color.Blue;
             this.BRegister.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BRegister.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.BRegister.Location = new System.Drawing.Point(215, 337);
@@ -153,7 +153,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.BackColor = System.Drawing.Color.Brown;
+            this.textBox3.BackColor = System.Drawing.Color.Gray;
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox3.ForeColor = System.Drawing.SystemColors.Window;
@@ -169,7 +169,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Brown;
+            this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(340, 450);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.button2);
