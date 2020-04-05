@@ -67,23 +67,35 @@ namespace ChatApp
 
             for (int i = 0; i < users.Count; i++)
             {
+                CircularButton cb = new CircularButton();
                 TextBox temp = new System.Windows.Forms.TextBox();
                 this.Controls.Add(temp);
                 temp.Parent.Controls.SetChildIndex(temp, 2);
-
+                cb.Parent = this;
+                cb.Parent.Controls.SetChildIndex(cb, 2);
+                cb.FlatStyle = FlatStyle.Flat;
+                cb.FlatAppearance.BorderSize = 0;
+                cb.Size = new System.Drawing.Size(10, 10);
+                cb.TabStop = false;
+                temp.Size = new System.Drawing.Size(70, 10);
 
                 if (i == 0)
                 {
-                    temp.Location = new Point(500, 50);
+                    cb.Location = new Point(575, 57);
+                    cb.BackColor = Color.Green;
+                    temp.Location = new Point(500, 55);
                 }
                 else
                 {
-                    temp.Location = new Point(500, 50 + i * 25);
+                    cb.Location = new Point(575, 57 + i*25);
+                    cb.BackColor = Color.Gray;
+                    temp.Location = new Point(500, 55 + i * 25);
+
                 }
 
                 temp.BackColor = Color.DarkGray;
                 temp.BorderStyle = BorderStyle.None;
-                temp.Text = users[i].ToString();
+                temp.Text = " " + users[i].ToString();
             }
         }
 
