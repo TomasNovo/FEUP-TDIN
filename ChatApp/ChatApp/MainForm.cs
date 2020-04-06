@@ -52,6 +52,7 @@ namespace ChatApp
             this.Size = new Size(0, 0);
 
             _loginForm.Show();
+            //_indexForm.Show();
         }
 
         // Changes forms

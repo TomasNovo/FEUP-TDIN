@@ -114,6 +114,17 @@ namespace Common
             return db.GetUsersArraylist();
         }
 
+        public ArrayList GetOnlineUsers()
+        {
+            ArrayList ou = new ArrayList();
+
+            for(int i = 0; i < users.Count; i++)
+            {
+                ou.Add(users.Keys.ElementAt(i));
+            }
+
+            return ou;
+        }
 
         //--------------- Hashing Methods -------------------------------------
         static string Hash()

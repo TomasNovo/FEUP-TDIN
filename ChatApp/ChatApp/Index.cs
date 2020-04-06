@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Drawing.Drawing2D;
 using System.Collections;
+using Common;
 
 namespace ChatApp
 {
@@ -19,7 +20,10 @@ namespace ChatApp
         string IP;
         int Port;
         TcpClient tcp;
-        
+        ArrayList users;
+        ArrayList onlineUsers;
+
+
         string message = "Hello I'm the client";
 
 
@@ -63,42 +67,56 @@ namespace ChatApp
 
         private void DrawUsers()
         {
-            ArrayList users = MainForm.Instance.client.GetUsers();
+            users = MainForm.Instance.client.GetUsers();
+            onlineUsers = MainForm.Instance.client.server.GetOnlineUsers();
 
             for (int i = 0; i < users.Count; i++)
             {
                 CircularButton cb = new CircularButton();
-                TextBox temp = new System.Windows.Forms.TextBox();
-                this.Controls.Add(temp);
-                temp.Parent.Controls.SetChildIndex(temp, 2);
                 cb.Parent = this;
                 cb.Parent.Controls.SetChildIndex(cb, 2);
                 cb.FlatStyle = FlatStyle.Flat;
                 cb.FlatAppearance.BorderSize = 0;
                 cb.Size = new System.Drawing.Size(10, 10);
                 cb.TabStop = false;
+
+                TextBox temp = new System.Windows.Forms.TextBox();
+                this.Controls.Add(temp);
+                temp.Parent.Controls.SetChildIndex(temp, 2);
                 temp.Size = new System.Drawing.Size(70, 10);
 
                 if (i == 0)
                 {
-                    cb.Location = new Point(575, 57);
-                    cb.BackColor = Color.Green;
                     temp.Location = new Point(500, 55);
+                    cb.Location = new Point(575, 57);
                 }
                 else
                 {
-                    cb.Location = new Point(575, 57 + i*25);
-                    cb.BackColor = Color.Gray;
                     temp.Location = new Point(500, 55 + i * 25);
-
+                    cb.Location = new Point(575, 57 + i * 25);
                 }
 
                 temp.BackColor = Color.DarkGray;
                 temp.BorderStyle = BorderStyle.None;
                 temp.Text = " " + users[i].ToString();
+
+                bool online;
+
+                for (int j = 0; j < onlineUsers.Count; j++)
+                {
+                    if (users[i].Equals(onlineUsers[j].ToString()))
+                    {
+                        cb.BackColor = Color.Green;
+                        break;
+                    }
+                    else
+                    {
+                        cb.BackColor = Color.Gray;
+                    }
+                }
             }
         }
-
+        
         private void Icon_Click(object sender, EventArgs e)
         {
             // Each icon will be a group chat
