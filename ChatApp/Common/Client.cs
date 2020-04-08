@@ -26,7 +26,6 @@ namespace Common
 
         public Client()
         {
-
         }
 
         //-----------------------------------Local methods-----------------------------------
@@ -85,6 +84,10 @@ namespace Common
 
         public bool Login(string username, string password)
         {
+            server.OnlineUsersChanged += OnOnlineUsersChange;
+
+            Console.WriteLine("Passed");
+
             if (!server.Login(username, HashString(password),this))
             {
                 Console.WriteLine("Invalid login!");
@@ -189,6 +192,14 @@ namespace Common
                 sb.Append(b.ToString("X2"));
 
             return sb.ToString();
+        }
+
+
+        //----------Delegates----------
+        public void OnOnlineUsersChange(object source, EventArgs e)
+        {
+            Console.WriteLine("Online users changed");
+            Console.WriteLine("EIIIIIIIIIIIIIIII");
         }
     }
 }

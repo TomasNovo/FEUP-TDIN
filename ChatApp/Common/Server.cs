@@ -58,8 +58,11 @@ namespace Common
             newUser.client = client;
 
             users.Add(username, newUser);
+            OnOnlineUsersChange();
             Console.WriteLine($"User '{username}' has logged in");
             NotifyUserLogin(username);
+
+            
 
             return true;
         }
@@ -146,6 +149,19 @@ namespace Common
                 }
 
                 return sb.ToString();
+            }
+        }
+
+        //---------Delegate------
+        public delegate void OnlineUsersChangeEventHandler(object source, EventArgs e);
+
+        public event OnlineUsersChangeEventHandler OnlineUsersChanged;
+
+        protected virtual void OnOnlineUsersChange()
+        {
+            if(OnlineUsersChanged != null)
+            {
+                OnlineUsersChanged(this, EventArgs.Empty);
             }
         }
     }
