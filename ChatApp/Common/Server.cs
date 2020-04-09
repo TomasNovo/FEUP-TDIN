@@ -162,7 +162,6 @@ namespace Common
             OnlineUsersEventArgs e = new OnlineUsersEventArgs(GetOnlineUsers());
             if (OnlineUsersChanged != null)
             {
-                Console.WriteLine("[UpdateOnlineUsers]: Raising event ...");
                 OnlineUsersChanged(this, e);
             }
         }

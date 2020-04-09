@@ -77,9 +77,15 @@ namespace ChatApp
                 BeginInvoke((MethodInvoker)delegate { DrawUsers(); });
             else
             {
+                TUsername.Text = "Do you wanna chat, " + MainForm.Instance.client.UserName + " ?";
 
                 users = MainForm.Instance.client.GetUsers();
                 onlineUsers = MainForm.Instance.client.server.GetOnlineUsers();
+                users.Remove(MainForm.Instance.client.UserName);
+                onlineUsers.Remove(MainForm.Instance.client.UserName);
+
+                OrderOnlineFirst(users, onlineUsers);
+                
 
                 for (int i = 0; i < users.Count; i++)
                 {
@@ -91,6 +97,7 @@ namespace ChatApp
                     cb.Size = new System.Drawing.Size(10, 10);
                     cb.TabStop = false;
 
+                    // Draws username
                     TextBox temp = new System.Windows.Forms.TextBox();
                     this.Controls.Add(temp);
                     temp.Parent.Controls.SetChildIndex(temp, 2);
@@ -111,6 +118,7 @@ namespace ChatApp
                     temp.BorderStyle = BorderStyle.None;
                     temp.Text = " " + users[i].ToString();
 
+                    // Draws green(online) or gray circular button  
                     for (int j = 0; j < onlineUsers.Count; j++)
                     {
                         if (users[i].Equals(onlineUsers[j].ToString()))
@@ -123,11 +131,40 @@ namespace ChatApp
                             cb.BackColor = Color.Gray;
                         }
                     }
+
+
+
+
                 }
 
             }
         }
         
+        private void OrderOnlineFirst(ArrayList toOrder, ArrayList online)
+        {
+            ArrayList indexes = new ArrayList();
+            for(int i = 0; i < toOrder.Count; i++)
+            {
+                for(int j = 0; j < online.Count; j++)
+                {
+                    if(toOrder[i].ToString().Equals(online[j].ToString()))
+                    {
+                        indexes.Add(i);
+                    }
+                }
+            }
+
+
+
+            for(int i = 0; i < indexes.Count; i++)
+            {
+                object temp = toOrder[i];
+                int index = Int32.Parse(indexes[i].ToString());
+                toOrder[i] = toOrder[index];
+                toOrder[index] = temp;
+            }
+        }
+
         private void Icon_Click(object sender, EventArgs e)
         {
             // Each icon will be a group chat
@@ -142,7 +179,6 @@ namespace ChatApp
         // Handler
         public void IndexHandler(object o, Common.OnlineUsersEventArgs e)
         {
-            Console.WriteLine("[Index]: Online users count {0} has changed.", e.ou.Count);
             DrawUsers();
         }
 

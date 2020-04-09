@@ -195,16 +195,14 @@ namespace Common
             return sb.ToString();
         }
 
-        //Handler
+        //Handler -> Client receives event and sends new event to Index
         public void Handler(object o, OnlineUsersEventArgs e)
         {
-            Console.WriteLine("[Client]: Online users count {0} has changed.", e.ou.Count);
             onlineUsers = e.ou;
 
             OnlineUsersEventArgs es = new OnlineUsersEventArgs(onlineUsers);
             if (OnlineUsersChanged != null)
             {
-                Console.WriteLine("[UpdateOnlineUsers]: Raising event ...");
                 OnlineUsersChanged(this, es);
             }
         }

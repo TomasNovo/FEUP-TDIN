@@ -33,8 +33,9 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.Icon = new ChatApp.CircularButton();
+            this.TUsername = new System.Windows.Forms.TextBox();
             this.circularButton1 = new ChatApp.CircularButton();
+            this.Icon = new ChatApp.CircularButton();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
@@ -72,7 +73,7 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(260, 11);
+            this.pictureBox3.Location = new System.Drawing.Point(259, 1);
             this.pictureBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(100, 100);
@@ -80,19 +81,16 @@
             this.pictureBox3.TabIndex = 9;
             this.pictureBox3.TabStop = false;
             // 
-            // Icon
+            // TUsername
             // 
-            this.Icon.BackColor = System.Drawing.Color.Black;
-            this.Icon.FlatAppearance.BorderSize = 0;
-            this.Icon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Icon.ForeColor = System.Drawing.Color.SlateBlue;
-            this.Icon.Location = new System.Drawing.Point(67, 202);
-            this.Icon.Name = "Icon";
-            this.Icon.Size = new System.Drawing.Size(50, 50);
-            this.Icon.TabIndex = 3;
-            this.Icon.Text = "Chat1";
-            this.Icon.UseVisualStyleBackColor = false;
-            this.Icon.Click += new System.EventHandler(this.Icon_Click);
+            this.TUsername.BackColor = System.Drawing.Color.Gray;
+            this.TUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TUsername.ForeColor = System.Drawing.SystemColors.Window;
+            this.TUsername.Location = new System.Drawing.Point(122, 141);
+            this.TUsername.Name = "TUsername";
+            this.TUsername.Size = new System.Drawing.Size(386, 23);
+            this.TUsername.TabIndex = 1;
             // 
             // circularButton1
             // 
@@ -100,12 +98,26 @@
             this.circularButton1.FlatAppearance.BorderSize = 0;
             this.circularButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.circularButton1.ForeColor = System.Drawing.Color.SlateBlue;
-            this.circularButton1.Location = new System.Drawing.Point(67, 131);
+            this.circularButton1.Location = new System.Drawing.Point(67, 234);
             this.circularButton1.Name = "circularButton1";
             this.circularButton1.Size = new System.Drawing.Size(50, 50);
             this.circularButton1.TabIndex = 10;
             this.circularButton1.Text = "Chat1";
             this.circularButton1.UseVisualStyleBackColor = false;
+            // 
+            // Icon
+            // 
+            this.Icon.BackColor = System.Drawing.Color.Black;
+            this.Icon.FlatAppearance.BorderSize = 0;
+            this.Icon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Icon.ForeColor = System.Drawing.Color.SlateBlue;
+            this.Icon.Location = new System.Drawing.Point(67, 308);
+            this.Icon.Name = "Icon";
+            this.Icon.Size = new System.Drawing.Size(50, 50);
+            this.Icon.TabIndex = 3;
+            this.Icon.Text = "Chat1";
+            this.Icon.UseVisualStyleBackColor = false;
+            this.Icon.Click += new System.EventHandler(this.Icon_Click);
             // 
             // Index
             // 
@@ -113,6 +125,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.TUsername);
             this.Controls.Add(this.circularButton1);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.Icon);
@@ -140,6 +153,7 @@
         private CircularButton Icon;
         private System.Windows.Forms.PictureBox pictureBox3;
         private CircularButton circularButton1;
+        private System.Windows.Forms.TextBox TUsername;
     }
 }
 
