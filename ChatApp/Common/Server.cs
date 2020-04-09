@@ -74,12 +74,7 @@ namespace Common
             NotifyUserLogin(username);
 
 
-            OnlineUsersEventArgs e = new OnlineUsersEventArgs(GetOnlineUsers());
-            if (OnlineUsersChanged != null)
-            {
-                Console.WriteLine("[UpdateOnlineUsers]: Raising event ...");
-                OnlineUsersChanged(this, e);
-            }
+            OnOnlineUsersChange();
 
             return true;
         }
@@ -171,18 +166,17 @@ namespace Common
 
         //---------Delegate------
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
-
         public event OnlineUsersChangeEventHandler OnlineUsersChanged;
 
-        //protected virtual void OnOnlineUsersChange(ArrayList al)
-        //{
-        //    OnlineUsersEventArgs e = new OnlineUsersEventArgs(al);
-        //    if (OnlineUsersChanged != null)
-        //    {
-        //        Console.WriteLine("[UpdateOnlineUsers]: Raising event ...");
-        //        OnlineUsersChanged(this, e);
-        //    }
-        //}
+        protected virtual void OnOnlineUsersChange()
+        {
+            OnlineUsersEventArgs e = new OnlineUsersEventArgs(GetOnlineUsers());
+            if (OnlineUsersChanged != null)
+            {
+                Console.WriteLine("[UpdateOnlineUsers]: Raising event ...");
+                OnlineUsersChanged(this, e);
+            }
+        }
     }
 
 
