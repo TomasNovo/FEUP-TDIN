@@ -27,6 +27,7 @@ namespace ChatApp
                 if (instance == null)
                 {
                     instance = new MainForm();
+
                 }
                 return instance;
             }
@@ -45,6 +46,9 @@ namespace ChatApp
             _loginForm = new Login();
             _indexForm = new Index();
             _registerForm = new Register();
+
+            client.OnlineUsersChanged += _indexForm.IndexHandler;
+
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -52,6 +56,8 @@ namespace ChatApp
             this.Size = new Size(0, 0);
 
             _loginForm.Show();
+
+            //client.server.OnlineUsersChanged += _indexForm.IndexHandler;
             //_indexForm.Show();
         }
 

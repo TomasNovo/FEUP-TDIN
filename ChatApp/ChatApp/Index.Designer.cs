@@ -34,6 +34,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.Icon = new ChatApp.CircularButton();
+            this.circularButton1 = new ChatApp.CircularButton();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
@@ -85,13 +86,26 @@
             this.Icon.FlatAppearance.BorderSize = 0;
             this.Icon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Icon.ForeColor = System.Drawing.Color.SlateBlue;
-            this.Icon.Location = new System.Drawing.Point(53, 132);
+            this.Icon.Location = new System.Drawing.Point(67, 202);
             this.Icon.Name = "Icon";
             this.Icon.Size = new System.Drawing.Size(50, 50);
             this.Icon.TabIndex = 3;
-            this.Icon.Text = "Icon";
+            this.Icon.Text = "Chat1";
             this.Icon.UseVisualStyleBackColor = false;
             this.Icon.Click += new System.EventHandler(this.Icon_Click);
+            // 
+            // circularButton1
+            // 
+            this.circularButton1.BackColor = System.Drawing.Color.Black;
+            this.circularButton1.FlatAppearance.BorderSize = 0;
+            this.circularButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.circularButton1.ForeColor = System.Drawing.Color.SlateBlue;
+            this.circularButton1.Location = new System.Drawing.Point(67, 131);
+            this.circularButton1.Name = "circularButton1";
+            this.circularButton1.Size = new System.Drawing.Size(50, 50);
+            this.circularButton1.TabIndex = 10;
+            this.circularButton1.Text = "Chat1";
+            this.circularButton1.UseVisualStyleBackColor = false;
             // 
             // Index
             // 
@@ -99,6 +113,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.circularButton1);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.Icon);
             this.Controls.Add(this.panel2);
@@ -124,6 +139,7 @@
         private System.Windows.Forms.Panel panel2;
         private CircularButton Icon;
         private System.Windows.Forms.PictureBox pictureBox3;
+        private CircularButton circularButton1;
     }
 }
 

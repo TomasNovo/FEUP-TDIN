@@ -12,6 +12,7 @@ using System.Threading;
 using System.Drawing.Drawing2D;
 using System.Collections;
 using Common;
+using System.Threading;
 
 namespace ChatApp
 {
@@ -22,20 +23,25 @@ namespace ChatApp
         TcpClient tcp;
         ArrayList users;
         ArrayList onlineUsers;
-
-
+        
         string message = "Hello I'm the client";
-
 
         public Index()
         {
             InitializeComponent();
+
+
+            //MainForm.Instance.client.OnlineUsersChanged += IndexHandler;
         }
 
         private void Index_Load(object sender, EventArgs e)
         {
+            //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
+
             DrawUsers();
+            //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
         }
+
 
         // Connect button
         private void button1_Click(object sender, EventArgs e)
@@ -67,53 +73,58 @@ namespace ChatApp
 
         private void DrawUsers()
         {
-            users = MainForm.Instance.client.GetUsers();
-            onlineUsers = MainForm.Instance.client.server.GetOnlineUsers();
-
-            for (int i = 0; i < users.Count; i++)
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { DrawUsers(); });
+            else
             {
-                CircularButton cb = new CircularButton();
-                cb.Parent = this;
-                cb.Parent.Controls.SetChildIndex(cb, 2);
-                cb.FlatStyle = FlatStyle.Flat;
-                cb.FlatAppearance.BorderSize = 0;
-                cb.Size = new System.Drawing.Size(10, 10);
-                cb.TabStop = false;
 
-                TextBox temp = new System.Windows.Forms.TextBox();
-                this.Controls.Add(temp);
-                temp.Parent.Controls.SetChildIndex(temp, 2);
-                temp.Size = new System.Drawing.Size(70, 10);
+                users = MainForm.Instance.client.GetUsers();
+                onlineUsers = MainForm.Instance.client.server.GetOnlineUsers();
 
-                if (i == 0)
+                for (int i = 0; i < users.Count; i++)
                 {
-                    temp.Location = new Point(500, 55);
-                    cb.Location = new Point(575, 57);
-                }
-                else
-                {
-                    temp.Location = new Point(500, 55 + i * 25);
-                    cb.Location = new Point(575, 57 + i * 25);
-                }
+                    CircularButton cb = new CircularButton();
+                    cb.Parent = this;
+                    cb.Parent.Controls.SetChildIndex(cb, 2);
+                    cb.FlatStyle = FlatStyle.Flat;
+                    cb.FlatAppearance.BorderSize = 0;
+                    cb.Size = new System.Drawing.Size(10, 10);
+                    cb.TabStop = false;
 
-                temp.BackColor = Color.DarkGray;
-                temp.BorderStyle = BorderStyle.None;
-                temp.Text = " " + users[i].ToString();
+                    TextBox temp = new System.Windows.Forms.TextBox();
+                    this.Controls.Add(temp);
+                    temp.Parent.Controls.SetChildIndex(temp, 2);
+                    temp.Size = new System.Drawing.Size(70, 10);
 
-                bool online;
-
-                for (int j = 0; j < onlineUsers.Count; j++)
-                {
-                    if (users[i].Equals(onlineUsers[j].ToString()))
+                    if (i == 0)
                     {
-                        cb.BackColor = Color.Green;
-                        break;
+                        temp.Location = new Point(500, 55);
+                        cb.Location = new Point(575, 57);
                     }
                     else
                     {
-                        cb.BackColor = Color.Gray;
+                        temp.Location = new Point(500, 55 + i * 25);
+                        cb.Location = new Point(575, 57 + i * 25);
+                    }
+
+                    temp.BackColor = Color.DarkGray;
+                    temp.BorderStyle = BorderStyle.None;
+                    temp.Text = " " + users[i].ToString();
+
+                    for (int j = 0; j < onlineUsers.Count; j++)
+                    {
+                        if (users[i].Equals(onlineUsers[j].ToString()))
+                        {
+                            cb.BackColor = Color.Green;
+                            break;
+                        }
+                        else
+                        {
+                            cb.BackColor = Color.Gray;
+                        }
                     }
                 }
+
             }
         }
         
@@ -121,6 +132,20 @@ namespace ChatApp
         {
             // Each icon will be a group chat
         }
+
+        //----------Delegates----------
+        //public void OnOnlineUsersChange(object source, EventArgs e)
+        //{
+        //    Console.WriteLine("Online users changed");
+        //}
+
+        // Handler
+        public void IndexHandler(object o, Common.OnlineUsersEventArgs e)
+        {
+            Console.WriteLine("[Index]: Online users count {0} has changed.", e.ou.Count);
+            DrawUsers();
+        }
+
     }
 
 

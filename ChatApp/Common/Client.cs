@@ -89,8 +89,6 @@ namespace Common
             Console.WriteLine("[Client]: Subscribing event OnChange ...");
             server.OnlineUsersChanged += Handler;
 
-            Console.WriteLine("Passed");
-
             if (!server.Login(username, HashString(password),this))
             {
                 Console.WriteLine("Invalid login!");
@@ -202,7 +200,17 @@ namespace Common
         {
             Console.WriteLine("[Client]: Online users count {0} has changed.", e.ou.Count);
             onlineUsers = e.ou;
+
+            OnlineUsersEventArgs es = new OnlineUsersEventArgs(onlineUsers);
+            if (OnlineUsersChanged != null)
+            {
+                Console.WriteLine("[UpdateOnlineUsers]: Raising event ...");
+                OnlineUsersChanged(this, es);
+            }
         }
+
+        public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
+        public event OnlineUsersChangeEventHandler OnlineUsersChanged;
     }
 
 }

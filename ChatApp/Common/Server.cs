@@ -9,17 +9,6 @@ using Common;
 
 namespace Common
 {
-    [Serializable]
-    public class OnlineUsersEventArgs : EventArgs
-    {
-        public ArrayList ou { get; set; }
-
-        public OnlineUsersEventArgs(ArrayList al)
-        {
-            ou = al;
-        }
-    };
-
     public class Server : MarshalByRefObject
     {
         public string ServerName;
