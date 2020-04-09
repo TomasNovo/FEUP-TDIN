@@ -9,6 +9,17 @@ using Common;
 
 namespace Common
 {
+    [Serializable]
+    public class OnlineUsersEventArgs : EventArgs
+    {
+        public ArrayList ou { get; set; }
+
+        public OnlineUsersEventArgs(ArrayList al)
+        {
+            ou = al;
+        }
+    };
+
     public class Server : MarshalByRefObject
     {
         public string ServerName;
@@ -58,11 +69,17 @@ namespace Common
             newUser.client = client;
 
             users.Add(username, newUser);
-            OnOnlineUsersChange();
+
             Console.WriteLine($"User '{username}' has logged in");
             NotifyUserLogin(username);
 
-            
+
+            OnlineUsersEventArgs e = new OnlineUsersEventArgs(GetOnlineUsers());
+            if (OnlineUsersChanged != null)
+            {
+                Console.WriteLine("[UpdateOnlineUsers]: Raising event ...");
+                OnlineUsersChanged(this, e);
+            }
 
             return true;
         }
@@ -153,16 +170,20 @@ namespace Common
         }
 
         //---------Delegate------
-        public delegate void OnlineUsersChangeEventHandler(object source, EventArgs e);
+        public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
 
         public event OnlineUsersChangeEventHandler OnlineUsersChanged;
 
-        protected virtual void OnOnlineUsersChange()
-        {
-            if(OnlineUsersChanged != null)
-            {
-                OnlineUsersChanged(this, EventArgs.Empty);
-            }
-        }
+        //protected virtual void OnOnlineUsersChange(ArrayList al)
+        //{
+        //    OnlineUsersEventArgs e = new OnlineUsersEventArgs(al);
+        //    if (OnlineUsersChanged != null)
+        //    {
+        //        Console.WriteLine("[UpdateOnlineUsers]: Raising event ...");
+        //        OnlineUsersChanged(this, e);
+        //    }
+        //}
     }
+
+
 }

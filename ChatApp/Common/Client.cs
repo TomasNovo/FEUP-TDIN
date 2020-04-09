@@ -20,7 +20,9 @@ namespace Common
         public string RealName;
 
         public Server server;
-        
+
+        public ArrayList onlineUsers;
+
         public Dictionary<int, List<Client>> chatRooms;
         public List<int> chronologicalIds;
 
@@ -84,7 +86,8 @@ namespace Common
 
         public bool Login(string username, string password)
         {
-            server.OnlineUsersChanged += OnOnlineUsersChange;
+            Console.WriteLine("[Client]: Subscribing event OnChange ...");
+            server.OnlineUsersChanged += Handler;
 
             Console.WriteLine("Passed");
 
@@ -194,12 +197,12 @@ namespace Common
             return sb.ToString();
         }
 
-
-        //----------Delegates----------
-        public void OnOnlineUsersChange(object source, EventArgs e)
+        //Handler
+        public void Handler(object o, OnlineUsersEventArgs e)
         {
-            Console.WriteLine("Online users changed");
-            Console.WriteLine("EIIIIIIIIIIIIIIII");
+            Console.WriteLine("[Client]: Online users count {0} has changed.", e.ou.Count);
+            onlineUsers = e.ou;
         }
     }
+
 }
