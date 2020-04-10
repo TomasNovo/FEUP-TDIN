@@ -39,6 +39,7 @@ namespace ChatApp
             //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
 
             DrawUsers();
+            MainForm.Instance.client.OnlineUsersChanged += IndexHandler;
             //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
         }
 
@@ -68,6 +69,7 @@ namespace ChatApp
 
         private void Client_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Console.WriteLine("Index was closed");
             MainForm.Instance.Close();
         }
 

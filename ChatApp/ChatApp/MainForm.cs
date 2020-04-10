@@ -46,9 +46,6 @@ namespace ChatApp
             _loginForm = new Login();
             _indexForm = new Index();
             _registerForm = new Register();
-
-            client.OnlineUsersChanged += _indexForm.IndexHandler;
-
         }
 
         private void MainForm_Load(object sender, EventArgs e)
