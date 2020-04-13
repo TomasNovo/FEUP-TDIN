@@ -18,10 +18,15 @@ namespace Common
 
         private Random rng;
 
+        // Tuple's first is the list of all the users of the group, the second is the list of users that accepted the chat
+        private Dictionary<int, Tuple<List<string>, List<string>>> chatRoomAccepts;
+
         public Server()
         {
             users = new Dictionary<String, User>();
-            
+
+            chatRoomAccepts = new Dictionary<int, Tuple<List<string>, List<string>>>();
+
             rng = new Random();
 
             db = new Database();
@@ -32,27 +37,25 @@ namespace Common
 
         //-----------------------------------Remote methods-----------------------------------
 
-        public bool Register(string username, string password, string realname, Client client)
+        public string Register(string username, string password, string realname, Client client)
         {
             if (!db.Register(username, password, realname))
-                return false;
-
-            //NotifyUserLogin(username);
-            //User newUser = new User(new UserInfo(username, password, realname));
-            //newUser.client = client;
-            //users.Add(username, newUser);
+                return "Username already exists!";
 
             Console.WriteLine($"User '{username}' registered.");
 
-            return true;
+            return "";
         }
 
-        public bool Login(string username, string password, Client client)
+        public string Login(string username, string password, Client client)
         {
+            if (GetUserClient(username) != null)
+                return "User already logged in!";
+
             UserInfo userInfo = db.Login(username, password);
             
             if (userInfo == null)
-                return false;
+                return "Username and password don't match";
 
             User newUser = new User(userInfo);
             newUser.client = client;
@@ -62,10 +65,9 @@ namespace Common
             Console.WriteLine($"User '{username}' has logged in");
             NotifyUserLogin(username);
 
-
             OnOnlineUsersChange(GetOnlineUsers());
 
-            return true;
+            return "";
         }
 
         public bool Logout(string username)
@@ -102,14 +104,13 @@ namespace Common
             return (users.TryGetValue(username, out User us)) ? us.client : null;
         }
 
-        public int StartChatWithUser(string username)
+        public int StartChatWithUser(string creator, string[] users)
         {
-            string[] arr = { username };
-            return StartGroupChat(arr);
+            return StartGroupChat(creator, users);
         }
 
         // TODO: Check for duplicate chats
-        public int StartGroupChat(string[] usernames)
+        public int StartGroupChat(string creator, string[] usernames)
         {
             List<Client> clients = new List<Client>();
             int roomId = rng.Next();
@@ -130,7 +131,37 @@ namespace Common
                 clients[i].JoinChatRoom(roomId, usernames, clients);
             }
 
+            OnAskForChat(roomId, creator, usernames.ToList<string>());
+
+            // Create roomChat and add creator to it
+            Tuple<List<string>, List<string>> tuple = new Tuple<List<string>, List<string>>(usernames.ToList(), new List<string>());
+            chatRoomAccepts.Add(roomId, tuple);
+            AcceptChatRequest(roomId, creator);
+
             return roomId;
+        }
+
+        public void AcceptChatRequest(int roomId, string username)
+        {
+            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<string>, List<string>> tuple);
+            tuple.Item2.Add(username);
+
+            if (ListEquals(tuple.Item1, tuple.Item2))
+                OnChatAccept(roomId);
+        }
+
+        public bool ListEquals(List<string> a, List<string> b)
+        {
+            if (a.Count != b.Count)
+                return false;
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (a[i] != b[i])
+                    return false;
+            }
+
+            return true;
         }
 
         public ArrayList GetDatabaseUsers()
@@ -150,28 +181,6 @@ namespace Common
             return ou;
         }
 
-        //--------------- Hashing Methods -------------------------------------
-        static string Hash()
-        {
-            return Hash(DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString());
-        }
-
-        static string Hash(string input)
-        {
-            using (SHA1Managed sha1 = new SHA1Managed())
-            {
-                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
-                var sb = new StringBuilder(hash.Length * 2);
-
-                foreach (byte b in hash)
-                {
-                    // can be "x2" if you want lowercase
-                    sb.Append(b.ToString("X2"));
-                }
-
-                return sb.ToString();
-            }
-        }
 
         //---------Delegate------
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
@@ -185,6 +194,41 @@ namespace Common
                 OnlineUsersChanged(this, e);
             }
         }
+
+        public delegate void AskForChatEventHandler(object source, AskForChatEventArgs e);
+        public event AskForChatEventHandler ChatAsked;
+
+        protected virtual void OnAskForChat(int roomId, string creator, List<string> users)
+        {
+            AskForChatEventArgs e = new AskForChatEventArgs();
+            e.roomId = roomId;
+            e.creator = creator;
+            e.userList = users;
+
+            if (ChatAsked != null)
+            {
+                ChatAsked(this, e);
+            }
+        }
+
+        public delegate void ChatAcceptedEventHandler(object source, ChatAcceptedEventArgs e);
+        public event ChatAcceptedEventHandler ChatAccepted;
+
+        protected virtual void OnChatAccept(int roomId)
+        {
+            ChatAcceptedEventArgs e = new ChatAcceptedEventArgs();
+            e.roomId = roomId;
+
+            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<string>, List<string>> tuple);
+            e.userList = tuple.Item1;
+
+
+            if (ChatAsked != null)
+            {
+                ChatAccepted(this, e);
+            }
+        }
+
     }
 
 

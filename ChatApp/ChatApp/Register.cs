@@ -131,9 +131,11 @@ namespace ChatApp
                 return;
             }
 
-            if(!MainForm.Instance.client.Register(Username, Password, RealName))
+            string registerMessage = MainForm.Instance.client.Register(Username, Password, RealName);
+
+            if (registerMessage != "")
             {
-                MessageBox.Show("Username already exists !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(registerMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

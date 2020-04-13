@@ -27,8 +27,8 @@ namespace ChatApp
                 if (instance == null)
                 {
                     instance = new MainForm();
-
                 }
+
                 return instance;
             }
         }

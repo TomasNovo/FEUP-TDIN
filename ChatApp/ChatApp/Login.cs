@@ -74,10 +74,15 @@ namespace ChatApp
 
         private void BLogin_Click(object sender, EventArgs e)
         {
+            LoginUser();
+        }
 
-            if (!MainForm.Instance.client.Login(TBUsername.Text, TBPass.Text))
+        private void LoginUser()
+        {
+            string loginMessage = MainForm.Instance.client.Login(TBUsername.Text, TBPass.Text);
+            if (loginMessage != "")
             {
-                MessageBox.Show("Wrong Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(loginMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -87,6 +92,22 @@ namespace ChatApp
         private void BRegister_Click(object sender, EventArgs e)
         {
             MainForm.Instance.SwitchToRegister();
+        }
+
+        private void TBUsername_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                LoginUser();
+            }
+        }
+
+        private void TBPass_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                LoginUser();
+            }
         }
     }
 }

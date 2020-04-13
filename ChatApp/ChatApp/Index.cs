@@ -1,28 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Sockets;
-using System.Threading;
 using System.Drawing.Drawing2D;
 using System.Collections;
 using Common;
-using System.Threading;
 
 namespace ChatApp
 {
     public partial class Index : Form
     {
-        string IP;
-        int Port;
-        TcpClient tcp;
-        ArrayList users;
-        ArrayList onlineUsers;
+        List<int> idCreated;
         
         string message = "Hello I'm the client";
 
@@ -30,6 +19,7 @@ namespace ChatApp
         {
             InitializeComponent();
 
+            idCreated = new List<int>();
 
             //MainForm.Instance.client.OnlineUsersChanged += IndexHandler;
         }
@@ -39,34 +29,16 @@ namespace ChatApp
             //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
 
             DrawUsers();
-            MainForm.Instance.client.OnlineUsersChanged += IndexHandler;
+            MainForm.Instance.client.OnlineUsersChanged += IndexOnlineUsersChangeHandler;
+
+            MainForm.Instance.client.ChatAsked += IndexAskForChatHandler;
+
+            MainForm.Instance.client.ChatAccepted += IndexChatAcceptedHandler;
+
             //this.FormClosing += MainForm.Instance.client.server.OnlineUsersChangedLogout;
             //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
         }
 
-
-        // Connect button
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //IP = textBox1.Text;
-            //Port = Int32.Parse(textBox2.Text);
-
-            tcp = new TcpClient(IP, Port);
-            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(message);
-
-            //---send the text---
-            Console.WriteLine("Sending : " + message);
-            NetworkStream nwStream = tcp.GetStream();
-            nwStream.Write(bytesToSend, 0, bytesToSend.Length);
-
-            //---read back the text---
-            byte[] bytesToRead = new byte[tcp.ReceiveBufferSize];
-            int bytesRead = nwStream.Read(bytesToRead, 0, tcp.ReceiveBufferSize);
-            Console.WriteLine("Received : " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
-            Console.ReadLine();
-            tcp.Close();
-
-        }
 
         private void DrawUsers()
         {
@@ -74,7 +46,10 @@ namespace ChatApp
                 BeginInvoke((MethodInvoker)delegate { DrawUsers(); });
             else
             {
-                TUsername.Text = "Do you wanna chat, " + MainForm.Instance.client.UserName + " ?";
+                ArrayList users;
+                ArrayList onlineUsers;
+
+                label2.Text = "Do you wanna chat, " + MainForm.Instance.client.UserName + " ?";
 
                 users = MainForm.Instance.client.GetUsers();
                 onlineUsers = MainForm.Instance.client.server.GetOnlineUsers();
@@ -95,10 +70,11 @@ namespace ChatApp
                     cb.TabStop = false;
 
                     // Draws username
-                    TextBox temp = new System.Windows.Forms.TextBox();
+                    Label temp = new System.Windows.Forms.Label();
+                    temp.DoubleClick += Temp_DoubleClick;
                     this.Controls.Add(temp);
                     temp.Parent.Controls.SetChildIndex(temp, 2);
-                    temp.Size = new System.Drawing.Size(70, 10);
+                    temp.Size = new System.Drawing.Size(70, 15);
 
                     if (i == 0)
                     {
@@ -113,7 +89,7 @@ namespace ChatApp
 
                     temp.BackColor = Color.DarkGray;
                     temp.BorderStyle = BorderStyle.None;
-                    temp.Text = " " + users[i].ToString();
+                    temp.Text = users[i].ToString();
 
                     // Draws green(online) or gray circular button  
                     for (int j = 0; j < onlineUsers.Count; j++)
@@ -131,7 +107,17 @@ namespace ChatApp
                 }
             }
         }
-        
+
+        private void Temp_DoubleClick(object sender, EventArgs e)
+        {
+            string username = ((Label)sender).Text;
+
+            if (!MainForm.Instance.client.server.GetOnlineUsers().Contains(username))
+                return;
+
+            int id = MainForm.Instance.client.StartChatWithUser(username);
+        }
+
         private void OrderOnlineFirst(ArrayList toOrder, ArrayList online)
         {
             ArrayList indexes = new ArrayList();
@@ -145,7 +131,6 @@ namespace ChatApp
                     }
                 }
             }
-
 
 
             for(int i = 0; i < indexes.Count; i++)
@@ -169,10 +154,63 @@ namespace ChatApp
         //}
 
         // Handler
-        public void IndexHandler(object o, Common.OnlineUsersEventArgs e)
+        public void IndexOnlineUsersChangeHandler(object o, OnlineUsersEventArgs e)
         {
             DrawUsers();
         }
+
+        public void IndexAskForChatHandler(object o, AskForChatEventArgs e)
+        {
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { IndexAskForChatHandler(o, e); });
+            else
+            {
+                // If user is the one who created the chat do nothing
+                if (e.creator == MainForm.Instance.client.UserName)
+                    return;
+
+                // If username is not contained in the userList, the chat request does not concern this user
+                if (!e.userList.Contains(MainForm.Instance.client.UserName))
+                    return;
+
+                e.userList.Remove(MainForm.Instance.client.UserName);
+
+                string message = "Do you want to chat with ";
+
+                for (int i = 0; i < e.userList.Count; i++)
+                {
+                    message += e.userList[i];
+
+                    if (i < e.userList.Count - 1)
+                        message += ", ";
+                }
+
+                message += "?";
+
+                DialogResult response = MessageBox.Show(message, "", MessageBoxButtons.YesNo);
+                bool responseBool = response.HasFlag(DialogResult.Yes);
+
+                if (responseBool)
+                    MainForm.Instance.client.AcceptChatRequest(e.roomId);
+            }
+        }
+
+        public void IndexChatAcceptedHandler(object o, ChatAcceptedEventArgs e)
+        {
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { IndexChatAcceptedHandler(o, e); });
+            else
+            {
+                // If username is not contained in the userList, the chat request does not concern this user
+                if (!e.userList.Contains(MainForm.Instance.client.UserName))
+                    return;
+
+                MessageBox.Show("Everyone accepted the chat");
+
+                // TODO: Create chat window
+            }
+        }
+
 
         private void Index_FormClosing(object sender, FormClosingEventArgs e)
         {

@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 namespace Common
 {
     [Serializable]
-    public class OnlineUsersEventArgs : EventArgs
+    public class AskForChatEventArgs : EventArgs
     {
-        public ArrayList ou { get; set; }
+        public int roomId { get; set; }
+        public string creator;
+        public List<string> userList { get; set; }
 
-        public OnlineUsersEventArgs(ArrayList al)
-        {
-            ou = al;
-        }
     };
 }

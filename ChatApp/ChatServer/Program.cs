@@ -44,6 +44,8 @@ namespace ChatServer
             Server server = new Server();
 
             RemotingServices.Marshal(server, endpoint);
+
+            GC.KeepAlive(server);
         }
 
     }

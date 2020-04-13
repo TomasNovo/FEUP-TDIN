@@ -56,7 +56,7 @@ namespace Common
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Failed to connect to {link}");
+                Console.WriteLine($"Failed to connect to {link}! {e.Message}");
                 return false;
             }
             
@@ -68,12 +68,13 @@ namespace Common
             return true;
         }
 
-        public bool Register(string username, string password, string RealName)
+        public string Register(string username, string password, string RealName)
         {
-            if (!server.Register(username, HashString(password), RealName, this))
+            string registerMessage = server.Register(username, HashString(password), RealName, this);
+            if (registerMessage != "")
             {
-                Console.WriteLine("username is taken!");
-                return false;
+                Console.WriteLine(registerMessage);
+                return registerMessage;
             }
 
             ServerMessage("Registered successfully");
@@ -81,29 +82,30 @@ namespace Common
             this.UserName = username;
             this.RealName = RealName;
 
-            return true;
+            return registerMessage;
         }
 
-        public bool Login(string username, string password)
+        public string Login(string username, string password)
         {
-            server.OnlineUsersChanged += Handler;
-
-            if (!server.Login(username, HashString(password),this))
+            string loginMessage = server.Login(username, HashString(password), this);
+            if (loginMessage != "")
             {
-                Console.WriteLine("Invalid login!");
-                return false;
+                Console.WriteLine(loginMessage);
+                return loginMessage;
             }
+
+            AddHandlers();
 
             this.UserName = username;
 
             ServerMessage("Logged in successfully");
 
-            return true;
+            return loginMessage;
         }
 
         public bool Logout(string username)
         {
-            server.OnlineUsersChanged += HandlerLogout;
+            RemoveHandlers();
 
             if (!server.Logout(username))
             {
@@ -123,12 +125,19 @@ namespace Common
 
         public int StartGroupChat(string[] usernames)
         {
-            return server.StartGroupChat(usernames);
+            return server.StartGroupChat(UserName, usernames);
         }
 
         public int StartChatWithUser(string username)
         {
-            return server.StartChatWithUser(username);
+            string[] users = { UserName, username };
+
+            return server.StartChatWithUser(UserName, users);
+        }
+
+        public void AcceptChatRequest(int roomId)
+        {
+            this.server.AcceptChatRequest(roomId, this.UserName);
         }
 
         public bool SendMessage(int id, string message)
@@ -194,6 +203,7 @@ namespace Common
 
 
         //------------Hashing Functions-----------------
+
         public static byte[] GetHash(string inputString)
         {
             using (HashAlgorithm algorithm = SHA256.Create())
@@ -210,30 +220,56 @@ namespace Common
         }
 
         //Handler -> Client receives event and sends new event to Index
-        public void Handler(object o, OnlineUsersEventArgs e)
-        {
-            onlineUsers = e.ou;
 
-            OnlineUsersEventArgs es = new OnlineUsersEventArgs(onlineUsers);
-            if (OnlineUsersChanged != null)
-            {
-                OnlineUsersChanged(this, es);
-            }
+        public void AddHandlers()
+        {
+            server.OnlineUsersChanged += HandlerLogout;
+            server.ChatAsked += HandlerAskForChat;
+            server.ChatAccepted += HandlerChatAccepted;
         }
 
-        public void HandlerLogout(object o, OnlineUsersEventArgs e)
+        public void RemoveHandlers()
         {
-            onlineUsers = e.ou;
-
-            OnlineUsersEventArgs es = new OnlineUsersEventArgs(onlineUsers);
-            if (OnlineUsersChanged != null)
-            {
-                OnlineUsersChanged(this, es);
-            }
+            server.OnlineUsersChanged -= HandlerLogout;
+            server.ChatAsked -= HandlerAskForChat;
         }
 
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
         public event OnlineUsersChangeEventHandler OnlineUsersChanged;
+
+        public void HandlerLogout(object o, OnlineUsersEventArgs e)
+        {
+            if (OnlineUsersChanged != null)
+            {
+                OnlineUsersChanged(this, e);
+            }
+        }
+
+
+        public delegate void AskForChatEventHandler(object source, AskForChatEventArgs e);
+        public event AskForChatEventHandler ChatAsked;
+
+        public void HandlerAskForChat(object o, AskForChatEventArgs e)
+        {
+            if (ChatAsked != null)
+            {
+                ChatAsked(this, e);
+            }
+        }
+
+
+        public delegate void ChatAcceptedEventHandler(object source, ChatAcceptedEventArgs e);
+        public event ChatAcceptedEventHandler ChatAccepted;
+
+        public void HandlerChatAccepted(object o, ChatAcceptedEventArgs e)
+        {
+            if (ChatAsked != null)
+            {
+                ChatAccepted(this, e);
+            }
+        }
+
+
     }
 
 }
