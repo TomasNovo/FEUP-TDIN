@@ -40,6 +40,7 @@ namespace ChatApp
 
             DrawUsers();
             MainForm.Instance.client.OnlineUsersChanged += IndexHandler;
+            //this.FormClosing += MainForm.Instance.client.server.OnlineUsersChangedLogout;
             //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
         }
 
@@ -65,12 +66,6 @@ namespace ChatApp
             Console.ReadLine();
             tcp.Close();
 
-        }
-
-        private void Client_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Console.WriteLine("Index was closed");
-            MainForm.Instance.Close();
         }
 
         private void DrawUsers()
@@ -133,12 +128,7 @@ namespace ChatApp
                             cb.BackColor = Color.Gray;
                         }
                     }
-
-
-
-
                 }
-
             }
         }
         
@@ -184,6 +174,19 @@ namespace ChatApp
             DrawUsers();
         }
 
+        private void Index_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MainForm.Instance.client.Logout(MainForm.Instance.client.UserName);
+            MainForm.Instance.Close();
+        }
+
+        //When form is closed
+        //private void Client_FormClosing(object sender, FormClosingEventArgs e)
+        //{
+        //    Console.WriteLine("Index was closed");
+        //    MainForm.Instance.client.Logout(MainForm.Instance.client.UserName);
+        //    MainForm.Instance.Close();
+        //}
     }
 
 

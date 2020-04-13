@@ -63,7 +63,18 @@ namespace Common
             NotifyUserLogin(username);
 
 
-            OnOnlineUsersChange();
+            OnOnlineUsersChange(GetOnlineUsers());
+
+            return true;
+        }
+
+        public bool Logout(string username)
+        {
+            //NotifyUserLogout(username);
+            users.Remove(username);
+            Console.WriteLine($"User '{username}' has logged out");
+
+            OnOnlineUsersChange(GetOnlineUsers());
 
             return true;
         }
@@ -76,6 +87,15 @@ namespace Common
                     entry.Value.client.ServerMessage($"User '{username}' has entered the chat");
             }
         }
+
+        //public void NotifyUserLogout(string username)
+        //{
+        //    foreach (KeyValuePair<string, User> entry in users) // Notify all other users on user register
+        //    {
+        //        if (entry.Key != username)
+        //            entry.Value.client.ServerMessage($"User '{username}' has leaved the chat");
+        //    }
+        //}
 
         public Client GetUserClient(string username)
         {
@@ -157,9 +177,9 @@ namespace Common
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
         public event OnlineUsersChangeEventHandler OnlineUsersChanged;
 
-        protected virtual void OnOnlineUsersChange()
+        protected virtual void OnOnlineUsersChange(ArrayList u)
         {
-            OnlineUsersEventArgs e = new OnlineUsersEventArgs(GetOnlineUsers());
+            OnlineUsersEventArgs e = new OnlineUsersEventArgs(u);
             if (OnlineUsersChanged != null)
             {
                 OnlineUsersChanged(this, e);

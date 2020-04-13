@@ -135,7 +135,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Index";
             this.Text = "Client";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Client_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Index_FormClosing);
             this.Load += new System.EventHandler(this.Index_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

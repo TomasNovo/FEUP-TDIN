@@ -86,7 +86,6 @@ namespace Common
 
         public bool Login(string username, string password)
         {
-            Console.WriteLine("[Client]: Subscribing event OnChange ...");
             server.OnlineUsersChanged += Handler;
 
             if (!server.Login(username, HashString(password),this))
@@ -98,6 +97,21 @@ namespace Common
             this.UserName = username;
 
             ServerMessage("Logged in successfully");
+
+            return true;
+        }
+
+        public bool Logout(string username)
+        {
+            server.OnlineUsersChanged += HandlerLogout;
+
+            if (!server.Logout(username))
+            {
+                Console.WriteLine("Something went wrong while logging out");
+                return false;
+            }
+
+            ServerMessage("Logged out successfully");
 
             return true;
         }
@@ -197,6 +211,17 @@ namespace Common
 
         //Handler -> Client receives event and sends new event to Index
         public void Handler(object o, OnlineUsersEventArgs e)
+        {
+            onlineUsers = e.ou;
+
+            OnlineUsersEventArgs es = new OnlineUsersEventArgs(onlineUsers);
+            if (OnlineUsersChanged != null)
+            {
+                OnlineUsersChanged(this, es);
+            }
+        }
+
+        public void HandlerLogout(object o, OnlineUsersEventArgs e)
         {
             onlineUsers = e.ou;
 
