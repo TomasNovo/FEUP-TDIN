@@ -18,6 +18,9 @@ namespace ChatApp
         private Index _indexForm;
         private Register _registerForm;
 
+        //Testing
+        private ChatRoom _chatRoom;
+
         public Common.Client client;
 
         public static MainForm Instance
@@ -46,13 +49,15 @@ namespace ChatApp
             _loginForm = new Login();
             _indexForm = new Index();
             _registerForm = new Register();
-        }
+            _chatRoom = new ChatRoom();
+    }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.Size = new Size(0, 0);
 
-            _loginForm.Show();
+            _chatRoom.Show();
+            //_loginForm.Show();
 
             //client.server.OnlineUsersChanged += _indexForm.IndexHandler;
             //_indexForm.Show();
