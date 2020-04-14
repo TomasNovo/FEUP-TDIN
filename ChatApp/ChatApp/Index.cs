@@ -78,13 +78,13 @@ namespace ChatApp
 
                     if (i == 0)
                     {
-                        temp.Location = new Point(500, 55);
-                        cb.Location = new Point(575, 57);
+                        temp.Location = new Point(510, 55);
+                        cb.Location = new Point(495, 57);
                     }
                     else
                     {
-                        temp.Location = new Point(500, 55 + i * 25);
-                        cb.Location = new Point(575, 57 + i * 25);
+                        temp.Location = new Point(510, 55 + i * 25);
+                        cb.Location = new Point(495, 57 + i * 25);
                     }
 
                     temp.BackColor = Color.DarkGray;
