@@ -19,6 +19,12 @@ namespace ChatApp
         {
             InitializeComponent();
 
+            // Fixed size
+            this.FormBorderStyle = FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             idCreated = new List<int>();
 
             //MainForm.Instance.client.OnlineUsersChanged += IndexHandler;
