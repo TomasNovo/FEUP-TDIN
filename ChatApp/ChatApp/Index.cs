@@ -33,6 +33,12 @@ namespace ChatApp
         private void Index_Load(object sender, EventArgs e)
         {
             //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
+            PUsers.AutoScroll = false;
+            PUsers.HorizontalScroll.Enabled = false;
+            PUsers.HorizontalScroll.Visible = false;
+            PUsers.HorizontalScroll.Maximum = 0;
+            PUsers.AutoScroll = true;
+
 
             DrawUsers();
             MainForm.Instance.client.OnlineUsersChanged += IndexOnlineUsersChangeHandler;
@@ -78,18 +84,18 @@ namespace ChatApp
                     // Draws username
                     Label temp = new System.Windows.Forms.Label();
                     temp.DoubleClick += Temp_DoubleClick;
-                    this.Controls.Add(temp);
+                    this.PUsers.Controls.Add(temp);
                     temp.Parent.Controls.SetChildIndex(temp, 2);
                     temp.Size = new System.Drawing.Size(70, 15);
 
                     if (i == 0)
                     {
-                        temp.Location = new Point(510, 55);
+                        temp.Location = new Point(20, 55);
                         cb.Location = new Point(495, 57);
                     }
                     else
                     {
-                        temp.Location = new Point(510, 55 + i * 25);
+                        temp.Location = new Point(20, 55 + i * 25);
                         cb.Location = new Point(495, 57 + i * 25);
                     }
 
