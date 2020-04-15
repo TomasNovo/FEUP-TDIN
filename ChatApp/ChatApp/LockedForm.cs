@@ -8,19 +8,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Common
+namespace ChatApp
 {
-    public partial class LockedForm : Form
+    public class LockedForm : Form
     {
         public LockedForm()
         {
-            InitializeComponent();
-
             // Fixed size
             this.FormBorderStyle = FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
         }
+
+        private void LockedForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MainForm.Instance.Close();
+        }
     }
 }
+

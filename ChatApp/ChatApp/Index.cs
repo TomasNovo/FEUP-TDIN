@@ -11,17 +11,14 @@ namespace ChatApp
 {
     public partial class Index : LockedForm
     {
-        List<int> idCreated;
-        
-        string message = "Hello I'm the client";
+        private Dictionary<int, ChatRoom> _chatRooms;
+
 
         public Index()
         {
             InitializeComponent();
 
-            idCreated = new List<int>();
-
-            //MainForm.Instance.client.OnlineUsersChanged += IndexHandler;
+            _chatRooms = new Dictionary<int, ChatRoom>();
         }
 
         private void Index_Load(object sender, EventArgs e)
@@ -41,8 +38,6 @@ namespace ChatApp
 
             MainForm.Instance.client.ChatAccepted += IndexChatAcceptedHandler;
 
-            //this.FormClosing += MainForm.Instance.client.server.OnlineUsersChangedLogout;
-            //MainForm.Instance.client.server.OnlineUsersChanged += IndexHandler;
         }
 
 
@@ -77,8 +72,6 @@ namespace ChatApp
                 for (int i = 0; i < users.Count; i++)
                 {
                     CircularButton cb = new CircularButton();
-                    //cb.Parent = this;
-                    //cb.Parent.Controls.SetChildIndex(cb, 2);
                     cb.FlatStyle = FlatStyle.Flat;
                     cb.FlatAppearance.BorderSize = 0;
                     cb.Size = new System.Drawing.Size(10, 10);
@@ -88,7 +81,6 @@ namespace ChatApp
                     // Draws username
                     Label temp = new System.Windows.Forms.Label();
                     temp.DoubleClick += Temp_DoubleClick;
-                    //temp.Parent.Controls.SetChildIndex(temp, 2);
                     temp.Size = new System.Drawing.Size(70, 15);
                     temp.Location = new Point(28, 55 + i * 25);
                     temp.BackColor = Color.DarkGray;
@@ -112,6 +104,48 @@ namespace ChatApp
 
                 }
             }
+        }
+
+        private void DrawChatRooms()
+        {
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { DrawChatRooms(); });
+            else
+            {
+
+                PChatRooms.Controls.Clear();
+
+                const int heightSpacing = 45;
+                const int widthSpacing = 45;
+
+                int i = 0;
+                foreach (KeyValuePair<int, ChatRoom> entry in _chatRooms)
+                {
+                    // do something with entry.Value or entry.Key
+
+                    CircularButton cb = new CircularButton();
+                    cb.FlatStyle = FlatStyle.Flat;
+                    cb.FlatAppearance.BorderSize = 0;
+                    cb.TabStop = false;
+                    cb.ForeColor = Color.SlateBlue;
+                    cb.BackColor = Color.Black;
+                    cb.Text = $"Chat{Environment.NewLine}{i+1}";
+                    cb.Size = new Size(40, 40);
+                    cb.Location = new Point(25 + widthSpacing * (i / 3), 25 + heightSpacing * (i % 3));
+                    cb.Name = $"{entry.Key}";
+                    cb.Click += Cb_Click;
+
+                    PChatRooms.Controls.Add(cb);
+                    i++;
+                }
+            }
+        }
+
+        private void Cb_Click(object sender, EventArgs e)
+        {
+            int roomId = Int32.Parse(((CircularButton)sender).Name);
+
+            _chatRooms[roomId].ToggleVisibility();
         }
 
         private void Temp_DoubleClick(object sender, EventArgs e)
@@ -215,7 +249,10 @@ namespace ChatApp
 
                 // TODO: Create chat window
 
+                ChatRoom chatRoom = new ChatRoom(e.roomId, e.userList);
+                _chatRooms.Add(e.roomId, chatRoom);
 
+                DrawChatRooms();
             }
         }
 
@@ -226,18 +263,6 @@ namespace ChatApp
             MainForm.Instance.Close();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        //When form is closed
-        //private void Client_FormClosing(object sender, FormClosingEventArgs e)
-        //{
-        //    Console.WriteLine("Index was closed");
-        //    MainForm.Instance.client.Logout(MainForm.Instance.client.UserName);
-        //    MainForm.Instance.Close();
-        //}
     }
 
 

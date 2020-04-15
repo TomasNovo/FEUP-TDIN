@@ -32,9 +32,8 @@
             this.PUsers = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.circularButton1 = new ChatApp.CircularButton();
-            this.Icon = new ChatApp.CircularButton();
             this.label2 = new System.Windows.Forms.Label();
+            this.PChatRooms = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,35 +67,6 @@
             this.pictureBox3.TabIndex = 9;
             this.pictureBox3.TabStop = false;
             // 
-            // circularButton1
-            // 
-            this.circularButton1.BackColor = System.Drawing.Color.Black;
-            this.circularButton1.FlatAppearance.BorderSize = 0;
-            this.circularButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.circularButton1.ForeColor = System.Drawing.Color.SlateBlue;
-            this.circularButton1.Location = new System.Drawing.Point(50, 190);
-            this.circularButton1.Margin = new System.Windows.Forms.Padding(2);
-            this.circularButton1.Name = "circularButton1";
-            this.circularButton1.Size = new System.Drawing.Size(38, 41);
-            this.circularButton1.TabIndex = 10;
-            this.circularButton1.Text = "Chat1";
-            this.circularButton1.UseVisualStyleBackColor = false;
-            // 
-            // Icon
-            // 
-            this.Icon.BackColor = System.Drawing.Color.Black;
-            this.Icon.FlatAppearance.BorderSize = 0;
-            this.Icon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Icon.ForeColor = System.Drawing.Color.SlateBlue;
-            this.Icon.Location = new System.Drawing.Point(50, 250);
-            this.Icon.Margin = new System.Windows.Forms.Padding(2);
-            this.Icon.Name = "Icon";
-            this.Icon.Size = new System.Drawing.Size(38, 41);
-            this.Icon.TabIndex = 3;
-            this.Icon.Text = "Chat1";
-            this.Icon.UseVisualStyleBackColor = false;
-            this.Icon.Click += new System.EventHandler(this.Icon_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -107,16 +77,22 @@
             this.label2.TabIndex = 11;
             this.label2.Text = "label2";
             // 
+            // PChatRooms
+            // 
+            this.PChatRooms.Location = new System.Drawing.Point(31, 193);
+            this.PChatRooms.Name = "PChatRooms";
+            this.PChatRooms.Size = new System.Drawing.Size(405, 161);
+            this.PChatRooms.TabIndex = 12;
+            // 
             // Index
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.PChatRooms);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.circularButton1);
             this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.Icon);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.PUsers);
             this.ForeColor = System.Drawing.Color.Snow;
@@ -135,10 +111,9 @@
 
         private System.Windows.Forms.Panel PUsers;
         private System.Windows.Forms.Panel panel2;
-        private CircularButton Icon;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private CircularButton circularButton1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel PChatRooms;
     }
 }
 

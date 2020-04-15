@@ -15,16 +15,28 @@ namespace ChatApp
     {
         int message_number = 0;
         private int roomId;
+        public List<string> userList;
         private Client client;
+        private bool hidden = true;
 
-        public ChatRoom(int RoomId)
+        public ChatRoom(int RoomId, List<string>  userList)
         {
             InitializeComponent();
 
-            roomId = RoomId;
+            this.roomId = RoomId;
 
             client = MainForm.Instance.client;
             client.MessageReceived += Client_MessageReceived;
+
+            for (int i = 0; i < userList.Count; i++)
+            {
+                TBUserList.Text += $"{userList[i]}{Environment.NewLine}";
+            }
+
+            userList.Remove(client.UserName);
+            this.userList = userList;
+
+            this.ControlBox = false;
         }
 
         private void Client_MessageReceived(object source, MessageReceivedEventArgs e)
@@ -34,7 +46,7 @@ namespace ChatApp
                 return;
 
             // Ignore messages belongin to other rooms
-            if (e.roomId == roomId)
+            if (e.roomId != roomId)
                 return;
 
             DrawMessages(e);
@@ -42,7 +54,10 @@ namespace ChatApp
 
         private void DrawMessages(MessageReceivedEventArgs e)
         {
-
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { DrawMessages(e); });
+            else
+                MessageBox.Show($"{e.sender}: {e.message}");
         }
 
         private void ChatRoom_Load(object sender, EventArgs e)
@@ -100,6 +115,16 @@ namespace ChatApp
             TBSend.Text = "Write here your message..";
             //TBSend.ForeColor = Color.Silver;
 
+        }
+
+        public void ToggleVisibility()
+        {
+            if (hidden)
+                this.Show();
+            else
+                this.Hide();
+
+            hidden = !hidden; // Swap hidden value
         }
     }
 }

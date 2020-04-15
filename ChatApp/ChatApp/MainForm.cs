@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,10 +20,8 @@ namespace ChatApp
         private Index _indexForm;
         private Register _registerForm;
 
-        //Testing
-        private ChatRoom _chatRoom;
 
-        public Common.Client client;
+        public Client client;
 
         public static MainForm Instance
         {
@@ -41,16 +40,13 @@ namespace ChatApp
         {
             InitializeComponent();
 
-            client = new Common.Client();
-            client.Connect("localhost", 8080, "server");
-
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.ShowInTaskbar = false;
 
             _loginForm = new Login();
             _indexForm = new Index();
             _registerForm = new Register();
-            _chatRoom = new ChatRoom();
+            //_chatRoom = new ChatRoom();
     }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -59,6 +55,13 @@ namespace ChatApp
 
             //_chatRoom.Show();
             _loginForm.Show();
+
+
+            client = new Client();
+            client.Connect("localhost", 8080, "server");
+
+            Thread thread1 = new Thread(client.Ping);
+            thread1.Start();
 
             //client.server.OnlineUsersChanged += _indexForm.IndexHandler;
             //_indexForm.Show();

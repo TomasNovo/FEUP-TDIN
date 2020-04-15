@@ -181,6 +181,11 @@ namespace Common
             return ou;
         }
 
+        public void Ping()
+        {
+
+        }
+
 
         //---------Delegate------
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);

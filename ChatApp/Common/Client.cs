@@ -118,6 +118,11 @@ namespace Common
             return true;
         }
 
+        public void Ping()
+        {
+            server.Ping();
+        }
+
         public ArrayList GetUsers()
         {
             return server.GetDatabaseUsers();
@@ -223,6 +228,7 @@ namespace Common
             server.OnlineUsersChanged += HandlerLogout;
             server.ChatAsked += HandlerAskForChat;
             server.ChatAccepted += HandlerChatAccepted;
+
         }
 
         public void RemoveHandlers()
