@@ -56,8 +56,8 @@ namespace ChatApp
         {
             this.Size = new Size(0, 0);
 
-            _chatRoom.Show();
-            //_loginForm.Show();
+            //_chatRoom.Show();
+            _loginForm.Show();
 
             //client.server.OnlineUsersChanged += _indexForm.IndexHandler;
             //_indexForm.Show();
