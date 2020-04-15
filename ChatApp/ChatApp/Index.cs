@@ -9,7 +9,7 @@ using Common;
 
 namespace ChatApp
 {
-    public partial class Index : Form
+    public partial class Index : LockedForm
     {
         List<int> idCreated;
         
@@ -18,12 +18,6 @@ namespace ChatApp
         public Index()
         {
             InitializeComponent();
-
-            // Fixed size
-            this.FormBorderStyle = FormBorderStyle.Fixed3D;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.StartPosition = FormStartPosition.CenterScreen;
 
             idCreated = new List<int>();
 
@@ -40,7 +34,7 @@ namespace ChatApp
             PUsers.AutoScroll = true;
 
 
-            DrawUsers();
+            DrawUserPanel();
             MainForm.Instance.client.OnlineUsersChanged += IndexOnlineUsersChangeHandler;
 
             MainForm.Instance.client.ChatAsked += IndexAskForChatHandler;
@@ -52,14 +46,23 @@ namespace ChatApp
         }
 
 
-        private void DrawUsers()
+        private void DrawUserPanel()
         {
             if (InvokeRequired)
-                BeginInvoke((MethodInvoker)delegate { DrawUsers(); });
+                BeginInvoke((MethodInvoker)delegate { DrawUserPanel(); });
             else
             {
                 ArrayList users;
                 ArrayList onlineUsers;
+
+                PUsers.Controls.Clear();
+
+                Label label1 = new Label();
+                label1.Font = new Font("Microsoft Sans Serif", 12);
+                label1.Text = "Users";
+                label1.Size = new Size(51, 20);
+                label1.Location = new Point(22, 17);
+                PUsers.Controls.Add(label1);
 
                 label2.Text = "Do you wanna chat, " + MainForm.Instance.client.UserName + " ?";
 
@@ -74,34 +77,25 @@ namespace ChatApp
                 for (int i = 0; i < users.Count; i++)
                 {
                     CircularButton cb = new CircularButton();
-                    cb.Parent = this;
-                    cb.Parent.Controls.SetChildIndex(cb, 2);
+                    //cb.Parent = this;
+                    //cb.Parent.Controls.SetChildIndex(cb, 2);
                     cb.FlatStyle = FlatStyle.Flat;
                     cb.FlatAppearance.BorderSize = 0;
                     cb.Size = new System.Drawing.Size(10, 10);
                     cb.TabStop = false;
+                    cb.Location = new Point(15, 57 + i * 25);
 
                     // Draws username
                     Label temp = new System.Windows.Forms.Label();
                     temp.DoubleClick += Temp_DoubleClick;
-                    this.PUsers.Controls.Add(temp);
-                    temp.Parent.Controls.SetChildIndex(temp, 2);
+                    //temp.Parent.Controls.SetChildIndex(temp, 2);
                     temp.Size = new System.Drawing.Size(70, 15);
-
-                    if (i == 0)
-                    {
-                        temp.Location = new Point(20, 55);
-                        cb.Location = new Point(495, 57);
-                    }
-                    else
-                    {
-                        temp.Location = new Point(20, 55 + i * 25);
-                        cb.Location = new Point(495, 57 + i * 25);
-                    }
-
+                    temp.Location = new Point(28, 55 + i * 25);
                     temp.BackColor = Color.DarkGray;
                     temp.BorderStyle = BorderStyle.None;
                     temp.Text = users[i].ToString();
+
+                    cb.BackColor = Color.Gray;
 
                     // Draws green(online) or gray circular button  
                     for (int j = 0; j < onlineUsers.Count; j++)
@@ -111,11 +105,11 @@ namespace ChatApp
                             cb.BackColor = Color.Green;
                             break;
                         }
-                        else
-                        {
-                            cb.BackColor = Color.Gray;
-                        }
                     }
+
+                    this.PUsers.Controls.Add(cb);
+                    this.PUsers.Controls.Add(temp);
+
                 }
             }
         }
@@ -168,7 +162,7 @@ namespace ChatApp
         // Handler
         public void IndexOnlineUsersChangeHandler(object o, OnlineUsersEventArgs e)
         {
-            DrawUsers();
+            DrawUserPanel();
         }
 
         public void IndexAskForChatHandler(object o, AskForChatEventArgs e)
@@ -220,6 +214,8 @@ namespace ChatApp
                 MessageBox.Show("Everyone accepted the chat");
 
                 // TODO: Create chat window
+
+
             }
         }
 
@@ -228,6 +224,11 @@ namespace ChatApp
         {
             MainForm.Instance.client.Logout(MainForm.Instance.client.UserName);
             MainForm.Instance.Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
 
         //When form is closed

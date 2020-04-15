@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,7 +11,7 @@ using System.Windows.Forms;
 
 namespace ChatApp
 {
-    public sealed partial class MainForm : Form
+    public sealed partial class MainForm : LockedForm
     {
         private static MainForm instance = null;
 

@@ -140,16 +140,13 @@ namespace Common
             this.server.AcceptChatRequest(roomId, this.UserName);
         }
 
-        public bool SendMessage(int id, string message)
+        public bool SendMessage(int roomId, string message)
         {
             try
             {
-                List<Client> clients = chatRooms[id];
+                List<Client> clients = chatRooms[roomId];
 
-                for (int i = 0; i < clients.Count; i++)
-                {
-                    clients[i].Message(UserName, message);
-                }
+                OnMessageSend(roomId, message);
             }
             catch(Exception e)
             {
@@ -232,6 +229,7 @@ namespace Common
         {
             server.OnlineUsersChanged -= HandlerLogout;
             server.ChatAsked -= HandlerAskForChat;
+            server.ChatAccepted -= HandlerChatAccepted;
         }
 
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
@@ -263,13 +261,36 @@ namespace Common
 
         public void HandlerChatAccepted(object o, ChatAcceptedEventArgs e)
         {
-            if (ChatAsked != null)
+            if (ChatAccepted != null)
             {
                 ChatAccepted(this, e);
             }
         }
 
+        public delegate void MessageReceivedEventHandler(object source, MessageReceivedEventArgs e);
+        public event MessageReceivedEventHandler MessageReceived;
 
+        public void HandlerMessageReceived(object o, MessageReceivedEventArgs e)
+        {
+            if (MessageReceived != null)
+            {
+                MessageReceived(this, e);
+            }
+        }
+
+        protected virtual void OnMessageSend(int roomId, string message)
+        {
+            MessageReceivedEventArgs e = new MessageReceivedEventArgs();
+            e.roomId = roomId;
+            e.sender = this.UserName;
+            e.message = message;
+            // e.timestamp = ...; ? 
+
+            if (MessageReceived != null)
+            {
+                MessageReceived(this, e);
+            }
+        }
     }
 
 }

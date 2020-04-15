@@ -7,16 +7,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Common;
 
 namespace ChatApp
 {
-    public partial class ChatRoom : Form
+    public partial class ChatRoom : LockedForm
     {
         int message_number = 0;
+        private int roomId;
+        private Client client;
 
-        public ChatRoom()
+        public ChatRoom(int RoomId)
         {
             InitializeComponent();
+
+            roomId = RoomId;
+
+            client = MainForm.Instance.client;
+            client.MessageReceived += Client_MessageReceived;
+        }
+
+        private void Client_MessageReceived(object source, MessageReceivedEventArgs e)
+        {
+            // Ignore event when message is sent by this client
+            if (e.sender == client.UserName)
+                return;
+
+            // Ignore messages belongin to other rooms
+            if (e.roomId == roomId)
+                return;
+
+            DrawMessages(e);
+        }
+
+        private void DrawMessages(MessageReceivedEventArgs e)
+        {
+
         }
 
         private void ChatRoom_Load(object sender, EventArgs e)
@@ -68,6 +94,9 @@ namespace ChatApp
             }
             message_number++;
             temp.Text = TBSend.Text;
+
+            MainForm.Instance.client.SendMessage(roomId, temp.Text);
+
             TBSend.Text = "Write here your message..";
             //TBSend.ForeColor = Color.Silver;
 

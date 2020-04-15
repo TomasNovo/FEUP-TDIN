@@ -62,12 +62,14 @@
       <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,6 +80,13 @@
   <ItemGroup>
     <Compile Include="AskForChatEventArgs.cs" />
     <Compile Include="ChatAcceptedEventArgs.cs" />
+    <Compile Include="LockedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LockedForm.Designer.cs">
+      <DependentUpon>LockedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessageReceivedEventArgs.cs" />
     <Compile Include="OnlineUsersEventArgs.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Database.cs" />

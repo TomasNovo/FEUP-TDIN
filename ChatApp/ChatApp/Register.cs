@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using Common;
 
 namespace ChatApp
 {
-    public partial class Register : Form
+    public partial class Register : LockedForm
     {
         public String Username;
         public String Password;
@@ -21,12 +22,6 @@ namespace ChatApp
         public Register()
         {
             InitializeComponent();
-
-            // Fixed size
-            this.FormBorderStyle = FormBorderStyle.Fixed3D;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         //Real Name Placeholder

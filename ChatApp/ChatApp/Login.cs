@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Common;
 
 namespace ChatApp
 {
-    public partial class Login : Form
+    public partial class Login : LockedForm
     {
         public String Username;
         public String Password;
@@ -19,12 +20,6 @@ namespace ChatApp
         public Login()
         {
             InitializeComponent();
-
-            // Fixed size
-            this.FormBorderStyle = FormBorderStyle.Fixed3D;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.StartPosition = FormStartPosition.CenterScreen;
         }
         
         
