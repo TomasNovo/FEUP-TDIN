@@ -35,7 +35,7 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.TBUserList = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.TChatName = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -43,9 +43,10 @@
             // PMessages
             // 
             this.PMessages.BackColor = System.Drawing.Color.White;
-            this.PMessages.Location = new System.Drawing.Point(34, 39);
+            this.PMessages.Location = new System.Drawing.Point(45, 48);
+            this.PMessages.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.PMessages.Name = "PMessages";
-            this.PMessages.Size = new System.Drawing.Size(490, 276);
+            this.PMessages.Size = new System.Drawing.Size(653, 340);
             this.PMessages.TabIndex = 0;
             // 
             // BSend
@@ -53,10 +54,10 @@
             this.BSend.BackColor = System.Drawing.Color.RoyalBlue;
             this.BSend.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BSend.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.BSend.Location = new System.Drawing.Point(544, 351);
-            this.BSend.Margin = new System.Windows.Forms.Padding(2);
+            this.BSend.Location = new System.Drawing.Point(725, 432);
+            this.BSend.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BSend.Name = "BSend";
-            this.BSend.Size = new System.Drawing.Size(75, 33);
+            this.BSend.Size = new System.Drawing.Size(100, 41);
             this.BSend.TabIndex = 4;
             this.BSend.Text = "Send";
             this.BSend.UseVisualStyleBackColor = false;
@@ -65,11 +66,11 @@
             // TBSend
             // 
             this.TBSend.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.TBSend.Location = new System.Drawing.Point(34, 332);
-            this.TBSend.Margin = new System.Windows.Forms.Padding(2);
+            this.TBSend.Location = new System.Drawing.Point(45, 409);
+            this.TBSend.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TBSend.Multiline = true;
             this.TBSend.Name = "TBSend";
-            this.TBSend.Size = new System.Drawing.Size(492, 65);
+            this.TBSend.Size = new System.Drawing.Size(655, 79);
             this.TBSend.TabIndex = 5;
             this.TBSend.Text = "Write here your message..";
             this.TBSend.Enter += new System.EventHandler(this.TBSend_Enter);
@@ -78,8 +79,8 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(536, 39);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox3.Location = new System.Drawing.Point(715, 48);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(100, 100);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -90,45 +91,50 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(497, 363);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox1.Location = new System.Drawing.Point(663, 447);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(27, 33);
+            this.pictureBox1.Size = new System.Drawing.Size(36, 41);
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
             // 
             // TBUserList
             // 
-            this.TBUserList.Location = new System.Drawing.Point(536, 168);
+            this.TBUserList.Location = new System.Drawing.Point(715, 207);
+            this.TBUserList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.TBUserList.Multiline = true;
             this.TBUserList.Name = "TBUserList";
             this.TBUserList.ReadOnly = true;
-            this.TBUserList.Size = new System.Drawing.Size(100, 147);
+            this.TBUserList.Size = new System.Drawing.Size(132, 180);
             this.TBUserList.TabIndex = 11;
             // 
-            // label1
+            // TChatName
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(221, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(111, 25);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Chat Name";
+            this.TChatName.BackColor = System.Drawing.Color.Gray;
+            this.TChatName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TChatName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TChatName.ForeColor = System.Drawing.SystemColors.Menu;
+            this.TChatName.Location = new System.Drawing.Point(45, 12);
+            this.TChatName.Name = "TChatName";
+            this.TChatName.Size = new System.Drawing.Size(271, 29);
+            this.TChatName.TabIndex = 12;
+            this.TChatName.Text = "Chat Name";
+            this.TChatName.TextChanged += new System.EventHandler(this.TChatName_TextChanged);
             // 
             // ChatRoom
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(648, 450);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(864, 554);
+            this.Controls.Add(this.TChatName);
             this.Controls.Add(this.TBUserList);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.TBSend);
             this.Controls.Add(this.BSend);
             this.Controls.Add(this.PMessages);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ChatRoom";
             this.Text = "ChatRoom";
             this.Load += new System.EventHandler(this.ChatRoom_Load);
@@ -147,6 +153,6 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox TBUserList;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox TChatName;
     }
 }

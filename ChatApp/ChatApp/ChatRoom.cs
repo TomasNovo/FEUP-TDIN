@@ -19,11 +19,14 @@ namespace ChatApp
         private Client client;
         private bool hidden = true;
 
+        private string ChatName;
+
         public ChatRoom(int RoomId, List<string>  userList)
         {
             InitializeComponent();
 
             this.roomId = RoomId;
+            this.ChatName = "ChatName" + this.roomId;
 
             client = MainForm.Instance.client;
             client.MessageReceived += Client_MessageReceived;
@@ -67,8 +70,15 @@ namespace ChatApp
                 BeginInvoke((MethodInvoker)delegate { DrawMessageReceived(e); });
             else
             {
-                //MessageBox.Show($"{e.sender}: {e.message}");
+                if(e.message.Length >= 16 &&  e.message.Substring(0,16).Equals("UpdatedChatName:"))
+                {
+                    this.ChatName = e.message.Substring(16);
+                    TChatName.Text = this.ChatName;
+                    return;
+                }
+                
                 DrawMessage(true, e.message, e.sender);
+                
             }
         }
 
@@ -143,6 +153,11 @@ namespace ChatApp
                 this.Hide();
 
             hidden = !hidden; // Swap hidden value
+        }
+
+        private void TChatName_TextChanged(object sender, EventArgs e)
+        {
+            MainForm.Instance.client.SendMessage(roomId, "UpdatedChatName:" + TChatName.Text);
         }
     }
 }

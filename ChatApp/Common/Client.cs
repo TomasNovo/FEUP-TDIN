@@ -232,7 +232,7 @@ namespace Common
             return sb.ToString();
         }
 
-        //Handler -> Client receives event and sends new event to Index
+        //-------------Events----------------------------
 
         public void AddHandlers()
         {
