@@ -54,7 +54,7 @@
             this.BSend.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BSend.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.BSend.Location = new System.Drawing.Point(544, 351);
-            this.BSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BSend.Margin = new System.Windows.Forms.Padding(2);
             this.BSend.Name = "BSend";
             this.BSend.Size = new System.Drawing.Size(75, 33);
             this.BSend.TabIndex = 4;
@@ -66,7 +66,7 @@
             // 
             this.TBSend.ForeColor = System.Drawing.SystemColors.InfoText;
             this.TBSend.Location = new System.Drawing.Point(34, 332);
-            this.TBSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.TBSend.Margin = new System.Windows.Forms.Padding(2);
             this.TBSend.Multiline = true;
             this.TBSend.Name = "TBSend";
             this.TBSend.Size = new System.Drawing.Size(492, 65);
@@ -79,7 +79,7 @@
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.Location = new System.Drawing.Point(536, 39);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(100, 100);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -91,7 +91,7 @@
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(497, 363);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(27, 33);
             this.pictureBox1.TabIndex = 10;

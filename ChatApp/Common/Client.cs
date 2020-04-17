@@ -151,7 +151,11 @@ namespace Common
             {
                 List<Client> clients = chatRooms[roomId];
 
-                OnMessageSend(roomId, message);
+                for (int i = 0; i < clients.Count; i++)
+
+                {
+                    clients[i].OnMessageSend(roomId, this.UserName, message);
+                }
             }
             catch(Exception e)
             {
@@ -228,7 +232,6 @@ namespace Common
             server.OnlineUsersChanged += HandlerLogout;
             server.ChatAsked += HandlerAskForChat;
             server.ChatAccepted += HandlerChatAccepted;
-
         }
 
         public void RemoveHandlers()
@@ -276,19 +279,19 @@ namespace Common
         public delegate void MessageReceivedEventHandler(object source, MessageReceivedEventArgs e);
         public event MessageReceivedEventHandler MessageReceived;
 
-        public void HandlerMessageReceived(object o, MessageReceivedEventArgs e)
-        {
-            if (MessageReceived != null)
-            {
-                MessageReceived(this, e);
-            }
-        }
+        //public void HandlerMessageReceived(object o, MessageReceivedEventArgs e)
+        //{
+        //    if (MessageReceived != null)
+        //    {
+        //        MessageReceived(this, e);
+        //    }
+        //}
 
-        protected virtual void OnMessageSend(int roomId, string message)
+        public void OnMessageSend(int roomId, string sender, string message, string timestamp = "")
         {
             MessageReceivedEventArgs e = new MessageReceivedEventArgs();
             e.roomId = roomId;
-            e.sender = this.UserName;
+            e.sender = sender;
             e.message = message;
             // e.timestamp = ...; ? 
 

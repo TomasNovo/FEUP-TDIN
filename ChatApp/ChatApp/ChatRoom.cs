@@ -28,12 +28,21 @@ namespace ChatApp
             client = MainForm.Instance.client;
             client.MessageReceived += Client_MessageReceived;
 
+            // Subscribe all
+            //foreach (KeyValuePair<int, List<Client>> entry in client.chatRooms)
+            //{
+            //    for (int i = 0; i < entry.Value.Count; i++)
+            //    {
+            //        client.MessageReceived += entry.Value[i].HandlerMessageReceived;
+            //    }
+            //}
+
+            userList.Remove(client.UserName);
             for (int i = 0; i < userList.Count; i++)
             {
                 TBUserList.Text += $"{userList[i]}{Environment.NewLine}";
             }
 
-            userList.Remove(client.UserName);
             this.userList = userList;
 
             this.ControlBox = false;
@@ -49,15 +58,18 @@ namespace ChatApp
             if (e.roomId != roomId)
                 return;
 
-            DrawMessages(e);
+            DrawMessageReceived(e);
         }
 
-        private void DrawMessages(MessageReceivedEventArgs e)
+        private void DrawMessageReceived(MessageReceivedEventArgs e)
         {
             if (InvokeRequired)
-                BeginInvoke((MethodInvoker)delegate { DrawMessages(e); });
+                BeginInvoke((MethodInvoker)delegate { DrawMessageReceived(e); });
             else
-                MessageBox.Show($"{e.sender}: {e.message}");
+            {
+                //MessageBox.Show($"{e.sender}: {e.message}");
+                DrawMessage(true, e.message, e.sender);
+            }
         }
 
         private void ChatRoom_Load(object sender, EventArgs e)
@@ -90,31 +102,37 @@ namespace ChatApp
 
         private void BSend_Click(object sender, EventArgs e)
         {
-
             if (TBSend.Text == "Write here your message..")
                 return;
 
-            Label temp = new System.Windows.Forms.Label();
-            this.PMessages.Controls.Add(temp);
-            temp.Parent.Controls.SetChildIndex(temp, 2);
-            temp.Size = new System.Drawing.Size(70, 15);
-
-            if (message_number == 0)
-            {
-                temp.Location = new Point(210, 10);
-            }
-            else
-            {
-                temp.Location = new Point(210, 10 + message_number * 15);
-            }
-            message_number++;
-            temp.Text = TBSend.Text;
-
-            MainForm.Instance.client.SendMessage(roomId, temp.Text);
+            DrawMessage(false, TBSend.Text);
+         
+            MainForm.Instance.client.SendMessage(roomId, TBSend.Text);
 
             TBSend.Text = "Write here your message..";
             //TBSend.ForeColor = Color.Silver;
+        }
 
+        private void DrawMessage(bool left, string message, string sender = "")
+        {
+            Label temp = new Label();
+            this.PMessages.Controls.Add(temp);
+            temp.Size = new Size(490, 15);
+            temp.AutoSize = false;
+
+            if (left)
+            {
+                temp.Location = new Point(3, 10 + message_number * 20);
+                temp.Text = $"{sender}: {message}";
+            }
+            else
+            {
+                temp.TextAlign = ContentAlignment.MiddleRight;
+                temp.Location = new Point(0, 10 + message_number * 20);
+                temp.Text = message;
+            }
+
+            message_number++;
         }
 
         public void ToggleVisibility()
