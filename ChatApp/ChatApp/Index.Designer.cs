@@ -32,8 +32,10 @@
             this.PUsers = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.LWelcome = new System.Windows.Forms.Label();
             this.PChatRooms = new System.Windows.Forms.Panel();
+            this.BGroupChat = new System.Windows.Forms.Button();
+            this.BDiscard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,15 +69,15 @@
             this.pictureBox3.TabIndex = 9;
             this.pictureBox3.TabStop = false;
             // 
-            // label2
+            // LWelcome
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(92, 115);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 20);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "label2";
+            this.LWelcome.AutoSize = true;
+            this.LWelcome.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LWelcome.Location = new System.Drawing.Point(27, 123);
+            this.LWelcome.Name = "LWelcome";
+            this.LWelcome.Size = new System.Drawing.Size(66, 17);
+            this.LWelcome.TabIndex = 11;
+            this.LWelcome.Text = "Welcome";
             // 
             // PChatRooms
             // 
@@ -84,14 +86,39 @@
             this.PChatRooms.Size = new System.Drawing.Size(405, 161);
             this.PChatRooms.TabIndex = 12;
             // 
+            // BGroupChat
+            // 
+            this.BGroupChat.ForeColor = System.Drawing.Color.Black;
+            this.BGroupChat.Location = new System.Drawing.Point(341, 164);
+            this.BGroupChat.Name = "BGroupChat";
+            this.BGroupChat.Size = new System.Drawing.Size(95, 23);
+            this.BGroupChat.TabIndex = 13;
+            this.BGroupChat.Text = "Start group chat";
+            this.BGroupChat.UseVisualStyleBackColor = true;
+            this.BGroupChat.Click += new System.EventHandler(this.BGroupChat_Click);
+            // 
+            // BDiscard
+            // 
+            this.BDiscard.ForeColor = System.Drawing.Color.Black;
+            this.BDiscard.Location = new System.Drawing.Point(361, 135);
+            this.BDiscard.Name = "BDiscard";
+            this.BDiscard.Size = new System.Drawing.Size(75, 23);
+            this.BDiscard.TabIndex = 14;
+            this.BDiscard.Text = "Discard";
+            this.BDiscard.UseVisualStyleBackColor = true;
+            this.BDiscard.Visible = false;
+            this.BDiscard.Click += new System.EventHandler(this.BDiscard_Click);
+            // 
             // Index
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.BDiscard);
+            this.Controls.Add(this.BGroupChat);
             this.Controls.Add(this.PChatRooms);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.LWelcome);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.PUsers);
@@ -112,8 +139,10 @@
         private System.Windows.Forms.Panel PUsers;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label LWelcome;
         private System.Windows.Forms.Panel PChatRooms;
+        private System.Windows.Forms.Button BGroupChat;
+        private System.Windows.Forms.Button BDiscard;
     }
 }
 

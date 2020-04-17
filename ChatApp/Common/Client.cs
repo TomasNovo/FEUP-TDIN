@@ -103,11 +103,11 @@ namespace Common
             return loginMessage;
         }
 
-        public bool Logout(string username)
+        public bool Logout()
         {
             RemoveHandlers();
 
-            if (!server.Logout(username))
+            if (!server.Logout(this.UserName))
             {
                 Console.WriteLine("Something went wrong while logging out");
                 return false;
@@ -128,21 +128,27 @@ namespace Common
             return server.GetDatabaseUsers();
         }
 
-        public int StartGroupChat(string[] usernames)
-        {
-            return server.StartGroupChat(UserName, usernames);
-        }
 
         public int StartChatWithUser(string username)
         {
-            string[] users = { UserName, username };
-
-            return server.StartChatWithUser(UserName, users);
+            return server.StartChatWithUser(UserName, username);
         }
+
+        public int StartGroupChat(List<string> usernames)
+        {
+            usernames.Add(this.UserName);
+            return server.StartGroupChat(UserName, usernames);
+        }
+
 
         public void AcceptChatRequest(int roomId)
         {
             this.server.AcceptChatRequest(roomId, this.UserName);
+        }
+
+        public void RejectChatRequest(int roomId)
+        {
+            this.server.RejectChatRequest(roomId, this.UserName);
         }
 
         public bool SendMessage(int roomId, string message)
@@ -152,7 +158,6 @@ namespace Common
                 List<Client> clients = chatRooms[roomId];
 
                 for (int i = 0; i < clients.Count; i++)
-
                 {
                     clients[i].OnMessageSend(roomId, this.UserName, message);
                 }
@@ -178,6 +183,8 @@ namespace Common
         }
 
 
+
+
         //-----------------------------------Remote methods-----------------------------------
 
         public void Message(string username, string msg)
@@ -190,19 +197,19 @@ namespace Common
             Console.WriteLine($"Server:{msg}");
         }
 
-        public bool JoinChatRoom(int id, string[] usernames, List<Client> clients)
+        public bool JoinChatRoom(int roomId, List<Client> clients)
         {
-            List<Client> userList = new List<Client>();
-            for (int i = 0; i < usernames.Length; i++)
-            {
-                if (usernames[i] == UserName)
-                    continue;
+            //List<Client> userList = new List<Client>();
+            //for (int i = 0; i < usernames.Length; i++)
+            //{
+            //    if (usernames[i] == UserName)
+            //        continue;
 
-                userList.Add(clients[i]);
-            }
+            //    userList.Add(clients[i]);
+            //}
 
-            chatRooms.Add(id, userList);
-            chronologicalIds.Add(id);
+            chatRooms.Add(roomId, clients);
+            //chronologicalIds.Add(roomId);
 
             return true;
         }
@@ -231,14 +238,14 @@ namespace Common
         {
             server.OnlineUsersChanged += HandlerLogout;
             server.ChatAsked += HandlerAskForChat;
-            server.ChatAccepted += HandlerChatAccepted;
+            server.ChatFinalized += HandlerChatFinalized;
         }
 
         public void RemoveHandlers()
         {
             server.OnlineUsersChanged -= HandlerLogout;
             server.ChatAsked -= HandlerAskForChat;
-            server.ChatAccepted -= HandlerChatAccepted;
+            server.ChatFinalized -= HandlerChatFinalized;
         }
 
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
@@ -265,27 +272,19 @@ namespace Common
         }
 
 
-        public delegate void ChatAcceptedEventHandler(object source, ChatAcceptedEventArgs e);
-        public event ChatAcceptedEventHandler ChatAccepted;
+        public delegate void ChatFinalizedEventHandler(object source, ChatFinalizedEventArgs e);
+        public event ChatFinalizedEventHandler ChatFinalized;
 
-        public void HandlerChatAccepted(object o, ChatAcceptedEventArgs e)
+        public void HandlerChatFinalized(object o, ChatFinalizedEventArgs e)
         {
-            if (ChatAccepted != null)
+            if (ChatFinalized != null)
             {
-                ChatAccepted(this, e);
+                ChatFinalized(this, e);
             }
         }
 
         public delegate void MessageReceivedEventHandler(object source, MessageReceivedEventArgs e);
         public event MessageReceivedEventHandler MessageReceived;
-
-        //public void HandlerMessageReceived(object o, MessageReceivedEventArgs e)
-        //{
-        //    if (MessageReceived != null)
-        //    {
-        //        MessageReceived(this, e);
-        //    }
-        //}
 
         public void OnMessageSend(int roomId, string sender, string message, string timestamp = "")
         {

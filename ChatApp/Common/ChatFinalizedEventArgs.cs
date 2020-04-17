@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace Common
 {
     [Serializable]
-    public class ChatAcceptedEventArgs
+    public class ChatFinalizedEventArgs
     {
+        public bool result;
         public int roomId { get; set; }
         public List<string> userList { get; set; }
 

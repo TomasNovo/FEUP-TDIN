@@ -18,14 +18,14 @@ namespace Common
 
         private Random rng;
 
-        // Tuple's first is the list of all the users of the group, the second is the list of users that accepted the chat
-        private Dictionary<int, Tuple<List<string>, List<string>>> chatRoomAccepts;
+        // Tuple's first is the list of all the clients of the users of the group, the second is the list of the users that accepted the chat
+        private Dictionary<int, Tuple<List<Client>, List<string>>> chatRoomAccepts;
 
         public Server()
         {
             users = new Dictionary<String, User>();
 
-            chatRoomAccepts = new Dictionary<int, Tuple<List<string>, List<string>>>();
+            chatRoomAccepts = new Dictionary<int, Tuple<List<Client>, List<string>>>();
 
             rng = new Random();
 
@@ -104,19 +104,23 @@ namespace Common
             return (users.TryGetValue(username, out User us)) ? us.client : null;
         }
 
-        public int StartChatWithUser(string creator, string[] users)
+        public int StartChatWithUser(string creator, string user)
         {
-            return StartGroupChat(creator, users);
+            List<string> userList = new List<string>();
+            userList.Add(creator);
+            userList.Add(user);
+
+            return StartGroupChat(creator, userList);
         }
 
         // TODO: Check for duplicate chats
-        public int StartGroupChat(string creator, string[] usernames)
+        public int StartGroupChat(string creator, List<string> usernames)
         {
             List<Client> clients = new List<Client>();
             int roomId = rng.Next();
 
             // Check for wrong usernames
-            for (int i = 0; i < usernames.Length; i++)
+            for (int i = 0; i < usernames.Count; i++)
             {
                 Client cl = GetUserClient(usernames[i]);
 
@@ -126,15 +130,10 @@ namespace Common
                 clients.Add(cl);
             }
 
-            for (int i = 0; i < clients.Count; i++)
-            {
-                clients[i].JoinChatRoom(roomId, usernames, clients);
-            }
-
             OnAskForChat(roomId, creator, usernames.ToList<string>());
 
             // Create roomChat and add creator to it
-            Tuple<List<string>, List<string>> tuple = new Tuple<List<string>, List<string>>(usernames.ToList(), new List<string>());
+            Tuple<List<Client>, List<string>> tuple = new Tuple<List<Client>, List<string>>(clients, new List<string>());
             chatRoomAccepts.Add(roomId, tuple);
             AcceptChatRequest(roomId, creator);
 
@@ -143,25 +142,59 @@ namespace Common
 
         public void AcceptChatRequest(int roomId, string username)
         {
-            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<string>, List<string>> tuple);
+            Console.WriteLine($"User {username} accepted the group chat");
+
+            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<Client>, List<string>> tuple);
             tuple.Item2.Add(username);
 
-            if (ListEquals(tuple.Item1, tuple.Item2))
-                OnChatAccept(roomId);
+            Console.WriteLine($"Users that accepted ({tuple.Item2.Count}/{tuple.Item1.Count}):");
+            for (int i = 0; i < tuple.Item2.Count; i++)
+            {
+                Console.WriteLine($"{tuple.Item2[i]}");
+            }
+
+            if (CheckAllAccepted(tuple.Item1, tuple.Item2))
+            {
+                // Join chatRoom on each client in the chatroom
+                for (int i = 0; i < tuple.Item1.Count; i++)
+                {
+                    tuple.Item2.Sort();
+                    tuple.Item1[i].JoinChatRoom(roomId, tuple.Item1);
+                }
+                
+                OnChatFinalize(roomId, true);
+
+                Console.WriteLine("All users accepted the chat!");
+            }
         }
 
-        public bool ListEquals(List<string> a, List<string> b)
+        public bool CheckAllAccepted(List<Client> a, List<string> b)
         {
             if (a.Count != b.Count)
                 return false;
 
+            int matchCounter = 0;
             for (int i = 0; i < a.Count; i++)
             {
-                if (a[i] != b[i])
-                    return false;
+                for (int j = 0; j < a.Count; j++)
+                {
+                    if (a[i].UserName == b[j])
+                        matchCounter++;
+                }
             }
 
-            return true;
+            return matchCounter == a.Count;
+        }
+
+        public void RejectChatRequest(int roomId, string username)
+        {
+            Console.WriteLine($"User {username} rejected the group chat");
+
+            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<Client>, List<string>> tuple);
+
+            OnChatFinalize(roomId, false);
+
+            Console.WriteLine($"User {username} has rejected the group chat!");
         }
 
         public ArrayList GetDatabaseUsers()
@@ -216,21 +249,21 @@ namespace Common
             }
         }
 
-        public delegate void ChatAcceptedEventHandler(object source, ChatAcceptedEventArgs e);
-        public event ChatAcceptedEventHandler ChatAccepted;
+        public delegate void ChatFinalizedEventHandler(object source, ChatFinalizedEventArgs e);
+        public event ChatFinalizedEventHandler ChatFinalized;
 
-        protected virtual void OnChatAccept(int roomId)
+        protected virtual void OnChatFinalize(int roomId, bool result)
         {
-            ChatAcceptedEventArgs e = new ChatAcceptedEventArgs();
+            ChatFinalizedEventArgs e = new ChatFinalizedEventArgs();
+            e.result = result;
             e.roomId = roomId;
 
-            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<string>, List<string>> tuple);
-            e.userList = tuple.Item1;
-
+            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<Client>, List<string>> tuple);
+            e.userList = tuple.Item2;
 
             if (ChatAsked != null)
             {
-                ChatAccepted(this, e);
+                ChatFinalized(this, e);
             }
         }
 

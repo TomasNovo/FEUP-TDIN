@@ -90,5 +90,9 @@ namespace ChatApp
             _registerForm.Show();
         }
 
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            client.Logout();
+        }
     }
 }

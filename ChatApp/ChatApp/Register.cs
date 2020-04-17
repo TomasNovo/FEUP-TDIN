@@ -104,12 +104,12 @@ namespace ChatApp
             }
         }
 
-        private void Login_Load(object sender, EventArgs e)
+        private void Register_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void Login_FormClosing(object sender, FormClosingEventArgs e)
+        private void Register_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainForm.Instance.Close();
         }

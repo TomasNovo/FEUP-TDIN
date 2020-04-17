@@ -12,7 +12,11 @@ namespace ChatApp
     public partial class Index : LockedForm
     {
         private Dictionary<int, ChatRoom> _chatRooms;
+        private bool selectingGroupChat = false;
+        private List<string> groupChatUserListBuffer;
 
+        private const string LWelcomeText = "Double click on a user to chat or click the button to start a group chat";
+        private const string BGroupChatText = "Start group chat";
 
         public Index()
         {
@@ -36,8 +40,7 @@ namespace ChatApp
 
             MainForm.Instance.client.ChatAsked += IndexAskForChatHandler;
 
-            MainForm.Instance.client.ChatAccepted += IndexChatAcceptedHandler;
-
+            MainForm.Instance.client.ChatFinalized += IndexChatFinalizedHandler;
         }
 
 
@@ -59,7 +62,7 @@ namespace ChatApp
                 label1.Location = new Point(22, 17);
                 PUsers.Controls.Add(label1);
 
-                label2.Text = "Do you wanna chat, " + MainForm.Instance.client.UserName + " ?";
+                LWelcome.Text = LWelcomeText;
 
                 users = MainForm.Instance.client.GetUsers();
                 onlineUsers = MainForm.Instance.client.server.GetOnlineUsers();
@@ -74,14 +77,14 @@ namespace ChatApp
                     CircularButton cb = new CircularButton();
                     cb.FlatStyle = FlatStyle.Flat;
                     cb.FlatAppearance.BorderSize = 0;
-                    cb.Size = new System.Drawing.Size(10, 10);
+                    cb.Size = new Size(10, 10);
                     cb.TabStop = false;
                     cb.Location = new Point(15, 57 + i * 25);
 
                     // Draws username
-                    Label temp = new System.Windows.Forms.Label();
+                    Label temp = new Label();
                     temp.DoubleClick += Temp_DoubleClick;
-                    temp.Size = new System.Drawing.Size(70, 15);
+                    temp.Size = new Size(70, 15);
                     temp.Location = new Point(28, 55 + i * 25);
                     temp.BackColor = Color.DarkGray;
                     temp.BorderStyle = BorderStyle.None;
@@ -232,37 +235,92 @@ namespace ChatApp
 
                 if (responseBool)
                     MainForm.Instance.client.AcceptChatRequest(e.roomId);
+                else
+                    MainForm.Instance.client.RejectChatRequest(e.roomId);
             }
         }
 
-        public void IndexChatAcceptedHandler(object o, ChatAcceptedEventArgs e)
+        public void IndexChatFinalizedHandler(object o, ChatFinalizedEventArgs e)
         {
-            if (InvokeRequired)
-                BeginInvoke((MethodInvoker)delegate { IndexChatAcceptedHandler(o, e); });
+            // If username is not contained in the userList, the chat request does not concern this user
+            if (!e.userList.Contains(MainForm.Instance.client.UserName))
+                return;
+
+            if (!e.result)
+            {
+                MessageBox.Show("Someone rejected the group chat!");
+                return;
+            }
+
+            MessageBox.Show("Everyone accepted the chat");
+
+            ChatRoom chatRoom = new ChatRoom(e.roomId, e.userList);
+            _chatRooms.Add(e.roomId, chatRoom);
+
+            if (selectingGroupChat)
+                BDiscard_Click(null, null);
+
+            DrawChatRooms();
+        }
+
+        private void BGroupChat_Click(object sender, EventArgs e)
+        {
+            if (selectingGroupChat)
+            {
+                if (groupChatUserListBuffer.Count == 0)
+                    BDiscard_Click(null, null);
+                else
+                    MainForm.Instance.client.StartGroupChat(groupChatUserListBuffer);
+            }
             else
             {
-                // If username is not contained in the userList, the chat request does not concern this user
-                if (!e.userList.Contains(MainForm.Instance.client.UserName))
-                    return;
+                LWelcome.Text = "Click on a user to add him to a group chat";
+                BGroupChat.Text = "Accept";
+                BDiscard.Show();
 
-                MessageBox.Show("Everyone accepted the chat");
+                groupChatUserListBuffer = new List<string>();
 
-                // TODO: Create chat window
+                for (int i = 0; i < PUsers.Controls.Count; i++)
+                    PUsers.Controls[i].Click += UserLabelGroupChatClick;
+            }
 
-                ChatRoom chatRoom = new ChatRoom(e.roomId, e.userList);
-                _chatRooms.Add(e.roomId, chatRoom);
+            selectingGroupChat = true;
+        }
 
-                DrawChatRooms();
+        private void UserLabelGroupChatClick(object sender, EventArgs e)
+        {
+            Label label = (Label)sender;
+
+            if (groupChatUserListBuffer.IndexOf(label.Text) != -1)
+            {
+                groupChatUserListBuffer.Remove(label.Text);
+                label.ForeColor = Color.Black;
+            }
+            else
+            {
+                groupChatUserListBuffer.Add(label.Text);
+                label.ForeColor = Color.Red;
             }
         }
 
+        private void BDiscard_Click(object sender, EventArgs e)
+        {
+            selectingGroupChat = false;
+
+            LWelcome.Text = LWelcomeText;
+            BGroupChat.Text = BGroupChatText;
+            BDiscard.Hide();
+
+            for (int i = 0; i < PUsers.Controls.Count; i++)
+                PUsers.Controls[i].Click -= UserLabelGroupChatClick;
+
+            DrawUserPanel();
+        }
 
         private void Index_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainForm.Instance.client.Logout(MainForm.Instance.client.UserName);
             MainForm.Instance.Close();
         }
-
     }
 
 
