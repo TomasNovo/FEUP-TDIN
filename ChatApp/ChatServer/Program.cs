@@ -36,6 +36,7 @@ namespace ChatServer
 
             var properties = new Hashtable();
             properties.Add("port", 8080);
+            properties.Add("name", "server");
 
             String endpoint = "server";
             TcpChannel channel = new TcpChannel(properties, clientProvider, serverProvider);
@@ -44,8 +45,6 @@ namespace ChatServer
             Server server = new Server();
 
             RemotingServices.Marshal(server, endpoint);
-
-            GC.KeepAlive(server);
         }
 
     }

@@ -6,6 +6,10 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Collections;
 using Common;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Remoting;
 
 namespace ChatApp
 {
@@ -36,10 +40,9 @@ namespace ChatApp
 
 
             DrawUserPanel();
+
             MainForm.Instance.client.OnlineUsersChanged += IndexOnlineUsersChangeHandler;
-
             MainForm.Instance.client.ChatAsked += IndexAskForChatHandler;
-
             MainForm.Instance.client.ChatFinalized += IndexChatFinalizedHandler;
         }
 
@@ -242,26 +245,32 @@ namespace ChatApp
 
         public void IndexChatFinalizedHandler(object o, ChatFinalizedEventArgs e)
         {
-            // If username is not contained in the userList, the chat request does not concern this user
-            if (!e.userList.Contains(MainForm.Instance.client.UserName))
-                return;
-
-            if (!e.result)
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { IndexChatFinalizedHandler(o, e); });
+            else
             {
-                MessageBox.Show("Someone rejected the group chat!");
-                return;
+                // If username is not contained in the userList, the chat request does not concern this user
+                if (!e.userList.Contains(MainForm.Instance.client.UserName))
+                    return;
+
+                if (!e.result)
+                {
+                    MessageBox.Show("Someone rejected the group chat!");
+                    return;
+                }
+
+                MessageBox.Show("Everyone accepted the chat");
+
+                ChatRoom chatRoom = new ChatRoom(e.roomId, e.userList);
+                _chatRooms.Add(e.roomId, chatRoom);
+
+                if (selectingGroupChat)
+                    BDiscard_Click(null, null);
+
+                DrawChatRooms();
             }
-
-            MessageBox.Show("Everyone accepted the chat");
-
-            ChatRoom chatRoom = new ChatRoom(e.roomId, e.userList);
-            _chatRooms.Add(e.roomId, chatRoom);
-
-            if (selectingGroupChat)
-                BDiscard_Click(null, null);
-
-            DrawChatRooms();
         }
+
 
         private void BGroupChat_Click(object sender, EventArgs e)
         {

@@ -7,14 +7,20 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Serialization.Formatters;
 using System.Collections;
 using System.Security.Cryptography;
+using System.Net;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
 namespace Common
 {
+    [Serializable]
     public class Client : MarshalByRefObject
     {
-        public string IP;
+        public string ServerIP;
         public int Port;
         public string EndPoint;
+
+        public string IPAddress;
 
         public string UserName;
         public string RealName;
@@ -23,7 +29,7 @@ namespace Common
 
         public ArrayList onlineUsers;
 
-        public Dictionary<int, List<Client>> chatRooms;
+        public Dictionary<int, ChatRoomInfo> chatRooms;
         public List<int> chronologicalIds;
 
         public Client()
@@ -32,13 +38,13 @@ namespace Common
 
         //-----------------------------------Local methods-----------------------------------
 
-        public bool Connect(string IP, int port, string endpoint)
+        public bool Connect(string ServerIP, int port, string endpoint)
         {
-            string link = $"tcp://{IP}:{port}/{endpoint}";
+            string link = $"tcp://{ServerIP}:{port}/{endpoint}";
 
             try
             {
-                chatRooms = new Dictionary<int, List<Client>>();
+                chatRooms = new Dictionary<int, ChatRoomInfo>();
 
                 chronologicalIds = new List<int>();
 
@@ -48,11 +54,13 @@ namespace Common
 
                 var properties = new Hashtable();
                 properties.Add("port", 0);
+                properties.Add("name", "server");
 
                 TcpChannel channel = new TcpChannel(properties, clientProvider, serverProvider);
                 ChannelServices.RegisterChannel(channel, false);
-                this.server = (Server)Activator.GetObject(
-                  typeof(Server), link );
+                this.server = (Server)Activator.GetObject(typeof(Server), link);
+
+                GetLocalIPAddress();
             }
             catch (Exception e)
             {
@@ -61,9 +69,11 @@ namespace Common
             }
             
 
-            this.IP = IP;
+            this.ServerIP = ServerIP;
             this.Port = port;
             this.EndPoint = endpoint;
+
+            this.IPAddress = GetLocalIPAddress();
 
             return true;
         }
@@ -107,7 +117,7 @@ namespace Common
         {
             RemoveHandlers();
 
-            if (!server.Logout(this.UserName))
+            if (this.UserName != null && !server.Logout(this.UserName))
             {
                 Console.WriteLine("Something went wrong while logging out");
                 return false;
@@ -155,7 +165,7 @@ namespace Common
         {
             try
             {
-                List<Client> clients = chatRooms[roomId];
+                List<Client> clients = chatRooms[roomId].clients;
 
                 for (int i = 0; i < clients.Count; i++)
                 {
@@ -175,7 +185,7 @@ namespace Common
         {
             try
             {
-                List<Client> clients = chatRooms[roomId];
+                List<Client> clients = chatRooms[roomId].clients;
 
                 for (int i = 0; i < clients.Count; i++)
                 {
@@ -202,8 +212,19 @@ namespace Common
             }
         }
 
+        public static string GetLocalIPAddress()
+        {
 
+            string localIP;
+            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+            {
+                socket.Connect("8.8.8.8", 65530);
+                IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                localIP = endPoint.Address.ToString();
 
+                return localIP;
+            }
+        }
 
         //-----------------------------------Remote methods-----------------------------------
 
@@ -217,23 +238,12 @@ namespace Common
             Console.WriteLine($"Server:{msg}");
         }
 
-        public bool JoinChatRoom(int roomId, List<Client> clients)
+        public bool JoinChatRoom(int roomId, ChatRoomInfo info)
         {
-            //List<Client> userList = new List<Client>();
-            //for (int i = 0; i < usernames.Length; i++)
-            //{
-            //    if (usernames[i] == UserName)
-            //        continue;
-
-            //    userList.Add(clients[i]);
-            //}
-
-            chatRooms.Add(roomId, clients);
-            //chronologicalIds.Add(roomId);
+            chatRooms.Add(roomId, info);
 
             return true;
         }
-
 
         //------------Hashing Functions-----------------
 
@@ -319,6 +329,11 @@ namespace Common
             {
                 MessageReceived(this, e);
             }
+        }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
         }
     }
 

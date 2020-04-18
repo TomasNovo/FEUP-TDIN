@@ -9,6 +9,7 @@ using Common;
 
 namespace Common
 {
+    [Serializable]
     public class Server : MarshalByRefObject
     {
         public string ServerName;
@@ -19,13 +20,13 @@ namespace Common
         private Random rng;
 
         // Tuple's first is the list of all the clients of the users of the group, the second is the list of the users that accepted the chat
-        private Dictionary<int, Tuple<List<Client>, List<string>>> chatRoomAccepts;
+        private Dictionary<int, ChatRoomInfo> chatRoomAccepts;
 
         public Server()
         {
             users = new Dictionary<String, User>();
 
-            chatRoomAccepts = new Dictionary<int, Tuple<List<Client>, List<string>>>();
+            chatRoomAccepts = new Dictionary<int, ChatRoomInfo>();
 
             rng = new Random();
 
@@ -133,8 +134,12 @@ namespace Common
             OnAskForChat(roomId, creator, usernames.ToList<string>());
 
             // Create roomChat and add creator to it
-            Tuple<List<Client>, List<string>> tuple = new Tuple<List<Client>, List<string>>(clients, new List<string>());
-            chatRoomAccepts.Add(roomId, tuple);
+            ChatRoomInfo info = new ChatRoomInfo();
+            info.roomId = roomId;
+            info.creator = creator;
+            info.clients = clients;
+
+            chatRoomAccepts.Add(roomId, info);
             AcceptChatRequest(roomId, creator);
 
             return roomId;
@@ -144,22 +149,22 @@ namespace Common
         {
             Console.WriteLine($"User {username} accepted the group chat");
 
-            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<Client>, List<string>> tuple);
-            tuple.Item2.Add(username);
+            chatRoomAccepts.TryGetValue(roomId, out ChatRoomInfo info);
+            info.accepted.Add(username);
 
-            Console.WriteLine($"Users that accepted ({tuple.Item2.Count}/{tuple.Item1.Count}):");
-            for (int i = 0; i < tuple.Item2.Count; i++)
+            Console.WriteLine($"Users that accepted ({info.accepted.Count}/{info.clients.Count}):");
+            for (int i = 0; i < info.accepted.Count; i++)
             {
-                Console.WriteLine($"{tuple.Item2[i]}");
+                Console.WriteLine($"{info.accepted[i]}");
             }
 
-            if (CheckAllAccepted(tuple.Item1, tuple.Item2))
+            if (CheckAllAccepted(info.clients, info.accepted))
             {
+
                 // Join chatRoom on each client in the chatroom
-                for (int i = 0; i < tuple.Item1.Count; i++)
+                for (int i = 0; i < info.clients.Count; i++)
                 {
-                    tuple.Item2.Sort();
-                    tuple.Item1[i].JoinChatRoom(roomId, tuple.Item1);
+                    info.clients[i].JoinChatRoom(roomId, info);
                 }
                 
                 OnChatFinalize(roomId, true);
@@ -190,7 +195,7 @@ namespace Common
         {
             Console.WriteLine($"User {username} rejected the group chat");
 
-            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<Client>, List<string>> tuple);
+            chatRoomAccepts.TryGetValue(roomId, out ChatRoomInfo info);
 
             OnChatFinalize(roomId, false);
 
@@ -258,13 +263,18 @@ namespace Common
             e.result = result;
             e.roomId = roomId;
 
-            chatRoomAccepts.TryGetValue(roomId, out Tuple<List<Client>, List<string>> tuple);
-            e.userList = tuple.Item2;
+            chatRoomAccepts.TryGetValue(roomId, out ChatRoomInfo info);
+            e.userList = info.accepted;
 
             if (ChatAsked != null)
             {
                 ChatFinalized(this, e);
             }
+        }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
         }
 
     }

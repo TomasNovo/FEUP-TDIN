@@ -15,47 +15,47 @@ namespace ChatTestClient
     {
         static void Main(string[] args)
         {
-            if (args[0] == "a")
-            {
-                Client client = new Client();
-                client.Connect("localhost", 8080, "server");
-                String username = "a";
+            //if (args[0] == "a")
+            //{
+            //    Client client = new Client();
+            //    client.Connect("localhost", 8080, "server");
+            //    String username = "a";
 
-                client.Login(username, "");
-                
-                // User "a" starts the group chat with user "b" and "c"
-                Console.ReadKey();
-                string[] groupUsers = { "a", "b", "c" };
-                int id = client.StartGroupChat(groupUsers);
+            //    client.Login(username, "");
 
-                client.ChatLoop(id);
-            }
+            //    // User "a" starts the group chat with user "b" and "c"
+            //    Console.ReadKey();
+            //    string[] groupUsers = { "a", "b", "c" };
+            //    int id = client.StartGroupChat(groupUsers);
 
-            else if (args[0] == "b")
-            {
-                Client client = new Client();
-                client.Connect("localhost", 8080, "server");
-                String username = "b";
+            //    client.ChatLoop(id);
+            //}
 
-                client.Login(username, "");
+            //else if (args[0] == "b")
+            //{
+            //    Client client = new Client();
+            //    client.Connect("localhost", 8080, "server");
+            //    String username = "b";
 
-                Console.ReadKey();
-                client.ChatLoop(client.chronologicalIds.FirstOrDefault());
-            }
+            //    client.Login(username, "");
 
-            else if (args[0] == "c")
-            {
-                Client client = new Client();
-                client.Connect("localhost", 8080, "server");
-                String username = "c";
+            //    Console.ReadKey();
+            //    client.ChatLoop(client.chronologicalIds.FirstOrDefault());
+            //}
 
-                client.Login(username, "");
+            //else if (args[0] == "c")
+            //{
+            //    Client client = new Client();
+            //    client.Connect("localhost", 8080, "server");
+            //    String username = "c";
 
-                Console.ReadKey();
-                client.ChatLoop(client.chronologicalIds.FirstOrDefault());
-            }
+            //    client.Login(username, "");
+
+            //    Console.ReadKey();
+            //    client.ChatLoop(client.chronologicalIds.FirstOrDefault());
+            //}
         }
 
-        
+
     }
 }
