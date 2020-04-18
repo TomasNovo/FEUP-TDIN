@@ -34,17 +34,18 @@
             this.TBSend = new System.Windows.Forms.TextBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.TBUserList = new System.Windows.Forms.TextBox();
             this.TChatName = new System.Windows.Forms.TextBox();
+            this.PUsers = new System.Windows.Forms.Panel();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // PMessages
             // 
-            this.PMessages.BackColor = System.Drawing.Color.White;
+            this.PMessages.BackColor = System.Drawing.Color.Silver;
             this.PMessages.Location = new System.Drawing.Point(45, 48);
-            this.PMessages.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.PMessages.Margin = new System.Windows.Forms.Padding(4);
             this.PMessages.Name = "PMessages";
             this.PMessages.Size = new System.Drawing.Size(653, 340);
             this.PMessages.TabIndex = 0;
@@ -65,6 +66,7 @@
             // 
             // TBSend
             // 
+            this.TBSend.BackColor = System.Drawing.Color.White;
             this.TBSend.ForeColor = System.Drawing.SystemColors.InfoText;
             this.TBSend.Location = new System.Drawing.Point(45, 409);
             this.TBSend.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -98,16 +100,6 @@
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
             // 
-            // TBUserList
-            // 
-            this.TBUserList.Location = new System.Drawing.Point(715, 207);
-            this.TBUserList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.TBUserList.Multiline = true;
-            this.TBUserList.Name = "TBUserList";
-            this.TBUserList.ReadOnly = true;
-            this.TBUserList.Size = new System.Drawing.Size(132, 180);
-            this.TBUserList.TabIndex = 11;
-            // 
             // TChatName
             // 
             this.TChatName.BackColor = System.Drawing.Color.Gray;
@@ -121,20 +113,28 @@
             this.TChatName.Text = "Chat Name";
             this.TChatName.TextChanged += new System.EventHandler(this.TChatName_TextChanged);
             // 
+            // PUsers
+            // 
+            this.PUsers.BackColor = System.Drawing.Color.Silver;
+            this.PUsers.Location = new System.Drawing.Point(715, 205);
+            this.PUsers.Name = "PUsers";
+            this.PUsers.Size = new System.Drawing.Size(131, 181);
+            this.PUsers.TabIndex = 13;
+            // 
             // ChatRoom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(864, 554);
+            this.Controls.Add(this.PUsers);
             this.Controls.Add(this.TChatName);
-            this.Controls.Add(this.TBUserList);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.TBSend);
             this.Controls.Add(this.BSend);
             this.Controls.Add(this.PMessages);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ChatRoom";
             this.Text = "ChatRoom";
             this.Load += new System.EventHandler(this.ChatRoom_Load);
@@ -152,7 +152,8 @@
         private System.Windows.Forms.TextBox TBSend;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.TextBox TBUserList;
         private System.Windows.Forms.TextBox TChatName;
+        private System.Windows.Forms.Panel PUsers;
+        private System.Windows.Forms.ColorDialog colorDialog1;
     }
 }

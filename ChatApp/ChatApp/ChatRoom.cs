@@ -16,10 +16,14 @@ namespace ChatApp
         int message_number = 0;
         private int roomId;
         public List<string> userList;
+        public List<Color> colors;
         private Client client;
         private bool hidden = true;
 
         private string ChatName;
+
+        // MACROS
+        public string CHAT_NAME_UPDATE = "UpdatedChatName:";
 
         public ChatRoom(int RoomId, List<string>  userList)
         {
@@ -31,6 +35,8 @@ namespace ChatApp
             client = MainForm.Instance.client;
             client.MessageReceived += Client_MessageReceived;
 
+            colors = new List<Color>();
+
             // Subscribe all
             //foreach (KeyValuePair<int, List<Client>> entry in client.chatRooms)
             //{
@@ -40,15 +46,49 @@ namespace ChatApp
             //    }
             //}
 
-            userList.Remove(client.UserName);
+            //userList.Remove(client.UserName);
+            swapToFirst(userList, client.UserName);
             for (int i = 0; i < userList.Count; i++)
             {
-                TBUserList.Text += $"{userList[i]}{Environment.NewLine}";
+                Label temp = new Label();
+                temp.DoubleClick += User_DoubleClick;
+                temp.Size = new Size(131, 15);
+                temp.Location = new Point(0, i * 15);
+                temp.BorderStyle = BorderStyle.FixedSingle;
+                temp.Text = userList[i];
+
+                if (i == 0)
+                {
+                    temp.BackColor = Color.MistyRose;
+                    colors.Add(Color.MistyRose);
+                }
+                else
+                {
+                    temp.BackColor = Color.AntiqueWhite;
+                    colors.Add(Color.AntiqueWhite);
+                }
+
+                this.PUsers.Controls.Add(temp);
+
+                //TBUserList.Text += $"{userList[i]}{Environment.NewLine}";
             }
 
             this.userList = userList;
 
             this.ControlBox = false;
+        }
+
+        private void swapToFirst(List<string> list, string user)
+        {
+            for(int i = 0; i < list.Count; i++)
+            {
+                if(list[i].Equals(user))
+                {
+                    string tmp = list[0];
+                    list[0] = user;
+                    list[i] = tmp;
+                }
+            }
         }
 
         private void Client_MessageReceived(object source, MessageReceivedEventArgs e)
@@ -70,15 +110,15 @@ namespace ChatApp
                 BeginInvoke((MethodInvoker)delegate { DrawMessageReceived(e); });
             else
             {
-                if(e.message.Length >= 16 &&  e.message.Substring(0,16).Equals("UpdatedChatName:"))
+                // Chat name update
+                if(e.message.Length >= 16 &&  e.message.Substring(0,16).Equals(CHAT_NAME_UPDATE))
                 {
                     this.ChatName = e.message.Substring(16);
                     TChatName.Text = this.ChatName;
                     return;
                 }
-                
+
                 DrawMessage(true, e.message, e.sender);
-                
             }
         }
 
@@ -132,14 +172,26 @@ namespace ChatApp
 
             if (left)
             {
+                temp.BackColor = Color.Yellow;
                 temp.Location = new Point(3, 10 + message_number * 20);
                 temp.Text = $"{sender}: {message}";
+
+                for (int i = 0; i < userList.Count; i++)
+                {
+                    if (sender.Equals(userList[i]))
+                    {
+                        temp.BackColor = colors[i];
+                    }
+                }
+
             }
             else
             {
+                temp.BackColor = Color.Blue;
                 temp.TextAlign = ContentAlignment.MiddleRight;
                 temp.Location = new Point(0, 10 + message_number * 20);
                 temp.Text = message;
+                temp.BackColor = colors[0];
             }
 
             message_number++;
@@ -157,7 +209,26 @@ namespace ChatApp
 
         private void TChatName_TextChanged(object sender, EventArgs e)
         {
-            MainForm.Instance.client.SendMessage(roomId, "UpdatedChatName:" + TChatName.Text);
+            MainForm.Instance.client.SendMessage(roomId, CHAT_NAME_UPDATE + TChatName.Text);
+        }
+
+        private void User_DoubleClick(object sender, EventArgs e)
+        {
+            string username = ((Label)sender).Text;
+            
+            if (colorDialog1.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+            {
+                ((Label)sender).BackColor = colorDialog1.Color;
+                
+                for(int i = 0; i < userList.Count; i++)
+                {
+                    if(userList[i].Equals(username))
+                    {
+                        colors[i] = colorDialog1.Color;
+                    }
+                }
+
+            }
         }
     }
 }
