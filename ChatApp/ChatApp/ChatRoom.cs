@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,10 @@ namespace ChatApp
 
         // MACROS
         public string CHAT_NAME_UPDATE = "UpdatedChatName:";
+        public string SEND_FILE = "File:";
+        public byte[] tempFile = new byte[0];
+        public string tempFileName = "";
+        public string extension = "";
 
         public ChatRoom(int RoomId, List<string>  userList)
         {
@@ -36,6 +41,9 @@ namespace ChatApp
             client.MessageReceived += Client_MessageReceived;
 
             colors = new List<Color>();
+
+            PBFile.MouseClick += new MouseEventHandler(LoadFile);
+
 
             // Subscribe all
             //foreach (KeyValuePair<int, List<Client>> entry in client.chatRooms)
@@ -118,6 +126,20 @@ namespace ChatApp
                     return;
                 }
 
+                if(e.message.Length >= 5 && e.message.Substring(0, 5).Equals(SEND_FILE) && e.file != null)
+                {
+                    tempFile = e.file;
+                }
+
+                //if(e.message.Length >= 5  && e.message.Substring(0,5).Equals(SEND_FILE))
+                //{
+                //    string[] words = e.message.Split(':'); // 0 -> filename ; 1 -> file string
+                //    byte[] bytes = Encoding.ASCII.GetBytes(words[1]);
+
+                //    DrawMessage(true, e.message.Substring(0, 5), e.sender);
+                //    return;
+                //}
+
                 DrawMessage(true, e.message, e.sender);
             }
         }
@@ -172,6 +194,16 @@ namespace ChatApp
 
             if (left)
             {
+                if (message.Length >= 5 && message.Substring(0, 5).Equals(SEND_FILE))
+                {
+                    string filename = message.Substring(5);
+                    tempFileName = filename;
+                    string[] words = filename.Split('.');
+                    extension = words[1];
+                    temp.DoubleClick += FileDownload;
+                    message = $"Sent file with name {filename}";
+                }
+
                 temp.BackColor = Color.Yellow;
                 temp.Location = new Point(3, 10 + message_number * 20);
                 temp.Text = $"{sender}: {message}";
@@ -228,6 +260,62 @@ namespace ChatApp
                     }
                 }
 
+            }
+        }
+
+        //----------Files-------------
+        private void LoadFile(object sender, MouseEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            string filename = "";
+            string safe = "";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                filename = ofd.FileName;
+                safe = ofd.SafeFileName;
+            }
+
+            FileInfo fileInfo = new FileInfo(filename);
+            byte[] data = new byte[fileInfo.Length];
+            using (FileStream fs = fileInfo.OpenRead())
+            {
+                fs.Read(data, 0, data.Length);
+            }
+
+            //byte[] -> string
+            //string result = System.Text.Encoding.ASCII.GetString(data);
+
+            DrawMessage(false, $"Sent file {safe}");
+
+            //Format: SEND_FILE:filename:result
+            MainForm.Instance.client.SendFile(roomId, SEND_FILE + safe, data);
+
+            // Delete the temporary file
+            //fileInfo.Delete();
+
+        }
+
+        private void FileDownload(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.FileName = tempFileName;
+            sfd.DefaultExt = extension;
+
+            if(sfd.ShowDialog() == DialogResult.OK)
+            {
+                Stream fs = sfd.OpenFile();
+                StreamWriter sw = new StreamWriter(fs);
+
+                fs.Write(tempFile, 0, tempFile.Length);
+
+                sw.Close();
+                fs.Close();
+
+                tempFile = new byte[0];
+                tempFileName = "";
+                extension = "";
             }
         }
     }

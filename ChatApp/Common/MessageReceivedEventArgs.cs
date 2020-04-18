@@ -13,6 +13,7 @@ namespace Common
         public string sender { get; set; }
         public string timestamp { get; set; } // ?
         public string message { get; set; }
+        public byte[] file { get; set; }
 
     }
 }

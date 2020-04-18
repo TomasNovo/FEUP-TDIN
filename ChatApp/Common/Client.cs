@@ -171,6 +171,26 @@ namespace Common
             return true;
         }
 
+        public bool SendFile(int roomId, string message, byte[] file)
+        {
+            try
+            {
+                List<Client> clients = chatRooms[roomId];
+
+                for (int i = 0; i < clients.Count; i++)
+                {
+                    clients[i].OnMessageSend(roomId, this.UserName, message, file);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
         public void ChatLoop(int id)
         {
             Console.WriteLine("Chatting...");
@@ -286,12 +306,13 @@ namespace Common
         public delegate void MessageReceivedEventHandler(object source, MessageReceivedEventArgs e);
         public event MessageReceivedEventHandler MessageReceived;
 
-        public void OnMessageSend(int roomId, string sender, string message, string timestamp = "")
+        public void OnMessageSend(int roomId, string sender, string message, byte[] file = null, string timestamp = "")
         {
             MessageReceivedEventArgs e = new MessageReceivedEventArgs();
             e.roomId = roomId;
             e.sender = sender;
             e.message = message;
+            e.file = file;
             // e.timestamp = ...; ? 
 
             if (MessageReceived != null)

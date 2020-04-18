@@ -33,12 +33,12 @@
             this.BSend = new System.Windows.Forms.Button();
             this.TBSend = new System.Windows.Forms.TextBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.PBFile = new System.Windows.Forms.PictureBox();
             this.TChatName = new System.Windows.Forms.TextBox();
             this.PUsers = new System.Windows.Forms.Panel();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBFile)).BeginInit();
             this.SuspendLayout();
             // 
             // PMessages
@@ -89,16 +89,16 @@
             this.pictureBox3.TabIndex = 9;
             this.pictureBox3.TabStop = false;
             // 
-            // pictureBox1
+            // PBFile
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(663, 447);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(36, 41);
-            this.pictureBox1.TabIndex = 10;
-            this.pictureBox1.TabStop = false;
+            this.PBFile.BackColor = System.Drawing.Color.White;
+            this.PBFile.Image = ((System.Drawing.Image)(resources.GetObject("PBFile.Image")));
+            this.PBFile.Location = new System.Drawing.Point(663, 447);
+            this.PBFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.PBFile.Name = "PBFile";
+            this.PBFile.Size = new System.Drawing.Size(36, 41);
+            this.PBFile.TabIndex = 10;
+            this.PBFile.TabStop = false;
             // 
             // TChatName
             // 
@@ -129,7 +129,7 @@
             this.ClientSize = new System.Drawing.Size(864, 554);
             this.Controls.Add(this.PUsers);
             this.Controls.Add(this.TChatName);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.PBFile);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.TBSend);
             this.Controls.Add(this.BSend);
@@ -139,7 +139,7 @@
             this.Text = "ChatRoom";
             this.Load += new System.EventHandler(this.ChatRoom_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBFile)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -151,7 +151,7 @@
         private System.Windows.Forms.Button BSend;
         private System.Windows.Forms.TextBox TBSend;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox PBFile;
         private System.Windows.Forms.TextBox TChatName;
         private System.Windows.Forms.Panel PUsers;
         private System.Windows.Forms.ColorDialog colorDialog1;
