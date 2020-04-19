@@ -138,15 +138,24 @@ namespace Common
             return server.GetDatabaseUsers();
         }
 
-
-        public int StartChatWithUser(string username)
+        public int StartChat(string username)
         {
-            return server.StartChatWithUser(UserName, username);
+            List<string> userList = new List<string>();
+            userList.Add(username);
+            return StartChat(userList);
         }
 
-        public int StartGroupChat(List<string> usernames)
+        public int StartChat(List<string> usernames)
         {
-            usernames.Add(this.UserName);
+            if (usernames.IndexOf(this.UserName) == -1)
+                usernames.Add(this.UserName);
+
+            usernames.Sort();
+
+            int roomId = Server.HashUsers(usernames);
+            if (chatRooms.ContainsKey(roomId))
+                return -2;
+
             return server.StartGroupChat(UserName, usernames);
         }
 
@@ -260,6 +269,19 @@ namespace Common
                 sb.Append(b.ToString("X2"));
 
             return sb.ToString();
+        }
+
+        public static int HashToInt(string inputString)
+        {
+            byte[] byteArr = GetHash(inputString);
+            byte[] intByteArr = new byte[4];
+
+            for (int i = 0; i < byteArr.Length && i < intByteArr.Length; i++)
+                intByteArr[i] = byteArr[i];
+
+            int result = BitConverter.ToInt32(byteArr, 0);
+
+            return result;
         }
 
         //-------------Events----------------------------

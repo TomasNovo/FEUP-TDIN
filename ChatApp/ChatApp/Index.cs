@@ -112,10 +112,10 @@ namespace ChatApp
             }
         }
 
-        private void DrawChatRooms()
+        private void DrawChatRoomPanel()
         {
             if (InvokeRequired)
-                BeginInvoke((MethodInvoker)delegate { DrawChatRooms(); });
+                BeginInvoke((MethodInvoker)delegate { DrawChatRoomPanel(); });
             else
             {
 
@@ -161,7 +161,12 @@ namespace ChatApp
             if (!MainForm.Instance.client.server.GetOnlineUsers().Contains(username))
                 return;
 
-            int id = MainForm.Instance.client.StartChatWithUser(username);
+            int roomId = MainForm.Instance.client.StartChat(username);
+            
+            if (roomId == -1) // Server error
+                MessageBox.Show("Failed to start chat");
+            else if (roomId == -2) // chat room already exists
+                MessageBox.Show("Chat room already exists!");
         }
 
         private void OrderOnlineFirst(ArrayList toOrder, ArrayList online)
@@ -234,9 +239,8 @@ namespace ChatApp
                 message += "?";
 
                 DialogResult response = MessageBox.Show(message, "", MessageBoxButtons.YesNo);
-                bool responseBool = response.HasFlag(DialogResult.Yes);
 
-                if (responseBool)
+                if (response == DialogResult.Yes)
                     MainForm.Instance.client.AcceptChatRequest(e.roomId);
                 else
                     MainForm.Instance.client.RejectChatRequest(e.roomId);
@@ -255,19 +259,26 @@ namespace ChatApp
 
                 if (!e.result)
                 {
+                    if (selectingGroupChat)
+                        BDiscard_Click(null, null);
+                    else
+                        DrawChatRoomPanel();
+
                     MessageBox.Show("Someone rejected the group chat!");
-                    return;
                 }
+                else
+                {
 
-                MessageBox.Show("Everyone accepted the chat");
+                    ChatRoom chatRoom = new ChatRoom(e.roomId, e.userList);
+                    _chatRooms.Add(e.roomId, chatRoom);
 
-                ChatRoom chatRoom = new ChatRoom(e.roomId, e.userList);
-                _chatRooms.Add(e.roomId, chatRoom);
+                    if (selectingGroupChat)
+                        BDiscard_Click(null, null);
+                    else
+                        DrawChatRoomPanel();
 
-                if (selectingGroupChat)
-                    BDiscard_Click(null, null);
-
-                DrawChatRooms();
+                    MessageBox.Show("Everyone accepted the chat");
+                }
             }
         }
 
@@ -279,7 +290,22 @@ namespace ChatApp
                 if (groupChatUserListBuffer.Count == 0)
                     BDiscard_Click(null, null);
                 else
-                    MainForm.Instance.client.StartGroupChat(groupChatUserListBuffer);
+                {
+                    int roomId = MainForm.Instance.client.StartChat(groupChatUserListBuffer);
+                    
+                    if (roomId == -1) // Server error
+                    {
+                        BDiscard_Click(null, null);
+                        MessageBox.Show("Failed to start chat");
+                        return;
+                    }
+                    else if (roomId == -2) // chat room already exists
+                    {
+                        BDiscard_Click(null, null);
+                        MessageBox.Show("Chat room already exists!");
+                        return;
+                    }
+                }
             }
             else
             {
@@ -323,6 +349,7 @@ namespace ChatApp
             for (int i = 0; i < PUsers.Controls.Count; i++)
                 PUsers.Controls[i].Click -= UserLabelGroupChatClick;
 
+            DrawChatRoomPanel();
             DrawUserPanel();
         }
 

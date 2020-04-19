@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
@@ -105,20 +106,21 @@ namespace Common
             return (users.TryGetValue(username, out User us)) ? us.client : null;
         }
 
-        public int StartChatWithUser(string creator, string user)
-        {
-            List<string> userList = new List<string>();
-            userList.Add(creator);
-            userList.Add(user);
-
-            return StartGroupChat(creator, userList);
-        }
-
         // TODO: Check for duplicate chats
         public int StartGroupChat(string creator, List<string> usernames)
         {
+            usernames.Sort();
+
             List<Client> clients = new List<Client>();
-            int roomId = rng.Next();
+            int roomId = HashUsers(usernames);
+
+            if (chatRoomAccepts.ContainsKey(roomId))
+            {
+                Console.WriteLine("ChatRoom already exists! Removing...");
+                chatRoomAccepts.Remove(roomId);
+            }
+
+            Console.WriteLine($"roomId:{roomId}");
 
             // Check for wrong usernames
             for (int i = 0; i < usernames.Count; i++)
@@ -131,7 +133,7 @@ namespace Common
                 clients.Add(cl);
             }
 
-            OnAskForChat(roomId, creator, usernames.ToList<string>());
+            OnAskForChat(roomId, creator, usernames.ToList());
 
             // Create roomChat and add creator to it
             ChatRoomInfo info = new ChatRoomInfo();
@@ -147,20 +149,19 @@ namespace Common
 
         public void AcceptChatRequest(int roomId, string username)
         {
-            Console.WriteLine($"User {username} accepted the group chat");
+            //Console.WriteLine($"User {username} accepted the group chat");
 
             chatRoomAccepts.TryGetValue(roomId, out ChatRoomInfo info);
             info.accepted.Add(username);
 
-            Console.WriteLine($"Users that accepted ({info.accepted.Count}/{info.clients.Count}):");
-            for (int i = 0; i < info.accepted.Count; i++)
-            {
-                Console.WriteLine($"{info.accepted[i]}");
-            }
+            //Console.WriteLine($"Users that accepted ({info.accepted.Count}/{info.clients.Count}):");
+            //for (int i = 0; i < info.accepted.Count; i++)
+            //{
+            //    Console.WriteLine($"{info.accepted[i]}");
+            //}
 
             if (CheckAllAccepted(info.clients, info.accepted))
             {
-
                 // Join chatRoom on each client in the chatroom
                 for (int i = 0; i < info.clients.Count; i++)
                 {
@@ -195,7 +196,7 @@ namespace Common
         {
             Console.WriteLine($"User {username} rejected the group chat");
 
-            chatRoomAccepts.TryGetValue(roomId, out ChatRoomInfo info);
+            chatRoomAccepts.Remove(roomId);
 
             OnChatFinalize(roomId, false);
 
@@ -217,6 +218,19 @@ namespace Common
             }
 
             return ou;
+        }
+
+        public static int HashUsers(List<string> usernames)
+        {
+            int roomId = 0;
+
+            for (int i = 0; i < usernames.Count; i++)
+                roomId += Client.HashToInt(usernames[i]);
+
+            if (roomId < 0)
+                roomId *= -1;
+
+            return roomId;
         }
 
         public void Ping()
