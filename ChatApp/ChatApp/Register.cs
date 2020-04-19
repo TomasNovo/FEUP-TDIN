@@ -128,7 +128,10 @@ namespace ChatApp
 
             if(Password != confirm)
             {
-                MessageBox.Show("Passwords must be equal !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string message = "Passwords must be equal !";
+                CustomOkMessageBox cok = new CustomOkMessageBox("errorRegister", message);
+                cok.Show();
+                //MessageBox.Show("Passwords must be equal !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -136,7 +139,9 @@ namespace ChatApp
 
             if (registerMessage != "")
             {
-                MessageBox.Show(registerMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CustomOkMessageBox cok = new CustomOkMessageBox("errorRegister", registerMessage);
+                cok.Show();
+                //MessageBox.Show(registerMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

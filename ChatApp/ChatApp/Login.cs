@@ -83,7 +83,10 @@ namespace ChatApp
             string loginMessage = MainForm.Instance.client.Login(TBUsername.Text, TBPass.Text);
             if (loginMessage != "")
             {
-                MessageBox.Show(loginMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CustomOkMessageBox cok = new CustomOkMessageBox("errorLogin", loginMessage);
+                cok.Show();
+
+                //MessageBox.Show(loginMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

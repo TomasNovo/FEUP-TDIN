@@ -201,7 +201,7 @@ namespace ChatApp
                     string[] words = filename.Split('.');
                     extension = words[1];
                     temp.DoubleClick += FileDownload;
-                    message = $"Sent file with name {filename}";
+                    message = $"Sent file with name {filename} (double click to download)";
                 }
 
                 temp.BackColor = Color.Yellow;
