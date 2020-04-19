@@ -27,6 +27,8 @@ namespace ChatApp
             this.BYes.TabStop = false;
             this.BNo.TabStop = false;
             this.label1.Text = this.message;
+
+            this.Text = "New Chat Proposal !!";
         }
 
         private void BYes_Click(object sender, EventArgs e)

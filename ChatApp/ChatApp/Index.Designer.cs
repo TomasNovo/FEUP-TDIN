@@ -91,7 +91,7 @@
             // 
             // BGroupChat
             // 
-            this.BGroupChat.BackColor = System.Drawing.Color.Gray;
+            this.BGroupChat.BackColor = System.Drawing.Color.RoyalBlue;
             this.BGroupChat.ForeColor = System.Drawing.Color.White;
             this.BGroupChat.Location = new System.Drawing.Point(497, 178);
             this.BGroupChat.Margin = new System.Windows.Forms.Padding(4);
@@ -105,7 +105,7 @@
             // 
             // BDiscard
             // 
-            this.BDiscard.BackColor = System.Drawing.Color.Gray;
+            this.BDiscard.BackColor = System.Drawing.Color.RoyalBlue;
             this.BDiscard.ForeColor = System.Drawing.Color.White;
             this.BDiscard.Location = new System.Drawing.Point(523, 210);
             this.BDiscard.Margin = new System.Windows.Forms.Padding(4);

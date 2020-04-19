@@ -135,8 +135,8 @@ namespace ChatApp
                     cb.FlatStyle = FlatStyle.Flat;
                     cb.FlatAppearance.BorderSize = 0;
                     cb.TabStop = false;
-                    cb.ForeColor = Color.SlateBlue;
-                    cb.BackColor = Color.Black;
+                    cb.ForeColor = Color.White;
+                    cb.BackColor = Color.RoyalBlue;
                     cb.Text = $"Chat{Environment.NewLine}{i + 1}";
                     cb.Size = new Size(40, 40);
                     cb.Location = new Point(25 + widthSpacing * (i / 3), 25 + heightSpacing * (i % 3));
@@ -271,11 +271,16 @@ namespace ChatApp
 
                 if (!e.result)
                 {
-                    MessageBox.Show("Someone rejected the group chat!");
+                    CustomOkMessageBox co = new CustomOkMessageBox("errorChatProposal", "Someone rejected the group chat!");
+                    co.Show();
+                    
                     return;
                 }
 
-                MessageBox.Show("Everyone accepted the chat");
+                CustomOkMessageBox cok = new CustomOkMessageBox("acceptChatProposal", "Everyone accepted the chat!");
+                cok.Show();
+
+                //MessageBox.Show("Everyone accepted the chat");
 
                 ChatRoom chatRoom = new ChatRoom(e.roomId, e.userList);
                 _chatRooms.Add(e.roomId, chatRoom);
