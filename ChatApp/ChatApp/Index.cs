@@ -41,6 +41,8 @@ namespace ChatApp
 
             DrawUserPanel();
 
+            LUser.Text += ", " + MainForm.Instance.client.UserName + " !";
+
             MainForm.Instance.client.OnlineUsersChanged += IndexOnlineUsersChangeHandler;
             MainForm.Instance.client.ChatAsked += IndexAskForChatHandler;
             MainForm.Instance.client.ChatFinalized += IndexChatFinalizedHandler;
@@ -73,7 +75,7 @@ namespace ChatApp
                 onlineUsers.Remove(MainForm.Instance.client.UserName);
 
                 OrderOnlineFirst(users, onlineUsers);
-                
+
 
                 for (int i = 0; i < users.Count; i++)
                 {
@@ -135,13 +137,24 @@ namespace ChatApp
                     cb.TabStop = false;
                     cb.ForeColor = Color.SlateBlue;
                     cb.BackColor = Color.Black;
-                    cb.Text = $"Chat{Environment.NewLine}{i+1}";
+                    cb.Text = $"Chat{Environment.NewLine}{i + 1}";
                     cb.Size = new Size(40, 40);
                     cb.Location = new Point(25 + widthSpacing * (i / 3), 25 + heightSpacing * (i % 3));
                     cb.Name = $"{entry.Key}";
                     cb.Click += Cb_Click;
 
                     PChatRooms.Controls.Add(cb);
+
+                    //Label t = new Label();
+                    //t.Text = "⚙️";
+                    ////t.BackColor = Color.Yellow;
+                    //t.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
+                    //t.Size = new Size(10, 15);
+                    //t.ForeColor = Color.Black;
+                    //t.Location = new Point(55 + widthSpacing * (i / 3), 53 + heightSpacing * (i % 3));
+                    //t.DoubleClick += ChatSettings(t, null, cb);
+                    //PChatRooms.Controls.Add(t);
+
                     i++;
                 }
             }
@@ -167,11 +180,11 @@ namespace ChatApp
         private void OrderOnlineFirst(ArrayList toOrder, ArrayList online)
         {
             ArrayList indexes = new ArrayList();
-            for(int i = 0; i < toOrder.Count; i++)
+            for (int i = 0; i < toOrder.Count; i++)
             {
-                for(int j = 0; j < online.Count; j++)
+                for (int j = 0; j < online.Count; j++)
                 {
-                    if(toOrder[i].ToString().Equals(online[j].ToString()))
+                    if (toOrder[i].ToString().Equals(online[j].ToString()))
                     {
                         indexes.Add(i);
                     }
@@ -179,7 +192,7 @@ namespace ChatApp
             }
 
 
-            for(int i = 0; i < indexes.Count; i++)
+            for (int i = 0; i < indexes.Count; i++)
             {
                 object temp = toOrder[i];
                 int index = Int32.Parse(indexes[i].ToString());
@@ -233,13 +246,16 @@ namespace ChatApp
 
                 message += "?";
 
-                DialogResult response = MessageBox.Show(message, "", MessageBoxButtons.YesNo);
-                bool responseBool = response.HasFlag(DialogResult.Yes);
+                CustomYesNoMessageBox yesno = new CustomYesNoMessageBox(MainForm.Instance.client ,e.roomId, message);
+                yesno.Show();
 
-                if (responseBool)
-                    MainForm.Instance.client.AcceptChatRequest(e.roomId);
-                else
-                    MainForm.Instance.client.RejectChatRequest(e.roomId);
+                //DialogResult response = MessageBox.Show(message, "", MessageBoxButtons.YesNo);
+                //bool responseBool = response.HasFlag(DialogResult.Yes);
+
+                //if (responseBool)
+                //    MainForm.Instance.client.AcceptChatRequest(e.roomId);
+                //else
+                //    MainForm.Instance.client.RejectChatRequest(e.roomId);
             }
         }
 
@@ -330,17 +346,17 @@ namespace ChatApp
         {
             MainForm.Instance.Close();
         }
-    }
 
 
-    public class CircularButton : Button
-    {
-        protected override void OnPaint(PaintEventArgs pevent)
+        public class CircularButton : Button
         {
-            GraphicsPath grpath = new GraphicsPath();
-            grpath.AddEllipse(0, 0, ClientSize.Width, ClientSize.Height);
-            this.Region = new System.Drawing.Region(grpath);
-            base.OnPaint(pevent);
+            protected override void OnPaint(PaintEventArgs pevent)
+            {
+                GraphicsPath grpath = new GraphicsPath();
+                grpath.AddEllipse(0, 0, ClientSize.Width, ClientSize.Height);
+                this.Region = new System.Drawing.Region(grpath);
+                base.OnPaint(pevent);
+            }
         }
     }
 }

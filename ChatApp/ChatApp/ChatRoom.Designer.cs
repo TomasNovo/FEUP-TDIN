@@ -37,6 +37,7 @@
             this.TChatName = new System.Windows.Forms.TextBox();
             this.PUsers = new System.Windows.Forms.Panel();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PBFile)).BeginInit();
             this.SuspendLayout();
@@ -121,12 +122,24 @@
             this.PUsers.Size = new System.Drawing.Size(131, 181);
             this.PUsers.TabIndex = 13;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label1.Location = new System.Drawing.Point(711, 182);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(112, 20);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Users In Chat";
+            // 
             // ChatRoom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(864, 554);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.PUsers);
             this.Controls.Add(this.TChatName);
             this.Controls.Add(this.PBFile);
@@ -155,5 +168,6 @@
         private System.Windows.Forms.TextBox TChatName;
         private System.Windows.Forms.Panel PUsers;
         private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Label label1;
     }
 }
