@@ -80,6 +80,7 @@ namespace ChatApp
 
         private void LoginUser()
         {
+            MainForm.Instance.Connect();
             string loginMessage = MainForm.Instance.client.Login(TBUsername.Text, TBPass.Text);
             if (loginMessage != "")
             {
@@ -91,6 +92,11 @@ namespace ChatApp
             }
 
             MainForm.Instance.Login();
+        }
+
+        public string GetServerIP()
+        {
+            return TBServerIP.Text;
         }
 
         private void BRegister_Click(object sender, EventArgs e)

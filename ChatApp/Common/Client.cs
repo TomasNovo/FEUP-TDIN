@@ -21,6 +21,7 @@ namespace Common
         public string EndPoint;
 
         public string IPAddress;
+        public bool connected = false;
 
         public string UserName;
         public string RealName;
@@ -60,7 +61,7 @@ namespace Common
                 ChannelServices.RegisterChannel(channel, false);
                 this.server = (Server)Activator.GetObject(typeof(Server), link);
 
-                GetLocalIPAddress();
+                this.IPAddress = GetLocalIPAddress();
             }
             catch (Exception e)
             {
@@ -73,7 +74,7 @@ namespace Common
             this.Port = port;
             this.EndPoint = endpoint;
 
-            this.IPAddress = GetLocalIPAddress();
+            connected = true;
 
             return true;
         }
@@ -334,7 +335,7 @@ namespace Common
             // e.timestamp = ...; ? 
 
             // Register locally
-            if (file == null && message.Length >= 16 && message.Substring(0, 16).Equals("UpdatedChatName:"))
+            if (file == null && !(message.Length >= 16 && message.Substring(0, 16).Equals("UpdatedChatName:")))
             {
                 chatRooms[roomId].log.AddMessage(sender, message);
             }

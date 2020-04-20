@@ -53,18 +53,14 @@ namespace ChatApp
         {
             this.Size = new Size(0, 0);
 
-            //_chatRoom.Show();
             _loginForm.Show();
 
-
             client = new Client();
-            client.Connect("localhost", 8080, "server");
 
-            Thread thread1 = new Thread(client.Ping);
-            thread1.Start();
+            //// Ping
+            //Thread thread1 = new Thread(client.Ping);
+            //thread1.Start();
 
-            //client.server.OnlineUsersChanged += _indexForm.IndexHandler;
-            //_indexForm.Show();
         }
 
         // Changes forms
@@ -88,6 +84,23 @@ namespace ChatApp
         {
             _loginForm.Hide();
             _registerForm.Show();
+        }
+
+        public void Connect()
+        {
+            if (!client.connected)
+            {
+                string serverIP = "localhost";
+                if (GetServerIP() != "")
+                    serverIP = GetServerIP();
+
+                MainForm.Instance.client.Connect(serverIP, 8080, "server");
+            }
+        }
+
+        public string GetServerIP()
+        {
+            return _loginForm.GetServerIP();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

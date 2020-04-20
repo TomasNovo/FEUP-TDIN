@@ -135,6 +135,7 @@ namespace ChatApp
                 return;
             }
 
+            MainForm.Instance.Connect();
             string registerMessage = MainForm.Instance.client.Register(Username, Password, RealName);
 
             if (registerMessage != "")
