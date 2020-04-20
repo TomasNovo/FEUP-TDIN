@@ -148,19 +148,13 @@ namespace Common
 
         public void AcceptChatRequest(int roomId, string username)
         {
-            //Console.WriteLine($"User {username} accepted the group chat");
-
             chatRoomAccepts.TryGetValue(roomId, out ChatRoomInfo info);
             info.accepted.Add(username);
 
-            //Console.WriteLine($"Users that accepted ({info.accepted.Count}/{info.clients.Count}):");
-            //for (int i = 0; i < info.accepted.Count; i++)
-            //{
-            //    Console.WriteLine($"{info.accepted[i]}");
-            //}
-
             if (CheckAllAccepted(info.clients, info.accepted))
             {
+                info.log = db.CreateChatRoomLog(roomId);
+
                 // Join chatRoom on each client in the chatroom
                 for (int i = 0; i < info.clients.Count; i++)
                 {
@@ -184,9 +178,10 @@ namespace Common
             Console.WriteLine($"User {username} has rejected the group chat!");
         }
 
-        public void RegisterMessageLog(int roomId, string )
+        public void RegisterMessageLog(int roomId, string sender, string message)
         {
-            //db
+            db.AddMessageToLog(roomId, sender, message);
+            Console.WriteLine($"Registered message from {sender} in room {roomId}");
         }
 
         public List<string> GetDatabaseUsers()

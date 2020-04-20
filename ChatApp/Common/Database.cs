@@ -55,11 +55,26 @@ namespace Common
             return userList.First();
         }
 
-        public bool AddMessageToLog(int roomId, string sender, string message)
+        public ChatRoomLog CreateChatRoomLog(int roomId)
         {
-            chatRoomLogs.Find()
+            var chatRoomsList = chatRoomLogs.Find(x => x.roomId == roomId).ToList();
+            if (chatRoomsList.Count == 1)
+                return chatRoomsList[0];
 
-            return true;
+            ChatRoomLog chatRoomLog = new ChatRoomLog(roomId);
+
+            chatRoomLogs.InsertOne(chatRoomLog);
+
+            return chatRoomLog;
+        }
+
+        public void AddMessageToLog(int roomId, string sender, string message)
+        {
+            ChatRoomLog log = chatRoomLogs.Find(x => x.roomId == roomId).Single();
+
+            log.AddMessage(sender, message);
+
+            chatRoomLogs.ReplaceOne(x => x.roomId == roomId, log);
         }
 
         public bool UsernameExists(string username)

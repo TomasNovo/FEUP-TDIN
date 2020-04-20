@@ -8,12 +8,17 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    [Serializable]
     public class ChatRoomLog
     {
         [BsonId]
         public int roomId { get; set; }
         public List<Tuple<string, string>> messageList = new List<Tuple<string, string>>();
 
+        public ChatRoomLog(int roomId)
+        {
+            this.roomId = roomId;
+        }
 
         public void AddMessage(string sender, string message)
         {

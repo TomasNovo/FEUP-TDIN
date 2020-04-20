@@ -174,7 +174,11 @@ namespace Common
                     clients[i].OnMessageSend(roomId, this.UserName, message);
                 }
 
-                // TODO: Send to server
+                //  Send to server
+                server.RegisterMessageLog(roomId, this.UserName, message);
+
+                // Register locally
+                chatRooms[roomId].log.AddMessage(this.UserName, message);
             }
             catch(Exception e)
             {
@@ -331,6 +335,9 @@ namespace Common
             e.message = message;
             e.file = file;
             // e.timestamp = ...; ? 
+
+            if (file == null)
+                chatRooms[roomId].log.AddMessage(sender, message);
 
             if (MessageReceived != null)
             {

@@ -26,6 +26,7 @@ namespace ChatApp
         // MACROS
         public string CHAT_NAME_UPDATE = "UpdatedChatName:";
         public string SEND_FILE = "File:";
+
         public byte[] tempFile = new byte[0];
         public string tempFileName = "";
         public string extension = "";
@@ -43,16 +44,6 @@ namespace ChatApp
             colors = new List<Color>();
 
             PBFile.MouseClick += new MouseEventHandler(LoadFile);
-
-
-            // Subscribe all
-            //foreach (KeyValuePair<int, List<Client>> entry in client.chatRooms)
-            //{
-            //    for (int i = 0; i < entry.Value.Count; i++)
-            //    {
-            //        client.MessageReceived += entry.Value[i].HandlerMessageReceived;
-            //    }
-            //}
 
             //userList.Remove(client.UserName);
             swapToFirst(userList, client.UserName);
@@ -84,6 +75,22 @@ namespace ChatApp
             this.userList = userList;
 
             this.ControlBox = false;
+
+            DrawLogMessages();
+        }
+
+        private void DrawLogMessages()
+        {
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { DrawLogMessages(); });
+            else
+            {
+                for (int i = 0; i < client.chatRooms[roomId].log.messageList.Count; i++)
+                {
+                    var tuple = client.chatRooms[roomId].log.messageList[i];
+                    DrawMessage(tuple.Item2, tuple.Item1);
+                }
+            }
         }
 
         private void swapToFirst(List<string> list, string user)
@@ -131,17 +138,52 @@ namespace ChatApp
                     tempFile = e.file;
                 }
 
-                //if(e.message.Length >= 5  && e.message.Substring(0,5).Equals(SEND_FILE))
-                //{
-                //    string[] words = e.message.Split(':'); // 0 -> filename ; 1 -> file string
-                //    byte[] bytes = Encoding.ASCII.GetBytes(words[1]);
-
-                //    DrawMessage(true, e.message.Substring(0, 5), e.sender);
-                //    return;
-                //}
-
-                DrawMessage(true, e.message, e.sender);
+                DrawMessage(e.message, e.sender);
             }
+        }
+
+        private void DrawMessage(string message, string sender = "")
+        {
+            Label temp = new Label();
+            this.PMessages.Controls.Add(temp);
+            temp.Size = new Size(490, 15);
+            temp.AutoSize = false;
+            bool left = (sender != "" && sender != client.UserName);
+
+            if (left)
+            {
+                if (message.Length >= 5 && message.Substring(0, 5).Equals(SEND_FILE))
+                {
+                    string filename = message.Substring(5);
+                    tempFileName = filename;
+                    string[] words = filename.Split('.');
+                    extension = words[1];
+                    temp.DoubleClick += FileDownload;
+                    message = $"Sent file with name {filename} (double click to download)";
+                }
+
+                temp.BackColor = Color.Yellow;
+                temp.Location = new Point(3, 10 + message_number * 20);
+                temp.Text = $"{sender}: {message}";
+
+                for (int i = 0; i < userList.Count; i++)
+                {
+                    if (sender.Equals(userList[i]))
+                    {
+                        temp.BackColor = colors[i];
+                    }
+                }
+            }
+            else
+            {
+                temp.BackColor = Color.Blue;
+                temp.TextAlign = ContentAlignment.MiddleRight;
+                temp.Location = new Point(0, 10 + message_number * 20);
+                temp.Text = message;
+                temp.BackColor = colors[0];
+            }
+
+            message_number++;
         }
 
         private void ChatRoom_Load(object sender, EventArgs e)
@@ -177,56 +219,12 @@ namespace ChatApp
             if (TBSend.Text == "Write here your message..")
                 return;
 
-            DrawMessage(false, TBSend.Text);
+            DrawMessage(TBSend.Text);
          
             MainForm.Instance.client.SendMessage(roomId, TBSend.Text);
 
             TBSend.Text = "Write here your message..";
             //TBSend.ForeColor = Color.Silver;
-        }
-
-        private void DrawMessage(bool left, string message, string sender = "")
-        {
-            Label temp = new Label();
-            this.PMessages.Controls.Add(temp);
-            temp.Size = new Size(490, 15);
-            temp.AutoSize = false;
-
-            if (left)
-            {
-                if (message.Length >= 5 && message.Substring(0, 5).Equals(SEND_FILE))
-                {
-                    string filename = message.Substring(5);
-                    tempFileName = filename;
-                    string[] words = filename.Split('.');
-                    extension = words[1];
-                    temp.DoubleClick += FileDownload;
-                    message = $"Sent file with name {filename} (double click to download)";
-                }
-
-                temp.BackColor = Color.Yellow;
-                temp.Location = new Point(3, 10 + message_number * 20);
-                temp.Text = $"{sender}: {message}";
-
-                for (int i = 0; i < userList.Count; i++)
-                {
-                    if (sender.Equals(userList[i]))
-                    {
-                        temp.BackColor = colors[i];
-                    }
-                }
-
-            }
-            else
-            {
-                temp.BackColor = Color.Blue;
-                temp.TextAlign = ContentAlignment.MiddleRight;
-                temp.Location = new Point(0, 10 + message_number * 20);
-                temp.Text = message;
-                temp.BackColor = colors[0];
-            }
-
-            message_number++;
         }
 
         public void ToggleVisibility()
@@ -287,7 +285,7 @@ namespace ChatApp
             //byte[] -> string
             //string result = System.Text.Encoding.ASCII.GetString(data);
 
-            DrawMessage(false, $"Sent file {safe}");
+            DrawMessage($"Sent file {safe}");
 
             //Format: SEND_FILE:filename:result
             MainForm.Instance.client.SendFile(roomId, SEND_FILE + safe, data);
