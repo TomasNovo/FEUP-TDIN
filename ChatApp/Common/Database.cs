@@ -14,6 +14,7 @@ namespace Common
         private MongoClient mongo;
         private IMongoDatabase database;
         private IMongoCollection<UserInfo> users;
+        private IMongoCollection<ChatRoomLog> chatRoomLogs;
 
         public bool StartMongo()
         {
@@ -22,9 +23,7 @@ namespace Common
                 mongo = new MongoClient("mongodb://localhost:27017");
                 database = mongo.GetDatabase("server");
                 users = database.GetCollection<UserInfo>("users");
-
-                // Empties collection
-                //users.DeleteMany(x => true);
+                chatRoomLogs = database.GetCollection<ChatRoomLog>("chatRoomLogs");
             }
             catch (Exception e)
             {
@@ -54,6 +53,13 @@ namespace Common
                 return null;
 
             return userList.First();
+        }
+
+        public bool AddMessageToLog(int roomId, string sender, string message)
+        {
+            chatRoomLogs.Find()
+
+            return true;
         }
 
         public bool UsernameExists(string username)

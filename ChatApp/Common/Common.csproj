@@ -81,6 +81,7 @@
     <Compile Include="AskForChatEventArgs.cs" />
     <Compile Include="ChatFinalizedEventArgs.cs" />
     <Compile Include="ChatRoomInfo.cs" />
+    <Compile Include="ChatRoomLog.cs" />
     <Compile Include="MessageReceivedEventArgs.cs" />
     <Compile Include="OnlineUsersEventArgs.cs" />
     <Compile Include="Client.cs" />
