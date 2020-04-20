@@ -245,7 +245,23 @@ namespace ChatApp
 
         private void User_DoubleClick(object sender, EventArgs e)
         {
+            string username = ((Label)sender).Text;
 
+            if (colorDialog1.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
+            {
+                ((Label)sender).BackColor = colorDialog1.Color;
+
+                for (int i = 0; i < userList.Count; i++)
+                {
+                    if (userList[i].Equals(username))
+                    {
+                        colors[i] = colorDialog1.Color;
+                        ResetMessages();
+                        break;
+                    }
+                }
+
+            }
         }
 
         private void ResetMessages()
@@ -310,6 +326,14 @@ namespace ChatApp
                 tempFile = new byte[0];
                 tempFileName = "";
                 extension = "";
+            }
+        }
+
+        private void BSend_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                MainForm.Instance.client.SendMessage(roomId, TBSend.Text);
             }
         }
     }
