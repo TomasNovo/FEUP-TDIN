@@ -28,6 +28,7 @@ namespace ChatApp
             this.BNo.TabStop = false;
             this.textBox1.Text = this.message;
             this.textBox1.ReadOnly = true;
+            this.textBox1.TabStop = false;
 
             this.Text = "New Chat Proposal !!";
         }
