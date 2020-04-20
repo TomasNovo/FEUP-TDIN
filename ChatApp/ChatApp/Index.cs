@@ -140,9 +140,15 @@ namespace ChatApp
             int roomId = MainForm.Instance.client.StartChat(username);
 
             if (roomId == -1) // Server error
-                MessageBox.Show("Failed to start chat");
+            {
+                CustomOkMessageBox box = new CustomOkMessageBox("genericError", "Failed to start chat");
+                box.Show();
+            }
             else if (roomId == -2) // chat room already exists
-                MessageBox.Show("Chat room already exists!");
+            {
+                CustomOkMessageBox box = new CustomOkMessageBox("genericError", "Chat room already exists!");
+                box.Show();
+            }
         }
 
         private void UserLabelGroupChatClick(object sender, EventArgs e)
@@ -296,12 +302,14 @@ namespace ChatApp
                     if (roomId == -1) // Server error
                     {
                         BDiscard_Click(null, null);
-                        MessageBox.Show("Failed to start chat");
+                        CustomOkMessageBox box = new CustomOkMessageBox("genericError", "Failed to start chat");
+                        box.Show();
                     }
                     else if (roomId == -2) // chat room already exists
                     {
                         BDiscard_Click(null, null);
-                        MessageBox.Show("Chat room already exists!");
+                        CustomOkMessageBox box = new CustomOkMessageBox("genericError", "Chat room already exists!");
+                        box.Show();
                     }
                 }
             }

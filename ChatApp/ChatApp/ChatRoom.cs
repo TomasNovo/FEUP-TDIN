@@ -255,10 +255,19 @@ namespace ChatApp
                     if(userList[i].Equals(username))
                     {
                         colors[i] = colorDialog1.Color;
+                        ResetMessages();
+                        break;
                     }
                 }
 
             }
+        }
+
+        private void ResetMessages()
+        {
+            message_number = 0;
+            PMessages.Controls.Clear();
+            DrawLogMessages();
         }
 
         //----------Files-------------

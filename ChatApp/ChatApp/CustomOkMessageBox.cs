@@ -24,6 +24,12 @@ namespace ChatApp
 
             switch(type)
             {
+                case "genericError":
+                    this.Text = "Error: Login";
+                    this.pictureBox2.Hide();
+                    this.pictureBox1.Show();
+                    break;
+
                 case "errorRegister":
                     this.Text = "Error: Register";
                     this.label1.Location = new Point(80, 145);
@@ -57,7 +63,6 @@ namespace ChatApp
                 default: break;
             }
         }
-        
 
         private void BOk_Click(object sender, EventArgs e)
         {

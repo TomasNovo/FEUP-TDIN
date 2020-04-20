@@ -176,9 +176,6 @@ namespace Common
 
                 //  Send to server
                 server.RegisterMessageLog(roomId, this.UserName, message);
-
-                // Register locally
-                chatRooms[roomId].log.AddMessage(this.UserName, message);
             }
             catch(Exception e)
             {
@@ -336,6 +333,7 @@ namespace Common
             e.file = file;
             // e.timestamp = ...; ? 
 
+            // Register locally
             if (file == null)
                 chatRooms[roomId].log.AddMessage(sender, message);
 
