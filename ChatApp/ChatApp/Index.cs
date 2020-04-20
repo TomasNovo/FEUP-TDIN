@@ -192,16 +192,6 @@ namespace ChatApp
 
                     PChatRooms.Controls.Add(cb);
 
-                    //Label t = new Label();
-                    //t.Text = "⚙️";
-                    ////t.BackColor = Color.Yellow;
-                    //t.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
-                    //t.Size = new Size(10, 15);
-                    //t.ForeColor = Color.Black;
-                    //t.Location = new Point(55 + widthSpacing * (i / 3), 53 + heightSpacing * (i % 3));
-                    //t.DoubleClick += ChatSettings(t, null, cb);
-                    //PChatRooms.Controls.Add(t);
-
                     i++;
                 }
             }
@@ -214,11 +204,6 @@ namespace ChatApp
             _chatRooms[roomId].ToggleVisibility();
         }
 
-
-        private void Icon_Click(object sender, EventArgs e)
-        {
-            // Each icon will be a group chat
-        }
 
         //----------Delegates----------
         //public void OnOnlineUsersChange(object source, EventArgs e)
