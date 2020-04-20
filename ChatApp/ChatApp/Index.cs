@@ -157,7 +157,7 @@ namespace ChatApp
             else
             {
                 groupChatUserListBuffer.Add(label.Text);
-                label.ForeColor = Color.Red;
+                label.ForeColor = Color.RoyalBlue;
             }
         }
 

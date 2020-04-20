@@ -32,7 +32,7 @@ namespace ChatApp
                     break;
 
                 case "errorLogin":
-                    this.Text = "Error: Register";
+                    this.Text = "Error: Login";
                     this.pictureBox2.Hide();
                     this.pictureBox1.Show();
                     break;

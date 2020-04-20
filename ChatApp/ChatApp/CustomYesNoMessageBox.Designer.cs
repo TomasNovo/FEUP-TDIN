@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomYesNoMessageBox));
             this.BNo = new System.Windows.Forms.Button();
             this.BYes = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
@@ -41,7 +41,7 @@
             this.BNo.BackColor = System.Drawing.Color.RoyalBlue;
             this.BNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BNo.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.BNo.Location = new System.Drawing.Point(219, 180);
+            this.BNo.Location = new System.Drawing.Point(219, 241);
             this.BNo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BNo.Name = "BNo";
             this.BNo.Size = new System.Drawing.Size(95, 41);
@@ -55,7 +55,7 @@
             this.BYes.BackColor = System.Drawing.Color.RoyalBlue;
             this.BYes.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BYes.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.BYes.Location = new System.Drawing.Point(53, 180);
+            this.BYes.Location = new System.Drawing.Point(53, 241);
             this.BYes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BYes.Name = "BYes";
             this.BYes.Size = new System.Drawing.Size(95, 41);
@@ -63,17 +63,6 @@
             this.BYes.Text = "Yes";
             this.BYes.UseVisualStyleBackColor = false;
             this.BYes.Click += new System.EventHandler(this.BYes_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(12, 138);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 20);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Text";
             // 
             // pictureBox3
             // 
@@ -86,15 +75,28 @@
             this.pictureBox3.TabIndex = 9;
             this.pictureBox3.TabStop = false;
             // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.Color.Gray;
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.ForeColor = System.Drawing.SystemColors.Window;
+            this.textBox1.Location = new System.Drawing.Point(51, 134);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(300, 93);
+            this.textBox1.TabIndex = 13;
+            this.textBox1.Text = "Text";
+            // 
             // CustomYesNoMessageBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(363, 232);
+            this.ClientSize = new System.Drawing.Size(363, 303);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.BNo);
             this.Controls.Add(this.BYes);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox3);
             this.Name = "CustomYesNoMessageBox";
             this.Text = "CustomMessageBox";
@@ -107,8 +109,8 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button BYes;
         private System.Windows.Forms.Button BNo;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
