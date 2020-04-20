@@ -133,7 +133,7 @@ namespace Common
             server.Ping();
         }
 
-        public ArrayList GetUsers()
+        public List<string> GetUsers()
         {
             return server.GetDatabaseUsers();
         }

@@ -10,9 +10,9 @@ namespace Common
     [Serializable]
     public class OnlineUsersEventArgs : EventArgs
     {
-        public ArrayList ou { get; set; }
+        public List<string> ou { get; set; }
 
-        public OnlineUsersEventArgs(ArrayList al)
+        public OnlineUsersEventArgs(List<string> al)
         {
             ou = al;
         }

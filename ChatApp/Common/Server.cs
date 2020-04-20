@@ -183,21 +183,14 @@ namespace Common
             Console.WriteLine($"User {username} has rejected the group chat!");
         }
 
-        public ArrayList GetDatabaseUsers()
+        public List<string> GetDatabaseUsers()
         {
             return db.GetUsersArraylist();
         }
 
-        public ArrayList GetOnlineUsers()
+        public List<string> GetOnlineUsers()
         {
-            ArrayList ou = new ArrayList();
-
-            for(int i = 0; i < users.Count; i++)
-            {
-                ou.Add(users.Keys.ElementAt(i));
-            }
-
-            return ou;
+            return users.Keys.ToList();
         }
 
         public static int HashUsers(List<string> usernames)
@@ -223,7 +216,7 @@ namespace Common
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
         public event OnlineUsersChangeEventHandler OnlineUsersChanged;
 
-        protected virtual void OnOnlineUsersChange(ArrayList u)
+        protected virtual void OnOnlineUsersChange(List<string> u)
         {
             OnlineUsersEventArgs e = new OnlineUsersEventArgs(u);
             if (OnlineUsersChanged != null)

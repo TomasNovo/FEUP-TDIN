@@ -38,7 +38,6 @@ namespace ChatApp
             PUsers.HorizontalScroll.Maximum = 0;
             PUsers.AutoScroll = true;
 
-
             DrawUserPanel();
 
             LUser.Text += ", " + MainForm.Instance.client.UserName + " !";
@@ -55,8 +54,8 @@ namespace ChatApp
                 BeginInvoke((MethodInvoker)delegate { DrawUserPanel(); });
             else
             {
-                ArrayList users;
-                ArrayList onlineUsers;
+                List<string> users;
+                List<string> onlineUsers;
 
                 PUsers.Controls.Clear();
 
@@ -74,43 +73,91 @@ namespace ChatApp
                 users.Remove(MainForm.Instance.client.UserName);
                 onlineUsers.Remove(MainForm.Instance.client.UserName);
 
-                OrderOnlineFirst(users, onlineUsers);
+                List<Tuple<string, bool>> mergedUsers = users.Select(e => new Tuple<string, bool>(e, onlineUsers.IndexOf(e) != -1)).ToList();
 
-
-                for (int i = 0; i < users.Count; i++)
-                {
-                    CircularButton cb = new CircularButton();
-                    cb.FlatStyle = FlatStyle.Flat;
-                    cb.FlatAppearance.BorderSize = 0;
-                    cb.Size = new Size(10, 10);
-                    cb.TabStop = false;
-                    cb.Location = new Point(15, 57 + i * 25);
-
-                    // Draws username
-                    Label temp = new Label();
-                    temp.DoubleClick += Temp_DoubleClick;
-                    temp.Size = new Size(70, 15);
-                    temp.Location = new Point(28, 55 + i * 25);
-                    temp.BackColor = Color.DarkGray;
-                    temp.BorderStyle = BorderStyle.None;
-                    temp.Text = users[i].ToString();
-
-                    cb.BackColor = Color.Gray;
-
-                    // Draws green(online) or gray circular button  
-                    for (int j = 0; j < onlineUsers.Count; j++)
+                mergedUsers.Sort((Tuple<string, bool> a, Tuple<string, bool> b) => 
+                { 
+                    if (a.Item2 == b.Item2)
                     {
-                        if (users[i].Equals(onlineUsers[j].ToString()))
-                        {
-                            cb.BackColor = Color.Green;
-                            break;
-                        }
+                        return a.Item1.CompareTo(b.Item1);
                     }
+                    else
+                    {
+                        if (a.Item2)
+                            return -1;
+                        else
+                            return 1;
+                    }
+                });
 
-                    this.PUsers.Controls.Add(cb);
-                    this.PUsers.Controls.Add(temp);
-
+                for (int i = 0; i < mergedUsers.Count; i++)
+                {
+                    DrawUser(i, mergedUsers[i].Item1, mergedUsers[i].Item2);
                 }
+            }
+        }
+
+        private void DrawUser(int i, string username, bool online)
+        {
+            CircularButton cb = new CircularButton();
+            cb.FlatStyle = FlatStyle.Flat;
+            cb.FlatAppearance.BorderSize = 0;
+            cb.Size = new Size(10, 10);
+            cb.TabStop = false;
+            cb.Location = new Point(15, 57 + i * 25);
+
+            // Draws username
+            Label temp = new Label();
+            temp.Size = new Size(70, 15);
+            temp.Location = new Point(28, 55 + i * 25);
+            temp.BackColor = Color.DarkGray;
+            temp.BorderStyle = BorderStyle.None;
+            temp.Text = username;
+
+            if (online)
+            {
+                if (selectingGroupChat)
+                    temp.Click += UserLabelGroupChatClick;
+                else
+                    temp.DoubleClick += UserDoubleClick;
+
+                cb.BackColor = Color.Green;
+            }
+            else
+                cb.BackColor = Color.Gray;
+
+            this.PUsers.Controls.Add(cb);
+            this.PUsers.Controls.Add(temp);
+        }
+
+        private void UserDoubleClick(object sender, EventArgs e)
+        {
+            string username = ((Label)sender).Text;
+
+            if (!MainForm.Instance.client.server.GetOnlineUsers().Contains(username))
+                return;
+
+            int roomId = MainForm.Instance.client.StartChat(username);
+
+            if (roomId == -1) // Server error
+                MessageBox.Show("Failed to start chat");
+            else if (roomId == -2) // chat room already exists
+                MessageBox.Show("Chat room already exists!");
+        }
+
+        private void UserLabelGroupChatClick(object sender, EventArgs e)
+        {
+            Label label = (Label)sender;
+
+            if (groupChatUserListBuffer.IndexOf(label.Text) != -1)
+            {
+                groupChatUserListBuffer.Remove(label.Text);
+                label.ForeColor = Color.White;
+            }
+            else
+            {
+                groupChatUserListBuffer.Add(label.Text);
+                label.ForeColor = Color.Red;
             }
         }
 
@@ -167,44 +214,6 @@ namespace ChatApp
             _chatRooms[roomId].ToggleVisibility();
         }
 
-        private void Temp_DoubleClick(object sender, EventArgs e)
-        {
-            string username = ((Label)sender).Text;
-
-            if (!MainForm.Instance.client.server.GetOnlineUsers().Contains(username))
-                return;
-
-            int roomId = MainForm.Instance.client.StartChat(username);
-            
-            if (roomId == -1) // Server error
-                MessageBox.Show("Failed to start chat");
-            else if (roomId == -2) // chat room already exists
-                MessageBox.Show("Chat room already exists!");
-        }
-
-        private void OrderOnlineFirst(ArrayList toOrder, ArrayList online)
-        {
-            ArrayList indexes = new ArrayList();
-            for (int i = 0; i < toOrder.Count; i++)
-            {
-                for (int j = 0; j < online.Count; j++)
-                {
-                    if (toOrder[i].ToString().Equals(online[j].ToString()))
-                    {
-                        indexes.Add(i);
-                    }
-                }
-            }
-
-
-            for (int i = 0; i < indexes.Count; i++)
-            {
-                object temp = toOrder[i];
-                int index = Int32.Parse(indexes[i].ToString());
-                toOrder[i] = toOrder[index];
-                toOrder[index] = temp;
-            }
-        }
 
         private void Icon_Click(object sender, EventArgs e)
         {
@@ -319,28 +328,11 @@ namespace ChatApp
 
                 groupChatUserListBuffer = new List<string>();
 
-                for (int i = 0; i < PUsers.Controls.Count; i++)
-                    PUsers.Controls[i].Click += UserLabelGroupChatClick;
-
                 selectingGroupChat = true;
+
+                DrawUserPanel();
             }
 
-        }
-
-        private void UserLabelGroupChatClick(object sender, EventArgs e)
-        {
-            Label label = (Label)sender;
-
-            if (groupChatUserListBuffer.IndexOf(label.Text) != -1)
-            {
-                groupChatUserListBuffer.Remove(label.Text);
-                label.ForeColor = Color.Black;
-            }
-            else
-            {
-                groupChatUserListBuffer.Add(label.Text);
-                label.ForeColor = Color.Red;
-            }
         }
 
         private void BDiscard_Click(object sender, EventArgs e)

@@ -61,14 +61,9 @@ namespace Common
             return (users.Find(x => x.username == username).ToList().Count == 1);
         }
 
-        public ArrayList GetUsersArraylist()
+        public List<string> GetUsersArraylist()
         {
-            ArrayList usernames = new ArrayList();
-
-            users.Find(_ => true).ToList().ForEach(u => {
-                usernames.Add("" + u.username + "");
-            });
-            return usernames;
+            return users.Find(_ => true).ToList().Select(e => e.username).ToList();
         }
     }
 }
