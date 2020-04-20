@@ -153,6 +153,7 @@ namespace ChatApp
 
             if (left)
             {
+                temp.Name = sender;
                 if (message.Length >= 5 && message.Substring(0, 5).Equals(SEND_FILE))
                 {
                     string filename = message.Substring(5);
@@ -177,6 +178,7 @@ namespace ChatApp
             }
             else
             {
+                temp.Name = client.UserName;
                 temp.BackColor = Color.Blue;
                 temp.TextAlign = ContentAlignment.MiddleRight;
                 temp.Location = new Point(0, 10 + message_number * 20);
@@ -256,11 +258,20 @@ namespace ChatApp
                     if (userList[i].Equals(username))
                     {
                         colors[i] = colorDialog1.Color;
-                        ResetMessages();
+                        ChangeColor(colorDialog1.Color, username);
                         break;
                     }
                 }
 
+            }
+        }
+
+        private void ChangeColor(Color color, string username)
+        {
+            for (int i = 0; i < PMessages.Controls.Count; i++)
+            {
+                if (PMessages.Controls[i].Name == username)
+                    PMessages.Controls[i].BackColor = color;
             }
         }
 

@@ -1,0 +1,8 @@
+Passos para correr o servidor:
+	- correr o ficheiro openDB.bat numa linha de comandos
+	- abrir o ficheiro ChatApp\ChatApp.sln no Visual Studio
+	- correr o projeto ChatServer \no Visual Studio
+
+Passos para correr o client
+	- abrir o ficheiro ChatApp\ChatApp.sln no Visual Studio
+	- correr o projeto ChatApp no Visual Studio
