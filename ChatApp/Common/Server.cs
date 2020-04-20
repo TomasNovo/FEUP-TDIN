@@ -65,7 +65,6 @@ namespace Common
             users.Add(username, newUser);
 
             Console.WriteLine($"User '{username}' has logged in");
-            NotifyUserLogin(username);
 
             OnOnlineUsersChange(GetOnlineUsers());
 
@@ -82,24 +81,6 @@ namespace Common
 
             return true;
         }
-
-        public void NotifyUserLogin(string username)
-        {
-            foreach (KeyValuePair<string, User> entry in users) // Notify all other users on user register
-            {
-                if (entry.Key != username)
-                    entry.Value.client.ServerMessage($"User '{username}' has entered the chat");
-            }
-        }
-
-        //public void NotifyUserLogout(string username)
-        //{
-        //    foreach (KeyValuePair<string, User> entry in users) // Notify all other users on user register
-        //    {
-        //        if (entry.Key != username)
-        //            entry.Value.client.ServerMessage($"User '{username}' has leaved the chat");
-        //    }
-        //}
 
         public Client GetUserClient(string username)
         {
@@ -120,7 +101,9 @@ namespace Common
                 chatRoomAccepts.Remove(roomId);
             }
 
-            Console.WriteLine($"roomId:{roomId}");
+            Console.WriteLine($"roomId: {roomId}");
+            ChatRoomInfo info = new ChatRoomInfo();
+            chatRoomAccepts.Add(roomId, info);
 
             // Check for wrong usernames
             for (int i = 0; i < usernames.Count; i++)
@@ -133,16 +116,13 @@ namespace Common
                 clients.Add(cl);
             }
 
-            OnAskForChat(roomId, creator, usernames.ToList());
-
             // Create roomChat and add creator to it
-            ChatRoomInfo info = new ChatRoomInfo();
             info.roomId = roomId;
             info.creator = creator;
             info.clients = clients;
 
-            chatRoomAccepts.Add(roomId, info);
             AcceptChatRequest(roomId, creator);
+            OnAskForChat(roomId, creator, usernames.ToList());
 
             return roomId;
         }
@@ -196,9 +176,9 @@ namespace Common
         {
             Console.WriteLine($"User {username} rejected the group chat");
 
-            chatRoomAccepts.Remove(roomId);
-
             OnChatFinalize(roomId, false);
+
+            chatRoomAccepts.Remove(roomId);
 
             Console.WriteLine($"User {username} has rejected the group chat!");
         }
@@ -277,10 +257,10 @@ namespace Common
             e.result = result;
             e.roomId = roomId;
 
-            chatRoomAccepts.TryGetValue(roomId, out ChatRoomInfo info);
-            e.userList = info.accepted;
+            Console.WriteLine(chatRoomAccepts.TryGetValue(roomId, out ChatRoomInfo info));
+            e.userList = info.clients.Select(element => element.UserName).ToList();
 
-            if (ChatAsked != null)
+            if (ChatFinalized != null)
             {
                 ChatFinalized(this, e);
             }

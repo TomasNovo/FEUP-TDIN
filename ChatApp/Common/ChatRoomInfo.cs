@@ -13,6 +13,6 @@ namespace Common
         public string creator { get; set; }
         public List<Client> clients { get; set; }
         public List<string> accepted = new List<string>();
-
+        //public List<>
     }
 }

@@ -291,6 +291,7 @@ namespace Common
             server.OnlineUsersChanged += HandlerLogout;
             server.ChatAsked += HandlerAskForChat;
             server.ChatFinalized += HandlerChatFinalized;
+            MessageReceived += MessageReceivedHandler;
         }
 
         public void RemoveHandlers()
@@ -298,6 +299,7 @@ namespace Common
             server.OnlineUsersChanged -= HandlerLogout;
             server.ChatAsked -= HandlerAskForChat;
             server.ChatFinalized -= HandlerChatFinalized;
+            MessageReceived -= MessageReceivedHandler;
         }
 
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
@@ -351,6 +353,11 @@ namespace Common
             {
                 MessageReceived(this, e);
             }
+        }
+
+        public void MessageReceivedHandler(object source, MessageReceivedEventArgs e)
+        {
+            //if (chatRooms.ContainsKey(e.roomId))
         }
 
         public override object InitializeLifetimeService()
