@@ -37,6 +37,31 @@ namespace Common
             Console.WriteLine("Server is running");
         }
 
+        //-----------------------------------Local methods-----------------------------------
+
+        private Client GetUserClient(string username)
+        {
+            return (users.TryGetValue(username, out User us)) ? us.client : null;
+        }
+
+        private bool CheckAllAccepted(List<Client> a, List<string> b)
+        {
+            if (a.Count != b.Count)
+                return false;
+
+            int matchCounter = 0;
+            for (int i = 0; i < a.Count; i++)
+            {
+                for (int j = 0; j < a.Count; j++)
+                {
+                    if (a[i].UserName == b[j])
+                        matchCounter++;
+                }
+            }
+
+            return matchCounter == a.Count;
+        }
+
         //-----------------------------------Remote methods-----------------------------------
 
         public string Register(string username, string password, string realname, Client client)
@@ -82,12 +107,6 @@ namespace Common
             return true;
         }
 
-        public Client GetUserClient(string username)
-        {
-            return (users.TryGetValue(username, out User us)) ? us.client : null;
-        }
-
-        // TODO: Check for duplicate chats
         public int StartGroupChat(string creator, List<string> usernames)
         {
             usernames.Sort();
@@ -152,24 +171,6 @@ namespace Common
 
                 Console.WriteLine("All users accepted the chat!");
             }
-        }
-
-        public bool CheckAllAccepted(List<Client> a, List<string> b)
-        {
-            if (a.Count != b.Count)
-                return false;
-
-            int matchCounter = 0;
-            for (int i = 0; i < a.Count; i++)
-            {
-                for (int j = 0; j < a.Count; j++)
-                {
-                    if (a[i].UserName == b[j])
-                        matchCounter++;
-                }
-            }
-
-            return matchCounter == a.Count;
         }
 
         public void RejectChatRequest(int roomId, string username)

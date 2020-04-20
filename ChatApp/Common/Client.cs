@@ -288,7 +288,7 @@ namespace Common
 
         public void AddHandlers()
         {
-            server.OnlineUsersChanged += HandlerLogout;
+            server.OnlineUsersChanged += HandlerOnlineUsersChanged;
             server.ChatAsked += HandlerAskForChat;
             server.ChatFinalized += HandlerChatFinalized;
             MessageReceived += MessageReceivedHandler;
@@ -296,7 +296,7 @@ namespace Common
 
         public void RemoveHandlers()
         {
-            server.OnlineUsersChanged -= HandlerLogout;
+            server.OnlineUsersChanged -= HandlerOnlineUsersChanged;
             server.ChatAsked -= HandlerAskForChat;
             server.ChatFinalized -= HandlerChatFinalized;
             MessageReceived -= MessageReceivedHandler;
@@ -305,14 +305,13 @@ namespace Common
         public delegate void OnlineUsersChangeEventHandler(object source, OnlineUsersEventArgs e);
         public event OnlineUsersChangeEventHandler OnlineUsersChanged;
 
-        public void HandlerLogout(object o, OnlineUsersEventArgs e)
+        public void HandlerOnlineUsersChanged(object o, OnlineUsersEventArgs e)
         {
             if (OnlineUsersChanged != null)
             {
                 OnlineUsersChanged(this, e);
             }
         }
-
 
         public delegate void AskForChatEventHandler(object source, AskForChatEventArgs e);
         public event AskForChatEventHandler ChatAsked;
@@ -324,7 +323,6 @@ namespace Common
                 ChatAsked(this, e);
             }
         }
-
 
         public delegate void ChatFinalizedEventHandler(object source, ChatFinalizedEventArgs e);
         public event ChatFinalizedEventHandler ChatFinalized;
