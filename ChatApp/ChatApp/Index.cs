@@ -303,13 +303,11 @@ namespace ChatApp
                     {
                         BDiscard_Click(null, null);
                         MessageBox.Show("Failed to start chat");
-                        return;
                     }
                     else if (roomId == -2) // chat room already exists
                     {
                         BDiscard_Click(null, null);
                         MessageBox.Show("Chat room already exists!");
-                        return;
                     }
                 }
             }
@@ -323,9 +321,10 @@ namespace ChatApp
 
                 for (int i = 0; i < PUsers.Controls.Count; i++)
                     PUsers.Controls[i].Click += UserLabelGroupChatClick;
+
+                selectingGroupChat = true;
             }
 
-            selectingGroupChat = true;
         }
 
         private void UserLabelGroupChatClick(object sender, EventArgs e)
@@ -351,9 +350,6 @@ namespace ChatApp
             LWelcome.Text = LWelcomeText;
             BGroupChat.Text = BGroupChatText;
             BDiscard.Hide();
-
-            for (int i = 0; i < PUsers.Controls.Count; i++)
-                PUsers.Controls[i].Click -= UserLabelGroupChatClick;
 
             DrawChatRoomPanel();
             DrawUserPanel();
