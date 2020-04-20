@@ -130,6 +130,7 @@ namespace ChatApp
                 {
                     this.ChatName = e.message.Substring(16);
                     TChatName.Text = this.ChatName;
+
                     return;
                 }
 
@@ -146,8 +147,8 @@ namespace ChatApp
         {
             Label temp = new Label();
             this.PMessages.Controls.Add(temp);
-            temp.Size = new Size(490, 15);
-            temp.AutoSize = false;
+            //temp.Size = new Size(490, 15);
+            temp.AutoSize = true;
             bool left = (sender != "" && sender != client.UserName);
 
             if (left)
@@ -163,7 +164,7 @@ namespace ChatApp
                 }
 
                 temp.BackColor = Color.Yellow;
-                temp.Location = new Point(3, 10 + message_number * 20);
+                temp.Location = new Point(0, 10 + message_number * 20);
                 temp.Text = $"{sender}: {message}";
 
                 for (int i = 0; i < userList.Count; i++)
@@ -188,10 +189,10 @@ namespace ChatApp
 
         private void ChatRoom_Load(object sender, EventArgs e)
         {
-            PMessages.AutoScroll = false;
-            PMessages.HorizontalScroll.Enabled = false;
-            PMessages.HorizontalScroll.Visible = false;
-            PMessages.HorizontalScroll.Maximum = 0;
+            //PMessages.AutoScroll = false;
+            //PMessages.HorizontalScroll.Enabled = false;
+            //PMessages.HorizontalScroll.Visible = false;
+            //PMessages.HorizontalScroll.Maximum = 0;
             PMessages.AutoScroll = true;
         }
 
@@ -244,23 +245,7 @@ namespace ChatApp
 
         private void User_DoubleClick(object sender, EventArgs e)
         {
-            string username = ((Label)sender).Text;
-            
-            if (colorDialog1.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
-            {
-                ((Label)sender).BackColor = colorDialog1.Color;
-                
-                for(int i = 0; i < userList.Count; i++)
-                {
-                    if(userList[i].Equals(username))
-                    {
-                        colors[i] = colorDialog1.Color;
-                        ResetMessages();
-                        break;
-                    }
-                }
 
-            }
         }
 
         private void ResetMessages()
@@ -283,6 +268,8 @@ namespace ChatApp
                 filename = ofd.FileName;
                 safe = ofd.SafeFileName;
             }
+            else return;
+
 
             FileInfo fileInfo = new FileInfo(filename);
             byte[] data = new byte[fileInfo.Length];

@@ -180,6 +180,11 @@ namespace Common
 
         public void RegisterMessageLog(int roomId, string sender, string message)
         {
+            if (message.Length >= 16 && message.Substring(0, 16).Equals("UpdatedChatName:"))
+            {
+                return;
+            }
+
             db.AddMessageToLog(roomId, sender, message);
             Console.WriteLine($"Registered message from {sender} in room {roomId}");
         }

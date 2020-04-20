@@ -334,8 +334,11 @@ namespace Common
             // e.timestamp = ...; ? 
 
             // Register locally
-            if (file == null)
+            if (file == null && message.Length >= 16 && message.Substring(0, 16).Equals("UpdatedChatName:"))
+            {
                 chatRooms[roomId].log.AddMessage(sender, message);
+            }
+            
 
             if (MessageReceived != null)
             {
