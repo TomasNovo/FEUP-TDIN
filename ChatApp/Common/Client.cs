@@ -87,8 +87,6 @@ namespace Common
                 return registerMessage;
             }
 
-            ServerMessage("Registered successfully");
-
             this.UserName = username;
             this.RealName = RealName;
 
@@ -108,8 +106,6 @@ namespace Common
 
             this.UserName = username;
 
-            ServerMessage("Logged in successfully");
-
             return loginMessage;
         }
 
@@ -122,8 +118,6 @@ namespace Common
                 Console.WriteLine("Something went wrong while logging out");
                 return false;
             }
-
-            ServerMessage("Logged out successfully");
 
             return true;
         }
@@ -159,7 +153,6 @@ namespace Common
             return server.StartGroupChat(UserName, usernames);
         }
 
-
         public void AcceptChatRequest(int roomId)
         {
             this.server.AcceptChatRequest(roomId, this.UserName);
@@ -180,6 +173,8 @@ namespace Common
                 {
                     clients[i].OnMessageSend(roomId, this.UserName, message);
                 }
+
+                // TODO: Send to server
             }
             catch(Exception e)
             {
@@ -236,16 +231,6 @@ namespace Common
         }
 
         //-----------------------------------Remote methods-----------------------------------
-
-        public void Message(string username, string msg)
-        {
-            Console.WriteLine($"{username}: {msg}");
-        }
-
-        public void ServerMessage(string msg)
-        {
-            Console.WriteLine($"Server:{msg}");
-        }
 
         public bool JoinChatRoom(int roomId, ChatRoomInfo info)
         {

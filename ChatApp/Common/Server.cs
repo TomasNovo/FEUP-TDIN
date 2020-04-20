@@ -184,6 +184,11 @@ namespace Common
             Console.WriteLine($"User {username} has rejected the group chat!");
         }
 
+        public void RegisterMessageLog(int roomId, string )
+        {
+            //db
+        }
+
         public List<string> GetDatabaseUsers()
         {
             return db.GetUsersArraylist();
@@ -266,6 +271,4 @@ namespace Common
         }
 
     }
-
-
 }
