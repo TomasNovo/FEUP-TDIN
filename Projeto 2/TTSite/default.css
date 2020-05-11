@@ -11,6 +11,11 @@ h1
     text-align: center;
 }
 
+#TextBox1
+{
+    resize: none;
+}
+
 /*table, tr, td
 {
     text-align: center;

@@ -18,6 +18,11 @@ namespace TTService
         private IMongoCollection<Ticket> tickets;
         //private IMongoCollection<ChatRoomLog> chatRoomLogs;
 
+        public Database()
+        {
+            StartMongo();
+        }
+
         public bool StartMongo()
         {
             try
@@ -39,8 +44,8 @@ namespace TTService
 
         public bool Register(string username, string email)
         {
-            if (UsernameExists(username))
-                return false;
+            //if (UsernameExists(username))
+            //    return false;
 
             users.InsertOne(new User(username, email));
 

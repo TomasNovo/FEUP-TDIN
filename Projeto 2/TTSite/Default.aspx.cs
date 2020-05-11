@@ -34,6 +34,10 @@ public partial class _Default : Page {
       Label1.ForeColor = Color.Red;
       Label1.Text = "Result: Select an Author!";
     }
+
+    //Register user
+    proxy.AddUserToDB(Username.Text, Usermail.Text);
+    
   }
 
   protected void Button2_Click(object sender, EventArgs e) {
@@ -61,6 +65,11 @@ class TTProxy : ClientBase<ITTService>, ITTService {
 
   public int AddTicket(string author, string desc) {
     return Channel.AddTicket(author, desc);
+  }
+
+  public int AddUserToDB(string username, string email)
+    {
+    return Channel.AddUserToDB(username, email);
   }
 }
 

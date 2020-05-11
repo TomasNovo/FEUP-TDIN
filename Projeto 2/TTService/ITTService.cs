@@ -16,5 +16,10 @@ namespace TTService {
     [WebGet(UriTemplate="/users", ResponseFormat=WebMessageFormat.Json)]
     [OperationContract]
     DataTable GetUsers();
-  }
+
+    // Our methods
+    [WebInvoke(Method = "POST", UriTemplate = "/users", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+    [OperationContract]
+    int AddUserToDB(string username, string email);
+    }
 }

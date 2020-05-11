@@ -37,6 +37,11 @@ namespace TTClient {
     public int AddTicket(string author, string desc) {
       return Channel.AddTicket(author, desc);
     }
-  }
+
+    public int AddUserToDB(string username, string email)
+    {
+        return Channel.AddUserToDB(username, email);
+    }
+    }
 
 }

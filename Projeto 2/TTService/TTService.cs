@@ -7,18 +7,11 @@ namespace TTService {
     public class TTService : ITTService {
         readonly string database;
 
-        private Database db;
+        private static Database db = new Database();
 
         TTService() {
             string connection = ConfigurationManager.ConnectionStrings["TTs"].ConnectionString;
             database = String.Format(connection, AppDomain.CurrentDomain.BaseDirectory);
-
-            db = new Database();
-            db.StartMongo();
-
-            db.Register("zecas", "zecas@gmail.com");
-
-
         }
 
         public int AddTicket(string author, string problem) {
@@ -84,5 +77,13 @@ namespace TTService {
             }
             return result;
         }
+
+        public int AddUserToDB(string username, string email)
+        {
+            db.Register(username, email);
+
+            return 0;
+        }
+            
     }
 }

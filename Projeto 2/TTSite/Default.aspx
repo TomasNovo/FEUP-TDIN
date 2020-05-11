@@ -16,23 +16,33 @@
         /*text-align: center;*/
       }
     </style>
-    <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="default.css"/>
 </head>
 <body style="background-color: #808080">
   <form id="form1" runat="server">
     <div>
-    
       <h1>Ticket Factory</h1>
       <table class="auto-style1">
         <tr>
           <td class="auto-style3">Author:</td>
           <td>
-            <asp:DropDownList ID="DropDownList1" runat="server" DataTextField="Name" DataValueField="Id">
-            </asp:DropDownList>
+              <asp:TextBox ID="Username" placeholder="Name" runat="server" Height="20px" TextMode="SingleLine" Width="200px"></asp:TextBox>
+              <asp:TextBox ID="Usermail" placeholder="Email" runat="server" Height="20px" TextMode="Email" Width="200px"></asp:TextBox>
           </td>
         </tr>
         <tr>
+            <td>
+                <asp:DropDownList ID="DropDownList1" runat="server" DataTextField="Name" DataValueField="Id">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
           <td class="auto-style3">Problem: </td>
+           <tr>
+               <td>
+               <asp:TextBox ID="TextBox4" placeholder="Title" runat="server" Height="20px" TextMode="SingleLine" Width="200px"></asp:TextBox>
+                </td>
+           </tr>
           <td>
             <asp:TextBox ID="TextBox1" runat="server" Height="100px" TextMode="MultiLine" Width="600px"></asp:TextBox>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
