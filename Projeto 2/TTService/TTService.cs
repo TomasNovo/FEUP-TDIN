@@ -16,14 +16,12 @@ namespace TTService {
             db = new Database();
             db.StartMongo();
 
-            db.Register("zecas", "zecas@gaymail.com");
+            db.Register("zecas", "zecas@gmail.com");
+
 
         }
 
         public int AddTicket(string author, string problem) {
-
-            //db.AddTicket()
-
             int id = 0;
 
             using (SqlConnection c = new SqlConnection(database)) {
