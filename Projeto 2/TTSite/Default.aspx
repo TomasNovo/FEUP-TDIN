@@ -8,18 +8,21 @@
     <style type="text/css">
       .auto-style1 {
         width: 100%;
+        /*text-align: center;*/
       }
       .auto-style3 {
         width: 65px;
         font-family: Arial;
+        /*text-align: center;*/
       }
     </style>
+    <link rel="stylesheet" href="default.css">
 </head>
-<body style="background-color: #CCFFCC">
+<body style="background-color: #808080">
   <form id="form1" runat="server">
     <div>
     
-      <h1>Acme Corporation TTSystem</h1>
+      <h1>Ticket Factory</h1>
       <table class="auto-style1">
         <tr>
           <td class="auto-style3">Author:</td>

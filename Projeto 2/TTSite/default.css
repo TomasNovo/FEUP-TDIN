@@ -2,5 +2,16 @@
     width: 100%;
     float: left;
     position: relative;
-    background-color: #CCFFCC;
+    background-color: #808080;
 }
+
+h1
+{
+    color: white;
+    text-align: center;
+}
+
+/*table, tr, td
+{
+    text-align: center;
+}*/
