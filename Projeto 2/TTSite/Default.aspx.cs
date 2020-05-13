@@ -9,7 +9,12 @@ public partial class _Default : Page {
   TTProxy proxy;
 
   protected void Page_Load(object sender, EventArgs e) {
-    proxy = new TTProxy();
+
+    string image_src = System.IO.Directory.GetCurrentDirectory().ToString() + "\\t.png";
+
+    logo.Attributes["src"] = image_src;
+
+        proxy = new TTProxy();
     if (!Page.IsPostBack) {                           // only on first request of a session
       DropDownList1.DataSource = proxy.GetUsers();
       DropDownList1.DataBind();
@@ -17,6 +22,9 @@ public partial class _Default : Page {
   }
 
   protected void Button1_Click(object sender, EventArgs e) {
+
+        Username.Text = System.IO.Directory.GetCurrentDirectory();
+        
     int id;
 
     if (DropDownList1.SelectedIndex > 0) {
@@ -36,7 +44,13 @@ public partial class _Default : Page {
     }
 
     //Register user
+    if(Username.Text != null && Usermail.Text != null)
     proxy.AddUserToDB(Username.Text, Usermail.Text);
+
+    //Register ticket 
+    DateTime date = DateTime.Now;
+    if(Username.Text != null && TextBox4.Text != null && TextBox1.Text != null)
+    proxy.AddTicketToDB(Username.Text, date, TextBox4.Text, TextBox1.Text);
     
   }
 
@@ -67,9 +81,13 @@ class TTProxy : ClientBase<ITTService>, ITTService {
     return Channel.AddTicket(author, desc);
   }
 
-  public int AddUserToDB(string username, string email)
-    {
+  public int AddUserToDB(string username, string email) {
     return Channel.AddUserToDB(username, email);
   }
+
+    public int AddTicketToDB(string username, System.DateTime date, string title, string description)
+    {
+        return Channel.AddTicketToDB(username, date, title, description);
+    }
 }
 

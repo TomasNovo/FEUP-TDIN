@@ -78,12 +78,17 @@ namespace TTService {
             return result;
         }
 
+        //Our methods
         public int AddUserToDB(string username, string email)
         {
             db.Register(username, email);
-
             return 0;
         }
-            
+
+        public int AddTicketToDB(string username, DateTime date, string title, string description)
+        {
+            db.AddTicket(username, date, title, description);
+            return 0;
+        }
     }
 }

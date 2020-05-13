@@ -22,7 +22,7 @@
 <body style="background-color: #3c4043">
     <form id="form1" runat="server">
     <div>
-       <!--<img src="../../../../assets/t.png"/>-->
+       <asp:Image ID="logo" runat="server"></asp:Image>
       <h1>Ticket Factory</h1>
       <table class="auto-style1">
         <tr>
