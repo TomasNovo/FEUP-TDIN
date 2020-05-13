@@ -2,18 +2,67 @@
     width: 100%;
     float: left;
     position: relative;
-    background-color: #808080;
 }
 
-h1
-{
+h1 {
+    margin-top: 0.5em;
+    font-size: 3em;
     color: white;
     text-align: center;
 }
 
-#TextBox1
+
+/*AUTH*/
+.auto-style2 /*Please identify*/ {
+    font-size: 2em;
+    text-align: center;
+    color: white;
+}
+
+.auth /*Name and email placeholders*/
+{
+    padding-top: 1em;
+    text-align: center; 
+}
+
+#Username, #Usermail, #TextBox4, #TextBox1 
+{
+    border-color: grey;
+    color: white;
+}
+
+/*TICKET*/
+.auto-style3 /*Fill your trouble ticket:*/ {
+    padding-top: 2em;
+    font-size: 2em;
+    text-align: center;
+    color: white;
+}
+
+#tb4, #tb1 /*title and problem td's*/ {
+    padding-top: 1em;
+    text-align: center;
+}
+
+#TextBox1 /*Problem*/ 
 {
     resize: none;
+}
+
+#TextBox4 /*Title*/ 
+{
+
+}
+
+/*Submit*/
+#submit /*Submit td*/
+{
+    text-align: center;
+}
+
+#Button1 {
+    background-color: #181a1b;
+    color: white;
 }
 
 /*table, tr, td

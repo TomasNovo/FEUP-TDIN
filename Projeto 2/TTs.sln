@@ -28,6 +28,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "TTSite", "TTSite\", "{4AB8B
 		VWDPort = "55165"
 		SlnRelativePath = "TTSite\"
 		DefaultWebSiteLanguage = "Visual C#"
+		StartServerOnDebug = "true"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTClient", "TTClient\TTClient.csproj", "{E82D3856-CFC8-487C-9CBB-128934274E87}"
