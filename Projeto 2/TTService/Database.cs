@@ -62,6 +62,12 @@ namespace TTService
             return true;
         }
 
+        public List<string> GetUsers()
+        {
+            List<string> u = (from x in users.AsQueryable<User>() select x.username).ToList();
+            return u;
+        }
+
         //public UserInfo Login(string username, string password)
         //{
         //    var userList = users.Find(x => (x.username == username && x.password == password)).ToList();

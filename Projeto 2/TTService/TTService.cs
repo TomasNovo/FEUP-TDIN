@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -89,6 +90,11 @@ namespace TTService {
         {
             db.AddTicket(username, date, title, description);
             return 0;
+        }
+
+        public List<string> GetUsersMongo()
+        {
+            return db.GetUsers();
         }
     }
 }

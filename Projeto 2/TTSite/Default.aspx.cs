@@ -4,6 +4,7 @@ using System.Web.UI;
 using System.ServiceModel;
 using TTService;
 using System.Data;
+using System.Collections.Generic;
 
 public partial class _Default : Page {
   TTProxy proxy;
@@ -81,6 +82,7 @@ class TTProxy : ClientBase<ITTService>, ITTService {
     return Channel.AddTicket(author, desc);
   }
 
+  //our methods
   public int AddUserToDB(string username, string email) {
     return Channel.AddUserToDB(username, email);
   }
@@ -88,6 +90,11 @@ class TTProxy : ClientBase<ITTService>, ITTService {
     public int AddTicketToDB(string username, System.DateTime date, string title, string description)
     {
         return Channel.AddTicketToDB(username, date, title, description);
+    }
+
+    public List<string> GetUsersMongo()
+    {
+        return Channel.GetUsersMongo();
     }
 }
 

@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.ServiceModel;
 using System.Windows.Forms;
 using TTService;
@@ -6,15 +8,24 @@ using TTService;
 namespace TTClient {
   public partial class Form1 : Form {
     TTProxy proxy;
+    List<string> usersMongo;
 
-    public Form1() {
-      int k;
+    public Form1() 
+    {
+        int k;
 
-      InitializeComponent();
-      proxy = new TTProxy();
-      DataTable users = proxy.GetUsers();
-      for (k = 1; k < users.Rows.Count; k++)
-        listBox1.Items.Add(users.Rows[k][1]);   // Row 0 is empty; the author name is in column 1
+        InitializeComponent();
+        proxy = new TTProxy();
+        DataTable users = proxy.GetUsers();
+        for (k = 1; k < users.Rows.Count; k++)
+            listBox1.Items.Add(users.Rows[k][1]);   // Row 0 is empty; the author name is in column 1
+
+        usersMongo = proxy.GetUsersMongo();
+
+        for(int i = 0; i < usersMongo.Count; i++)
+        {
+            listBox2.Items.Add(usersMongo[i]);
+        }
     }
 
     private void listBox1_SelectedIndexChanged(object sender, System.EventArgs e) {
@@ -24,29 +35,36 @@ namespace TTClient {
     }
   }
 
+
+
   // Manual proxy to the service (in alternative to direct HTTP requests)
-  class TTProxy : ClientBase<ITTService>, ITTService {
-        public DataTable GetUsers() {
-          return Channel.GetUsers();
-        }
+  //class TTProxy : ClientBase<ITTService>, ITTService {
+  //      public DataTable GetUsers() {
+  //        return Channel.GetUsers();
+  //      }
 
-        public DataTable GetTickets(string author) {
-          return Channel.GetTickets(author);
-        }
+  //      public DataTable GetTickets(string author) {
+  //        return Channel.GetTickets(author);
+  //      }
 
-        public int AddTicket(string author, string desc) {
-          return Channel.AddTicket(author, desc);
-        }
+  //      public int AddTicket(string author, string desc) {
+  //        return Channel.AddTicket(author, desc);
+  //      }
 
-        public int AddUserToDB(string username, string email){
-            return Channel.AddUserToDB(username, email);
-        }
+  //      //our methods
+  //      public int AddUserToDB(string username, string email){
+  //          return Channel.AddUserToDB(username, email);
+  //      }
 
-        public int AddTicketToDB(string username, System.DateTime date, string title, string description)
-        {
-            return Channel.AddTicketToDB(username, date, title, description);
-        }
+  //      public int AddTicketToDB(string username, System.DateTime date, string title, string description)
+  //      {
+  //          return Channel.AddTicketToDB(username, date, title, description);
+  //      }
+  //      public List<string> GetUsersMongo()
+  //      {
+  //          return Channel.GetUsersMongo();
+  //      }
 
-    }
+  //  }
 
 }
