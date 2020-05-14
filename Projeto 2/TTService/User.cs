@@ -9,7 +9,7 @@ namespace TTService
 {
     public class User
     {
-        //public ObjectId Id { get; set; }
+        public ObjectId Id { get; set; }
         public string username { get; set; }
         public string email { get; set; }
 

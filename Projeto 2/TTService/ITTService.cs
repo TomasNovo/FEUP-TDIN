@@ -11,32 +11,19 @@ namespace TTService
     {
         [WebInvoke(Method = "POST", UriTemplate = "/tickets", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        int AddTicket(string author, string problem);
+        int AddTicket(string author, string email, string title, string description);
 
         [WebGet(UriTemplate = "/tickets/{author}", ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        DataTable GetTickets(string author);
+        DataTable GetTicketsByUser(string author);
+
+        [WebGet(UriTemplate = "/tickets", ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        DataTable GetTickets();
 
         [WebGet(UriTemplate = "/users", ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
         DataTable GetUsers();
-
-        // Our methods
-        [WebInvoke(Method = "POST", UriTemplate = "/users", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        [OperationContract]
-        int AddUserToDB(string username, string email);
-
-        [WebGet(UriTemplate = "/getUsers", ResponseFormat = WebMessageFormat.Json)]
-        [OperationContract]
-        List<string> GetUsersMongo();
-
-        [WebInvoke(Method = "POST", UriTemplate = "/addTickets", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        [OperationContract]
-        int AddTicketToDB(string username, System.DateTime date, string title, string description);
-
-
-        
-
 
     }
 

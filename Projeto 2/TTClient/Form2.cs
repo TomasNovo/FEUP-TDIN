@@ -10,23 +10,27 @@ namespace TTClient
     public partial class Form2 : Form
     {
         TTProxy proxy;
-        List<string> users;
+        DataTable users;
+        int state = 0; // 0 = login // 1 = ?
+        string username;
 
         public Form2()
         {
             InitializeComponent();
             proxy = new TTProxy();
 
-            users = proxy.GetUsersMongo();
+            users = proxy.GetUsers();
 
             //Hide elements
             listBox2.Visible = false;
             dataGridView1.Visible = false;
 
-            for (int i = 0; i < users.Count; i++)
+            for (int i = 0; i < users.Rows.Count; i++)
             {
-                listBox2.Items.Add(users[i]);
+                listBox2.Items.Add(users.Rows[i][1]);
             }
+
+            UpdateByState();
         }
 
         // View by username
@@ -34,47 +38,66 @@ namespace TTClient
         {
             listBox2.Visible = true;
             dataGridView1.Visible = true;
+
+            if (listBox2.SelectedIndex == -1)
+                listBox2.SelectedIndex = 0;
+
+            UpdateUserTickets();
         }
 
         // View all tickets
         private void button3_Click(object sender, EventArgs e)
         {
             listBox2.Visible = false;
-            dataGridView1.Visible = false;
-        }
-    }
+            dataGridView1.Visible = true;
 
-    class TTProxy : ClientBase<ITTService>, ITTService
-    {
-        public DataTable GetUsers()
-        {
-            return Channel.GetUsers();
+            dataGridView1.DataSource = proxy.GetTickets();
         }
 
-        public DataTable GetTickets(string author)
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            return Channel.GetTickets(author);
+            UpdateUserTickets();
         }
 
-        public int AddTicket(string author, string desc)
+        private void UpdateUserTickets()
         {
-            return Channel.AddTicket(author, desc);
+            DataTable tickets = proxy.GetTicketsByUser((string)users.Rows[listBox2.SelectedIndex][1]);
+            dataGridView1.DataSource = tickets;
         }
 
-        //our methods
-        public int AddUserToDB(string username, string email)
+        private void UpdateByState()
         {
-            return Channel.AddUserToDB(username, email);
+            if (state == 0)
+            {
+                button1.Visible = false;
+                button3.Visible = false;
+                listBox2.Visible = false;
+                dataGridView1.Visible = false;
+
+                label3.Visible = true;
+                textBox1.Visible = true;
+                button2.Visible = true;
+            }
+            else if (state == 1)
+            {
+                button1.Visible = true;
+                button3.Visible = true;
+                listBox2.Visible = true;
+                dataGridView1.Visible = true;
+
+                label3.Visible = false;
+                textBox1.Visible = false;
+                button2.Visible = false;
+            }
         }
 
-        public int AddTicketToDB(string username, System.DateTime date, string title, string description)
+        private void button2_Click(object sender, EventArgs e)
         {
-            return Channel.AddTicketToDB(username, date, title, description);
-        }
-        public List<string> GetUsersMongo()
-        {
-            return Channel.GetUsersMongo();
-        }
+            username = textBox1.Text;
+            state = 1;
+            UpdateByState();
 
+            label1.Text = $"Welcome, {username} !";
+        }
     }
 }

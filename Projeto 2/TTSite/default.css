@@ -25,7 +25,7 @@ h1 {
     text-align: center; 
 }
 
-#Username, #Usermail, #TextBox4, #TextBox1 
+#Username, #Usermail, #Title, #Description 
 {
     border-color: grey;
     color: white;
@@ -44,12 +44,12 @@ h1 {
     text-align: center;
 }
 
-#TextBox1 /*Problem*/ 
+#Description /*Problem*/ 
 {
     resize: none;
 }
 
-#TextBox4 /*Title*/ 
+#Title /*Title*/ 
 {
 
 }

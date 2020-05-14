@@ -39,25 +39,18 @@
         </tr>
         <tr>
             <td id="tb4">
-            <asp:TextBox ID="TextBox4" placeholder="Title" runat="server" Height="20px" TextMode="SingleLine" Width="200px" style="background-color: #181a1b"></asp:TextBox>
+            <asp:TextBox ID="Title" placeholder="Title" runat="server" Height="20px" TextMode="SingleLine" Width="200px" style="background-color: #181a1b"></asp:TextBox>
             </td>
         </tr>
         <tr>
           <td id="tb1">
-            <asp:TextBox ID="TextBox1" placeholder="Describe here your problem..." runat="server" Height="100px" TextMode="MultiLine" Width="420px" style="background-color: #181a1b"></asp:TextBox>
+            <asp:TextBox ID="Description" placeholder="Describe here your problem..." runat="server" Height="100px" TextMode="MultiLine" Width="420px" style="background-color: #181a1b"></asp:TextBox>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </td>
          </tr>
           <tr>
             <td id="submit">
                 <asp:Button ID="Button1" runat="server" Text="Submit" OnClick="Button1_Click" />
-            </td>
-        </tr>
-          <tr>
-            <td>
-                <asp:DropDownList ID="DropDownList1" runat="server" DataTextField="Name" DataValueField="Id">
-                </asp:DropDownList>
-
             </td>
         </tr>
       </table>

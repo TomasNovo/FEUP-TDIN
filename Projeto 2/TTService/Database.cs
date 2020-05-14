@@ -44,8 +44,8 @@ namespace TTService
 
         public bool Register(string username, string email)
         {
-            //if (UsernameExists(username))
-            //    return false;
+            if (UsernameExists(username))
+                return false;
 
             users.InsertOne(new User(username, email));
 
@@ -54,19 +54,28 @@ namespace TTService
 
         public bool AddTicket(string username, DateTime date, string title, string description)
         {
-            //if (UsernameExists(username))
-            //    return false;
-
             tickets.InsertOne(new Ticket(username, date, title, description));
 
             return true;
         }
 
-        public List<string> GetUsers()
+        public List<User> GetUsers()
         {
-            List<string> u = (from x in users.AsQueryable<User>() select x.username).ToList();
+            List<User> u = (from x in users.AsQueryable<User>() select x).ToList();
             return u;
         }
+
+        public List<Ticket> GetTickets()
+        {
+            List<Ticket> u = (from x in tickets.AsQueryable<Ticket>() select x).ToList();
+            return u;
+        }
+
+        public List<Ticket> GetTickets(string username)
+        {
+            return tickets.Find(x => x.user == username).ToList();
+        }
+
 
         //public UserInfo Login(string username, string password)
         //{

@@ -6,77 +6,87 @@ using System.Data.SqlClient;
 
 namespace TTService {
     public class TTService : ITTService {
-        readonly string database;
 
         private static Database db = new Database();
 
         TTService() {
-            string connection = ConfigurationManager.ConnectionStrings["TTs"].ConnectionString;
-            database = String.Format(connection, AppDomain.CurrentDomain.BaseDirectory);
         }
 
-        public int AddTicket(string author, string problem) {
-            int id = 0;
+        public int AddTicket(string author, string email, string title, string description)
+        {
+            DateTime date = DateTime.Now;
 
-            using (SqlConnection c = new SqlConnection(database)) {
-                try {
-                    c.Open();
-                    string sql = "insert into TTickets(Author, Problem, Answer, Status) values (@a1, @p1, '', 1)"; // injection protection
-                    SqlCommand cmd = new SqlCommand(sql, c);                                                       // injection protection
-                    cmd.Parameters.AddWithValue("@a1", author);                                                    // injection protection
-                    cmd.Parameters.AddWithValue("@p1", problem);                                                   // injection protection
-                    cmd.ExecuteNonQuery();
-                    cmd.CommandText = "select max(Id) from TTickets";
-                    id = (int)cmd.ExecuteScalar();
-                }
-                catch (SqlException) {
-                }
-                finally {
-                    c.Close();
-                }
-            }
-            return id;
+            db.Register(author, email);
+
+            db.AddTicket(author, date, title, description);
+
+            return 0;
         }
 
-        public DataTable GetTickets(string author) {
-            DataTable result = new DataTable("TTickets");
+        public DataTable GetUsers()
+        {
+            List<User> users = db.GetUsers();
+            DataTable dt = new DataTable("users");
 
-            using (SqlConnection c = new SqlConnection(database)) {
-                try {
-                    c.Open();
-                    string sql = "select Id, Problem, Status, Answer from TTickets where Author=@a1";
-                    SqlCommand cmd = new SqlCommand(sql, c);
-                    cmd.Parameters.AddWithValue("@a1", author);
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.Fill(result);
-                }
-                catch (SqlException ex) {
-                }
-                finally {
-                    c.Close();
-                }
+            dt.Columns.Add("id");
+            dt.Columns.Add("username");
+            dt.Columns.Add("email");
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                User user = users[i];
+
+                List<string> arr = new List<string>();
+                arr.Add(user.Id.ToString());
+                arr.Add(user.username);
+                arr.Add(user.email);
+
+                dt.Rows.Add(arr.ToArray());
             }
-            return result;
+
+            return dt;
         }
 
-        public DataTable GetUsers() {
-            DataTable result = new DataTable("Users");
+        public DataTable GetTicketsByUser(string author) {
 
-            using (SqlConnection c = new SqlConnection(database)) {
-                try {
-                    c.Open();
-                    string sql = "select * from Employees";
-                    SqlCommand cmd = new SqlCommand(sql, c);
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.Fill(result);
-                }
-                catch (SqlException) {
-                }
-                finally {
-                    c.Close();
-                }
+            List<Ticket> tickets;
+            if (author == "")
+                tickets = db.GetTickets();
+            else
+                tickets = db.GetTickets(author);
+
+            DataTable dt = new DataTable("tickets");
+
+            dt.Columns.Add("id");
+            dt.Columns.Add("username");
+            dt.Columns.Add("date");
+            dt.Columns.Add("title");
+            dt.Columns.Add("description");
+            dt.Columns.Add("status");
+            dt.Columns.Add("solver");
+
+            for (int i = 0; i < tickets.Count; i++)
+            {
+                Ticket ticket = tickets[i];
+
+                List<string> arr = new List<string>();
+                arr.Add(ticket.Id.ToString());
+                arr.Add(ticket.user);
+                arr.Add(ticket.date.ToString());
+                arr.Add(ticket.title);
+                arr.Add(ticket.description);
+                arr.Add(ticket.status.ToString());
+                arr.Add(ticket.solver);
+
+                dt.Rows.Add(arr.ToArray());
             }
-            return result;
+
+            return dt;
+        }
+
+        public DataTable GetTickets()
+        {
+            return GetTicketsByUser("");
         }
 
         //Our methods
@@ -92,7 +102,7 @@ namespace TTService {
             return 0;
         }
 
-        public List<string> GetUsersMongo()
+        public List<User> GetUsersMongo()
         {
             return db.GetUsers();
         }
