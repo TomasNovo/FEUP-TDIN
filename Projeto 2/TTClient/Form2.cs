@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.ServiceModel;
 using System.Windows.Forms;
+using System.Net.Mail;
 using TTService;
+
 
 namespace TTClient
 {
@@ -38,6 +40,13 @@ namespace TTClient
         {
             listBox2.Visible = true;
             dataGridView1.Visible = true;
+
+            if(listBox2.Items.Count == 0)
+            {
+                CustomOkMessageBox box = new CustomOkMessageBox("There are no users registed !");
+                box.Show();
+                return;
+            }
 
             if (listBox2.SelectedIndex == -1)
                 listBox2.SelectedIndex = 0;
@@ -98,6 +107,43 @@ namespace TTClient
             UpdateByState();
 
             label1.Text = $"Welcome, {username} !";
+        }
+
+        //email send
+        private void button4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int id = 3;
+                string title = "Ganda titulo";
+                string description = "Ganda descrição";
+                string solution = "You should go to ISEP";
+                string to = "up201604503@fe.up.pt";
+
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.sapo.pt");
+
+                mail.From = new MailAddress("TicketFactoryTDIN@sapo.pt");
+                mail.To.Add(to);
+                mail.Subject = "[Ticket Factory] Solved Ticket with id " + id.ToString();
+                mail.Body = "Recently you submitted the following ticket: \n\n"+
+                   title + '\n' + description + "\n\n" + "We propose the following solution: \n" + solution;
+
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("TicketFactoryTDIN@sapo.pt", "TDINamite420");
+                SmtpServer.EnableSsl = true;
+
+                SmtpServer.Send(mail);
+
+                CustomOkMessageBox box = new CustomOkMessageBox("Email sent to " + to + " !");
+                box.Show();
+
+            }
+            catch (Exception ex)
+            {
+                CustomOkMessageBox box = new CustomOkMessageBox(ex.ToString());
+                box.Show();
+            }
         }
     }
 }
