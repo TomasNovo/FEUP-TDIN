@@ -73,7 +73,7 @@ namespace TTClient
             }
         }
 
-            // Ask question
+        // Ask question
         private void button8_Click(object sender, EventArgs e)
         {
             if (state != 0)
@@ -94,6 +94,19 @@ namespace TTClient
                 state = 4;
                 selected(button9);
                 position(button9);
+
+                UpdateByState();
+            }
+        }
+
+            // My tickets 
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (state != 0)
+            {
+                state = 5;
+                selected(button10);
+                position(button10);
 
                 UpdateByState();
             }
@@ -196,6 +209,7 @@ namespace TTClient
                 button1.Visible = true;
                 button3.Visible = true;
                 label3.Visible = false;
+                label1.Visible = false;
 
                 button4.Visible = false;
             }
@@ -204,6 +218,7 @@ namespace TTClient
                 button1.Visible = false;
                 button3.Visible = false;
                 label3.Visible = false;
+                label1.Visible = false;
 
                 listBox2.Visible = false;
                 dataGridView1.Visible = false;
@@ -213,7 +228,22 @@ namespace TTClient
             }
             else if (state == 4) // resolve ticket
             {
+                label1.Visible = false;
                 button4.Visible = true;
+                button1.Visible = false;
+                button3.Visible = false;
+                label3.Visible = false;
+                listBox2.Visible = false;
+                dataGridView1.Visible = false;
+                button6.Visible = false;
+                button5.Visible = false;
+            }
+            else if (state == 5) // my tickets
+            {
+                panel2.Visible = true;
+                label1.Text = "See your tickets, " + username;
+                label1.Visible = true;
+                button4.Visible = false;
                 button1.Visible = false;
                 button3.Visible = false;
                 label3.Visible = false;

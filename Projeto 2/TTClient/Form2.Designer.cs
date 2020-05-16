@@ -42,10 +42,11 @@
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -209,11 +210,50 @@
             this.panel1.Controls.Add(this.button8);
             this.panel1.Controls.Add(this.button7);
             this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Controls.Add(this.button10);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(271, 589);
             this.panel1.TabIndex = 15;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.SystemColors.Desktop;
+            this.panel2.Location = new System.Drawing.Point(-3, 205);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(16, 89);
+            this.panel2.TabIndex = 19;
+            // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.Color.Gray;
+            this.button9.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.ForeColor = System.Drawing.Color.White;
+            this.button9.Location = new System.Drawing.Point(1, 500);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(270, 89);
+            this.button9.TabIndex = 18;
+            this.button9.Text = "✔️ Resolve Ticket";
+            this.button9.UseVisualStyleBackColor = false;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.Gray;
+            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.ForeColor = System.Drawing.Color.White;
+            this.button8.Location = new System.Drawing.Point(1, 395);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(270, 89);
+            this.button8.TabIndex = 17;
+            this.button8.Text = "📩 Ask Question";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // button7
             // 
@@ -223,51 +263,29 @@
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(0, 229);
+            this.button7.Location = new System.Drawing.Point(3, 205);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(271, 89);
+            this.button7.Size = new System.Drawing.Size(268, 89);
             this.button7.TabIndex = 16;
             this.button7.Text = "🗃 View Tickets ";
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
-            // button8
+            // button10
             // 
-            this.button8.BackColor = System.Drawing.Color.Gray;
-            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.ForeColor = System.Drawing.Color.White;
-            this.button8.Location = new System.Drawing.Point(0, 317);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(271, 89);
-            this.button8.TabIndex = 17;
-            this.button8.Text = "📩 Ask Question";
-            this.button8.UseVisualStyleBackColor = false;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // button9
-            // 
-            this.button9.BackColor = System.Drawing.Color.Gray;
-            this.button9.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
-            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(-1, 412);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(271, 89);
-            this.button9.TabIndex = 18;
-            this.button9.Text = "✔️ Resolve Ticket";
-            this.button9.UseVisualStyleBackColor = false;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.SystemColors.Desktop;
-            this.panel2.Location = new System.Drawing.Point(-1, 229);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(16, 89);
-            this.panel2.TabIndex = 19;
+            this.button10.BackColor = System.Drawing.Color.Gray;
+            this.button10.FlatAppearance.BorderColor = System.Drawing.SystemColors.GrayText;
+            this.button10.FlatAppearance.BorderSize = 0;
+            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button10.ForeColor = System.Drawing.Color.White;
+            this.button10.Location = new System.Drawing.Point(1, 300);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(268, 89);
+            this.button10.TabIndex = 20;
+            this.button10.Text = "🎟   My Tickets ";
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // Form2
             // 
@@ -316,5 +334,6 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button button10;
     }
 }
