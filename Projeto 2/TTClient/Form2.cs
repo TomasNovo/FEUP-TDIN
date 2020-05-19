@@ -108,6 +108,10 @@ namespace TTClient
                 selected(button10);
                 position(button10);
 
+
+                DataTable tickets = proxy.GetTicketsSolver(username);
+                dataGridView1.DataSource = tickets;
+
                 UpdateByState();
             }
         }
@@ -184,6 +188,8 @@ namespace TTClient
                 button6.Visible = false;
                 panel2.Visible = false;
                 button4.Visible = false;
+                textBox2.Visible = false;
+                textBox3.Visible = false;
 
                 label3.Visible = true;
                 textBox1.Visible = true;
@@ -203,6 +209,9 @@ namespace TTClient
                 textBox1.Visible = false;
                 button2.Visible = false;
                 button5.Visible = false;
+
+                textBox2.Visible = false;
+                textBox3.Visible = false;
             }
             else if(state == 2) // view tickets 
             {
@@ -210,15 +219,21 @@ namespace TTClient
                 button3.Visible = true;
                 label3.Visible = false;
                 label1.Visible = false;
+                textBox2.Visible = false;
+                textBox3.Visible = false;
 
                 button4.Visible = false;
             }
             else if (state == 3) // ask question
             {
+                label1.Text = "Ask a secondary question, " + username;
+                textBox2.Visible = true;
+                textBox3.Visible = true;
+
                 button1.Visible = false;
                 button3.Visible = false;
                 label3.Visible = false;
-                label1.Visible = false;
+                label1.Visible = true;
 
                 listBox2.Visible = false;
                 dataGridView1.Visible = false;
@@ -228,6 +243,8 @@ namespace TTClient
             }
             else if (state == 4) // resolve ticket
             {
+                textBox2.Visible = false;
+                textBox3.Visible = false;
                 label1.Visible = false;
                 button4.Visible = true;
                 button1.Visible = false;
@@ -240,6 +257,8 @@ namespace TTClient
             }
             else if (state == 5) // my tickets
             {
+                textBox2.Visible = false;
+                textBox3.Visible = false;
                 panel2.Visible = true;
                 label1.Text = "See your tickets, " + username;
                 label1.Visible = true;
@@ -248,7 +267,7 @@ namespace TTClient
                 button3.Visible = false;
                 label3.Visible = false;
                 listBox2.Visible = false;
-                dataGridView1.Visible = false;
+                dataGridView1.Visible = true;
                 button6.Visible = false;
                 button5.Visible = false;
             }
@@ -319,12 +338,20 @@ namespace TTClient
         // self-assign
         private void button6_Click(object sender, EventArgs e)
         {
-            if(dataGridView1.SelectedRows.Count > 1)
+            if (dataGridView1.SelectedRows.Count > 1)
             {
                 CustomOkMessageBox box = new CustomOkMessageBox("It's better if you assign only one ticket at time!");
                 box.Show();
+                return;
             }
-            
+
+            int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
+            DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+            string id = Convert.ToString(selectedRow.Cells["Id"].Value);
+
+            Console.WriteLine(id);
+
+            proxy.AssignSolver(username, id);
         }
     }
 }

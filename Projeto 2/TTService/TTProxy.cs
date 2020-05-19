@@ -29,5 +29,15 @@ namespace TTService
         {
             return Channel.AddTicket(author, email, title, description);
         }
+
+        public int AssignSolver(string solver, string id)
+        {
+            return Channel.AssignSolver(solver, id);
+        }
+
+        public DataTable GetTicketsSolver(string s)
+        {
+            return Channel.GetTicketsSolver(s);
+        }
     }
 }

@@ -59,6 +59,21 @@ namespace TTService
             return true;
         }
 
+        public bool AssignSolver(string solver, string id)
+        {
+            var filter = Builders<Ticket>.Filter.Eq("Id", new ObjectId(id));
+            var update = Builders<Ticket>.Update.Set("solver", solver).Set("status", TicketStatus.Assigned);
+
+            tickets.UpdateOne(filter, update);
+
+            return true;
+        }
+
+        public List<Ticket> GetTicketsSolver(string s)
+        {
+            return tickets.Find(x => x.solver == s).ToList();
+        }
+
         public List<User> GetUsers()
         {
             List<User> u = (from x in users.AsQueryable<User>() select x).ToList();

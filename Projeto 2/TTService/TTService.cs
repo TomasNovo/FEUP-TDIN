@@ -102,6 +102,47 @@ namespace TTService {
             return 0;
         }
 
+        public int AssignSolver(string solver, string id)
+        {
+            db.AssignSolver(solver, id);
+            return 0;
+        }
+
+        public DataTable GetTicketsSolver(string s)
+        {
+            //return db.GetTicketsSolver(s);
+            List<Ticket> tickets = db.GetTicketsSolver(s);
+
+            DataTable dt = new DataTable("tickets");
+
+            dt.Columns.Add("id");
+            dt.Columns.Add("username");
+            dt.Columns.Add("date");
+            dt.Columns.Add("title");
+            dt.Columns.Add("description");
+            dt.Columns.Add("status");
+            dt.Columns.Add("solver");
+
+            for (int i = 0; i < tickets.Count; i++)
+            {
+                Ticket ticket = tickets[i];
+
+                List<string> arr = new List<string>();
+                arr.Add(ticket.Id.ToString());
+                arr.Add(ticket.user);
+                arr.Add(ticket.date.ToString());
+                arr.Add(ticket.title);
+                arr.Add(ticket.description);
+                arr.Add(ticket.status.ToString());
+                arr.Add(ticket.solver);
+
+                dt.Rows.Add(arr.ToArray());
+            }
+
+            return dt;
+        }
+
+
         public List<User> GetUsersMongo()
         {
             return db.GetUsers();
