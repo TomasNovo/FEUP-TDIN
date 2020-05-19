@@ -111,6 +111,7 @@ namespace TTClient
 
                 DataTable tickets = proxy.GetTicketsSolver(username);
                 dataGridView1.DataSource = tickets;
+                dataGridView1.Visible = true;
 
                 UpdateByState();
             }
@@ -221,7 +222,7 @@ namespace TTClient
                 label1.Visible = false;
                 textBox2.Visible = false;
                 textBox3.Visible = false;
-
+                dataGridView1.Visible = false;
                 button4.Visible = false;
             }
             else if (state == 3) // ask question
@@ -326,7 +327,7 @@ namespace TTClient
 
             for(int i = 0; i < all.Rows.Count; i++)
             {
-                if (!all.Rows[i][5].ToString().Equals("Unassigned"))
+                if (!all.Rows[i][5].ToString().Equals(TicketStatus.Unassigned.ToString()))
                 {
                     all.Rows.RemoveAt(i);
                 }
@@ -348,8 +349,18 @@ namespace TTClient
             int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
             DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
             string id = Convert.ToString(selectedRow.Cells["Id"].Value);
+            string num = Convert.ToString( selectedRow.Cells["status"].Value);
 
-            Console.WriteLine(id);
+
+
+            Console.WriteLine(num);
+
+            if(!num.Equals(TicketStatus.Unassigned.ToString()))
+            {
+                CustomOkMessageBox box = new CustomOkMessageBox("Ticket is not available to self assign");
+                box.Show();
+                return;
+            }
 
             proxy.AssignSolver(username, id);
         }
