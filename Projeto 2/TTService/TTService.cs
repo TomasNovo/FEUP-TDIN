@@ -1,5 +1,7 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.IdGenerators;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -11,9 +13,31 @@ namespace TTService
     {
 
         private static Database db = new Database();
+        private static DepartmentQueue departmentQueue;
 
         TTService()
         {
+            FetchSecondaryTickets();
+
+        }
+
+
+        private void FetchSecondaryTickets()
+        {
+            departmentQueue = new DepartmentQueue();
+            departmentQueue.db = db;
+
+            List<SecondaryTicket> tickets = db.GetSecondaryTickets();
+
+            for (int i = 0; i < tickets.Count; i++)
+            {
+                SecondaryTicket ticket = tickets[i];
+
+                if (!ticket.received)
+                    Console.WriteLine(departmentQueue.AddSecondaryTicket(ticket));
+            }
+
+            departmentQueue.Listen();
         }
 
         public int AddTicket(string author, string email, string title, string description)
@@ -155,9 +179,11 @@ namespace TTService
 
         public int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
         {
-            db.AddSecondaryTicket(originalTicketId, solver, secondarySolver, title, description);
+            SecondaryTicket st = db.AddSecondaryTicket(originalTicketId, solver, secondarySolver, title, description);
 
             db.ChangeTicketStatus(originalTicketId, TicketStatus.WaitingForAnswers);
+
+            //secondaryTickets.Enqueue(st);
 
             return 0;
         }

@@ -10,7 +10,7 @@ using System.Collections;
 
 namespace TTService
 {
-    class Database
+    public class Database
     {
         private MongoClient mongo;
         private IMongoDatabase database;
@@ -117,9 +117,12 @@ namespace TTService
             return (users.Find(x => x.username == username).ToList().Count == 1);
         }
 
-        public void AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
+        public SecondaryTicket AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
         {
-            secondaryTickets.InsertOne(new SecondaryTicket(new ObjectId(originalTicketId), solver, secondarySolver, title, description));
+            SecondaryTicket st = new SecondaryTicket(ObjectId.GenerateNewId(), new ObjectId(originalTicketId), solver, secondarySolver, title, description);
+            secondaryTickets.InsertOne(st);
+
+            return st;
         }
 
         public List<SecondaryTicket> GetSecondaryTickets()
@@ -136,5 +139,14 @@ namespace TTService
         {
             return secondaryTickets.Find(x => x.secondarySolver == secondarySolver).ToList();
         }
+
+        public void SetSecondaryTicketReceived(string id, bool value)
+        {
+            var filter = Builders<SecondaryTicket>.Filter.Eq("Id", new ObjectId(id));
+            var update = Builders<SecondaryTicket>.Update.Set("received", value);
+
+            secondaryTickets.UpdateOne(filter, update);
+        }
+
     }
 }

@@ -7,18 +7,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TTService;
 
 namespace Department
 {
     public partial class Form1 : Form
     {
+        TTProxy proxy;
         int state = 0;
         string username;
         string department;
+
+        DepartmentSocketClient socketClient = new DepartmentSocketClient();
+
         public Form1()
         {
             InitializeComponent();
+
+            proxy = new TTProxy();
+
             UpdateByState();
+
         }
 
         private void UpdateByState()
@@ -30,6 +39,7 @@ namespace Department
                 textBox1.Visible = true;
                 textBox2.Visible = true;
                 button2.Visible = true;
+                dataGridView2.Visible = false;
 
                 //info
                 label2.Visible = false;
@@ -41,17 +51,22 @@ namespace Department
                 textBox1.Visible = false;
                 textBox2.Visible = false;
                 button2.Visible = false;
+                dataGridView2.Visible = false;
 
                 //info
                 label2.Visible = true;
                 label4.Visible = true;
+
             }
             else if(state == 2) // view all questions to take
             {
+                dataGridView2.Visible = true;
 
             }
             else if (state == 3) // view all current questions taked
             {
+                dataGridView2.Visible = false;
+                socketClient.StartClient();
 
             }
         }
@@ -90,6 +105,7 @@ namespace Department
         {
             username = textBox1.Text;
             department = textBox2.Text;
+            socketClient.department = department;
 
             label4.Text += username;
             label2.Text += department;
@@ -109,6 +125,8 @@ namespace Department
                 state = 2;
                 selected(button7);
                 position(button7);
+
+                dataGridView2.DataSource = proxy.GetSecondaryTicketsBySecondarySolver(department);
 
                 UpdateByState();
             }

@@ -237,6 +237,7 @@ namespace TTClient
                 button11.Visible = false;
                 button12.Visible = false;
                 dataGridView2.Visible = false;
+                label7.Visible = false;
             }
             else if (state == 1)
             {
@@ -264,6 +265,7 @@ namespace TTClient
                 button11.Visible = false;
                 button12.Visible = false;
                 dataGridView2.Visible = false;
+                label7.Visible = false;
             }
             else if(state == 2) // view tickets 
             {
@@ -286,12 +288,13 @@ namespace TTClient
                 button11.Visible = false;
                 button12.Visible = false;
                 dataGridView2.Visible = false;
+                label7.Visible = false;
 
                 textBox2.Text = "";
                 textBox3.Text = "";
                 textBox4.Text = "";
             }
-            else if (state == 3) // ask question
+            else if (state == 3) // ask secondary question
             {
                 label1.Text = "Ask a secondary question, " + username;
                 textBox2.Visible = true;
@@ -318,6 +321,14 @@ namespace TTClient
                 button12.Visible = true;
                 button12.Text = "View Secondary Tickets";
                 dataGridView2.Visible = false;
+                
+                label7.Visible = true;
+                if (TicketSelected())
+                {
+                    string id = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["Id"].Value;
+                    //string num = Convert.ToString(selectedRow.Cells["status"].Value);
+                    label7.Text = $"Ticket ID: {id}";
+                }
 
                 textBox2.Text = "";
                 textBox3.Text = "";
@@ -345,6 +356,7 @@ namespace TTClient
                 button11.Visible = false;
                 button12.Visible = false;
                 dataGridView2.Visible = false;
+                label7.Visible = false;
             }
             else if (state == 5) // my tickets
             {
@@ -370,6 +382,7 @@ namespace TTClient
                 button11.Visible = false;
                 button12.Visible = false;
                 dataGridView2.Visible = false;
+                label7.Visible = false;
             }
 
             else if (state == 6) // view secondary tickets
@@ -401,6 +414,7 @@ namespace TTClient
                 button12.Visible = true;
                 button12.Text = "Submit Secondary Ticket";
                 dataGridView2.Visible = true;
+                label7.Visible = false;
 
                 textBox4.Text = "";
             }
