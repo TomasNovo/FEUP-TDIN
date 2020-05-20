@@ -37,6 +37,26 @@ namespace TTService
         [OperationContract]
         DataTable GetUsers();
 
+
+        // Add Secondary Tickets
+        [WebInvoke(Method = "POST", UriTemplate = "/secondaryTickets", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description);
+
+        // Get Secondary Tickets
+        [WebGet(UriTemplate = "/secondaryTickets", ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        DataTable GetSecondaryTickets();
+
+        // Get Secondary Tickets
+        [WebGet(UriTemplate = "/secondaryTicketsBySolver/{solver}", ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        DataTable GetSecondaryTicketsBySolver(string solver);
+
+        // Get Secondary Tickets
+        [WebGet(UriTemplate = "/secondaryTicketsBySecondarySolver/{secondarySolver}", ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        DataTable GetSecondaryTicketsBySecondarySolver(string secondarySolver);
     }
 
 }

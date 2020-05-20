@@ -84,6 +84,7 @@
     <Compile Include="Database.cs" />
     <Compile Include="ITTService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecondaryTicket.cs" />
     <Compile Include="Ticket.cs" />
     <Compile Include="TTProxy.cs" />
     <Compile Include="TTService.cs" />

@@ -59,8 +59,14 @@ namespace TTClient
             }
         }
 
+        // Make ENTER key submit
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                button2_Click(null, null);
+        }
 
-            // View tickets
+        // View tickets
         private void button7_Click(object sender, EventArgs e)
         {
             if(state != 0)
@@ -120,50 +126,77 @@ namespace TTClient
         // View by username
         private void button1_Click(object sender, EventArgs e)
         {
-            users = proxy.GetUsers();
-            listBox2.Items.Clear();
-
-            for (int i = 0; i < users.Rows.Count; i++)
+            if (state == 2)
             {
-                listBox2.Items.Add(users.Rows[i][1]);
+                users = proxy.GetUsers();
+                listBox2.Items.Clear();
+
+                for (int i = 0; i < users.Rows.Count; i++)
+                {
+                    listBox2.Items.Add(users.Rows[i][1]);
+                }
+
+                listBox2.Visible = true;
+                dataGridView1.Visible = true;
+                button5.Visible = false;
+                button6.Visible = true;
+                //dataGridView1.Location = new Point(190, 140);
+                //dataGridView1.Size = new Size(618, 244);
+
+                if (listBox2.Items.Count == 0)
+                {
+                    CustomOkMessageBox box = new CustomOkMessageBox("There are no users registed !");
+                    box.Show();
+                    return;
+                }
+
+                if (listBox2.SelectedIndex == -1)
+                    listBox2.SelectedIndex = 0;
+
+                UpdateUserTickets();
+            }
+            else if (state == 6)
+            {
+                DataTable dt = proxy.GetSecondaryTicketsBySolver(username);
+                string ticketId = textBox4.Text;
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if ((string)dt.Rows[i][1] != ticketId)
+                    {
+                        dt.Rows.RemoveAt(i);
+                        i--;
+                    }
+                }
+
+                dataGridView2.DataSource = dt;
             }
 
-            listBox2.Visible = true;
-            dataGridView1.Visible = true;
-            button5.Visible = false;
-            button6.Visible = true;
-            //dataGridView1.Location = new Point(190, 140);
-            //dataGridView1.Size = new Size(618, 244);
-
-            if (listBox2.Items.Count == 0)
-            {
-                CustomOkMessageBox box = new CustomOkMessageBox("There are no users registed !");
-                box.Show();
-                return;
-            }
-
-            if (listBox2.SelectedIndex == -1)
-                listBox2.SelectedIndex = 0;
-
-            UpdateUserTickets();
         }
 
         // View all tickets
         private void button3_Click(object sender, EventArgs e)
         {
-            listBox2.Visible = false;
-            dataGridView1.Visible = true;
-            button5.Visible = true;
-            button6.Visible = true;
-            //dataGridView1.Location = new Point(119, 140);
-            //dataGridView1.Size = new Size(857, 244);
+            if (state == 2)
+            {
+                listBox2.Visible = false;
+                dataGridView1.Visible = true;
+                button5.Visible = true;
+                button6.Visible = true;
+                //dataGridView1.Location = new Point(119, 140);
+                //dataGridView1.Size = new Size(857, 244);
 
 
-            dataGridView1.DataSource = proxy.GetTickets();
+                dataGridView1.DataSource = proxy.GetTickets();
 
-            users = null;
+                users = null;
 
-            //dataGridView1.DataSource.
+                //dataGridView1.DataSource.
+            }
+            else if (state == 6)
+            {
+                dataGridView2.DataSource = proxy.GetSecondaryTicketsBySolver(username);
+            }
         }
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -195,6 +228,15 @@ namespace TTClient
                 label3.Visible = true;
                 textBox1.Visible = true;
                 button2.Visible = true;
+
+                label2.Visible = false;
+                label5.Visible = false;
+                label6.Visible = false;
+                textBox2.Visible = false;
+                textBox4.Visible = false;
+                button11.Visible = false;
+                button12.Visible = false;
+                dataGridView2.Visible = false;
             }
             else if (state == 1)
             {
@@ -213,9 +255,20 @@ namespace TTClient
 
                 textBox2.Visible = false;
                 textBox3.Visible = false;
+
+                label2.Visible = false;
+                label5.Visible = false;
+                label6.Visible = false;
+                textBox2.Visible = false;
+                textBox4.Visible = false;
+                button11.Visible = false;
+                button12.Visible = false;
+                dataGridView2.Visible = false;
             }
             else if(state == 2) // view tickets 
             {
+                button3.Text = "View all tickets by ID";
+                button1.Text = "View tickets by Username";
                 button1.Visible = true;
                 button3.Visible = true;
                 label3.Visible = false;
@@ -224,6 +277,19 @@ namespace TTClient
                 textBox3.Visible = false;
                 dataGridView1.Visible = false;
                 button4.Visible = false;
+
+                label2.Visible = false;
+                label5.Visible = false;
+                label6.Visible = false;
+                textBox2.Visible = false;
+                textBox4.Visible = false;
+                button11.Visible = false;
+                button12.Visible = false;
+                dataGridView2.Visible = false;
+
+                textBox2.Text = "";
+                textBox3.Text = "";
+                textBox4.Text = "";
             }
             else if (state == 3) // ask question
             {
@@ -241,6 +307,21 @@ namespace TTClient
                 button6.Visible = false;
                 button5.Visible = false;
                 button4.Visible = false;
+
+                label2.Visible = true;
+                label5.Text = "Department ID:";
+                label5.Visible = true;
+                label6.Visible = true;
+                textBox2.Visible = true;
+                textBox4.Visible = true;
+                button11.Visible = true;
+                button12.Visible = true;
+                button12.Text = "View Secondary Tickets";
+                dataGridView2.Visible = false;
+
+                textBox2.Text = "";
+                textBox3.Text = "";
+                textBox4.Text = "";
             }
             else if (state == 4) // resolve ticket
             {
@@ -255,6 +336,15 @@ namespace TTClient
                 dataGridView1.Visible = false;
                 button6.Visible = false;
                 button5.Visible = false;
+
+                label2.Visible = false;
+                label5.Visible = false;
+                label6.Visible = false;
+                textBox2.Visible = false;
+                textBox4.Visible = false;
+                button11.Visible = false;
+                button12.Visible = false;
+                dataGridView2.Visible = false;
             }
             else if (state == 5) // my tickets
             {
@@ -271,6 +361,48 @@ namespace TTClient
                 dataGridView1.Visible = true;
                 button6.Visible = false;
                 button5.Visible = false;
+
+                label2.Visible = false;
+                label5.Visible = false;
+                label6.Visible = false;
+                textBox2.Visible = false;
+                textBox4.Visible = false;
+                button11.Visible = false;
+                button12.Visible = false;
+                dataGridView2.Visible = false;
+            }
+
+            else if (state == 6) // view secondary tickets
+            {
+                label1.Text = "See your secondary tickets, " + username;
+                label1.Visible = true;
+                textBox2.Visible = false;
+                textBox3.Visible = false;
+
+                button1.Text = "View by ticket id";
+                button3.Text = "View all";
+                button1.Visible = true;
+                button3.Visible = true;
+                label3.Visible = false;
+
+                listBox2.Visible = false;
+                dataGridView1.Visible = true;
+                button6.Visible = false;
+                button5.Visible = false;
+                button4.Visible = false;
+
+                label2.Visible = false;
+                label5.Text = "Ticket ID:";
+                label5.Visible = true;
+                label6.Visible = false;
+                textBox2.Visible = false;
+                textBox4.Visible = true;
+                button11.Visible = false;
+                button12.Visible = true;
+                button12.Text = "Submit Secondary Ticket";
+                dataGridView2.Visible = true;
+
+                textBox4.Text = "";
             }
         }
 
@@ -364,5 +496,51 @@ namespace TTClient
 
             proxy.AssignSolver(username, id);
         }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 1)
+            {
+                CustomOkMessageBox box = new CustomOkMessageBox("It's better if you assign select one ticket at time!");
+                box.Show();
+                return;
+            }
+
+            if (TicketSelected())
+            {
+                int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
+                DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                string id = Convert.ToString(selectedRow.Cells["Id"].Value);
+
+                proxy.AddSecondaryTicket(id, username, textBox4.Text, textBox2.Text, textBox3.Text);
+
+                textBox2.Text = "";
+                textBox3.Text = "";
+                textBox4.Text = "";
+
+            }
+        }
+
+        private bool TicketSelected()
+        {
+            return dataGridView1.SelectedCells.Count == 1;
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            if (state == 3)
+            {
+                state = 6;
+                UpdateByState();
+
+                dataGridView2.DataSource = proxy.GetSecondaryTicketsBySolver(username);
+            }
+            else if (state == 6)
+            {
+                state = 3;
+                UpdateByState();
+            }
+        }
+
     }
 }

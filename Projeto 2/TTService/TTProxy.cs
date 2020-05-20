@@ -39,5 +39,27 @@ namespace TTService
         {
             return Channel.GetTicketsSolver(s);
         }
+
+        public int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
+        {
+            return Channel.AddSecondaryTicket(originalTicketId, solver, secondarySolver, title, description);
+        }
+
+        public DataTable GetSecondaryTickets()
+        {
+            return Channel.GetSecondaryTickets();
+        }
+
+        public DataTable GetSecondaryTicketsBySolver(string solver)
+        {
+            return Channel.GetSecondaryTicketsBySolver(solver);
+        }
+
+        public DataTable GetSecondaryTicketsBySecondarySolver(string secondarySolver)
+        {
+            return Channel.GetSecondaryTicketsBySecondarySolver(secondarySolver);
+        }
+
+  
     }
 }

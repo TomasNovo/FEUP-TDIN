@@ -16,6 +16,8 @@ namespace TTService
         private IMongoDatabase database;
         private IMongoCollection<User> users;
         private IMongoCollection<Ticket> tickets;
+        private IMongoCollection<SecondaryTicket> secondaryTickets;
+
         //private IMongoCollection<ChatRoomLog> chatRoomLogs;
 
         public Database()
@@ -31,6 +33,7 @@ namespace TTService
                 database = mongo.GetDatabase("service");
                 users = database.GetCollection<User>("users");
                 tickets = database.GetCollection<Ticket>("tickets");
+                secondaryTickets = database.GetCollection<SecondaryTicket>("secondaryTickets");
             }
             catch (Exception e)
             {
@@ -69,6 +72,14 @@ namespace TTService
             return true;
         }
 
+        public void ChangeTicketStatus(string id, TicketStatus status)
+        {
+            var filter = Builders<Ticket>.Filter.Eq("Id", new ObjectId(id));
+            var update = Builders<Ticket>.Update.Set("status", status);
+
+            tickets.UpdateOne(filter, update);
+        }
+
         public List<Ticket> GetTicketsSolver(string s)
         {
             return tickets.Find(x => x.solver == s).ToList();
@@ -91,7 +102,6 @@ namespace TTService
             return tickets.Find(x => x.user == username).ToList();
         }
 
-
         //public UserInfo Login(string username, string password)
         //{
         //    var userList = users.Find(x => (x.username == username && x.password == password)).ToList();
@@ -105,6 +115,26 @@ namespace TTService
         public bool UsernameExists(string username)
         {
             return (users.Find(x => x.username == username).ToList().Count == 1);
+        }
+
+        public void AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
+        {
+            secondaryTickets.InsertOne(new SecondaryTicket(new ObjectId(originalTicketId), solver, secondarySolver, title, description));
+        }
+
+        public List<SecondaryTicket> GetSecondaryTickets()
+        {
+            return secondaryTickets.Find(x => true).ToList();
+        }
+
+        public List<SecondaryTicket> GetSecondaryTicketsBySolver(string solver)
+        {
+            return secondaryTickets.Find(x => x.solver == solver).ToList();
+        }
+
+        public List<SecondaryTicket> GetSecondaryTicketsBySecondarySolver(string secondarySolver)
+        {
+            return secondaryTickets.Find(x => x.secondarySolver == secondarySolver).ToList();
         }
     }
 }
