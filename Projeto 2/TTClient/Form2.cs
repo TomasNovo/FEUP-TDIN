@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.ServiceModel;
 using System.Windows.Forms;
-using System.Net.Mail;
 using TTService;
 using System.Drawing;
 
@@ -15,6 +14,7 @@ namespace TTClient
         DataTable users;
         int state = 0; // 0 = login // 1 = ?
         string username;
+        MailTicket m = null;
 
         public Form2()
         {
@@ -100,6 +100,9 @@ namespace TTClient
                 state = 4;
                 selected(button9);
                 position(button9);
+
+
+
 
                 UpdateByState();
             }
@@ -336,8 +339,6 @@ namespace TTClient
             }
             else if (state == 4) // resolve ticket
             {
-                textBox2.Visible = false;
-                textBox3.Visible = false;
                 label1.Visible = false;
                 button4.Visible = true;
                 button1.Visible = false;
@@ -349,14 +350,47 @@ namespace TTClient
                 button5.Visible = false;
 
                 label2.Visible = false;
-                label5.Visible = false;
                 label6.Visible = false;
                 textBox2.Visible = false;
                 textBox4.Visible = false;
                 button11.Visible = false;
                 button12.Visible = false;
                 dataGridView2.Visible = false;
-                label7.Visible = false;
+                
+                label7.Visible = true;
+
+                string username = "";
+                string mail = "";
+                string id = ""; 
+                string title = "";
+                string description = "";
+
+                if (TicketSelected())
+                {
+                    id = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["Id"].Value;
+                    username = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["username"].Value;
+                    title = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["title"].Value;
+                    description = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["description"].Value;
+                    label7.Text = $"Ticket ID: {id}";
+                }
+
+                users = proxy.GetUsers();
+
+                for (int i = 0; i < users.Rows.Count; i++)
+                {
+                    if (users.Rows[i][1].Equals(username))
+                    {
+                        mail = users.Rows[i][2].ToString();
+                    }
+                }
+
+                textBox3.Visible = true;
+                textBox2.Visible = true;
+                label5.Text = "Mail to: " + mail;
+                label5.Visible = true;
+
+                m = new MailTicket(id, title, description, mail, textBox3.Text);
+
             }
             else if (state == 5) // my tickets
             {
@@ -432,38 +466,7 @@ namespace TTClient
         //email send
         private void button4_Click(object sender, EventArgs e)
         {
-            try
-            {
-                int id = 3;
-                string title = "Ganda titulo";
-                string description = "Ganda descrição";
-                string solution = "You should go to ISEP";
-                string to = "up201604503@fe.up.pt";
-
-                MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient("smtp.sapo.pt");
-
-                mail.From = new MailAddress("TicketFactoryTDIN@sapo.pt");
-                mail.To.Add(to);
-                mail.Subject = "[Ticket Factory] Solved Ticket with id " + id.ToString();
-                mail.Body = "Recently you submitted the following ticket: \n\n"+
-                   title + '\n' + description + "\n\n" + "We propose the following solution: \n" + solution;
-
-                SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("TicketFactoryTDIN@sapo.pt", "TDINamite420");
-                SmtpServer.EnableSsl = true;
-
-                SmtpServer.Send(mail);
-
-                CustomOkMessageBox box = new CustomOkMessageBox("Email sent to " + to + " !");
-                box.Show();
-
-            }
-            catch (Exception ex)
-            {
-                CustomOkMessageBox box = new CustomOkMessageBox(ex.ToString());
-                box.Show();
-            }
+            m.sendMail();
         }
 
         // view unassigned
