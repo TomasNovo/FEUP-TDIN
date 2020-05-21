@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TTClient;
 using TTService;
 
 namespace Department
@@ -40,6 +41,13 @@ namespace Department
                 textBox2.Visible = true;
                 button2.Visible = true;
                 dataGridView2.Visible = false;
+                label5.Visible = false;
+                label7.Visible = false;
+                label6.Visible = false;
+                label8.Visible = false;
+                textBox3.Visible = false;
+                textBox4.Visible = false;
+                button1.Visible = false;
 
                 //info
                 label2.Visible = false;
@@ -52,6 +60,13 @@ namespace Department
                 textBox2.Visible = false;
                 button2.Visible = false;
                 dataGridView2.Visible = false;
+                label5.Visible = false;
+                label7.Visible = false;
+                label6.Visible = false;
+                label8.Visible = false;
+                textBox3.Visible = false;
+                textBox4.Visible = false;
+                button1.Visible = false;
 
                 //info
                 label2.Visible = true;
@@ -61,11 +76,32 @@ namespace Department
             else if(state == 2) // view all questions to take
             {
                 dataGridView2.Visible = true;
+                label5.Visible = false;
+                label7.Visible = false;
+                label6.Visible = false;
+                label8.Visible = false;
+                textBox3.Visible = false;
+                textBox4.Visible = false;
+
+                button1.Visible = false;
 
             }
             else if (state == 3) // view all current questions taked
             {
+                label1.Visible = false;
+                label3.Visible = false;
+                textBox1.Visible = false;
+                textBox2.Visible = false;
+                button2.Visible = false;
                 dataGridView2.Visible = false;
+                label5.Visible = true;
+                label7.Visible = true;
+                label6.Visible = true;
+                label8.Visible = true;
+                textBox3.ReadOnly = true;
+                textBox3.Visible = true;
+                textBox4.Visible = true;
+                button1.Visible = true;
                 socketClient.StartClient();
 
             }
@@ -100,7 +136,7 @@ namespace Department
             }
         }
 
-        //submit
+        //submit auth
         private void button2_Click(object sender, EventArgs e)
         {
             username = textBox1.Text;
@@ -141,8 +177,53 @@ namespace Department
                 selected(button10);
                 position(button10);
 
+                if (dataGridView2.SelectedRows.Count > 1)
+                {
+                    CustomOkMessageBox box = new CustomOkMessageBox("It's better if you assign select one ticket at time!");
+                    box.Show();
+                    return;
+                }
+
+                if (TicketSelected())
+                {
+                    int selectedrowindex = dataGridView2.SelectedCells[0].RowIndex;
+                    DataGridViewRow selectedRow = dataGridView2.Rows[selectedrowindex];
+                    string id = Convert.ToString(selectedRow.Cells["originalTicketId"].Value);
+                    string title = Convert.ToString(selectedRow.Cells["title"].Value); 
+                    string description = Convert.ToString(selectedRow.Cells["description"].Value);
+
+                    //proxy.AddSecondaryTicket(id, username, textBox4.Text, textBox2.Text, textBox3.Text);
+                     
+                    label7.Text = "Ticket ID: " + id;
+                    label5.Text = "Ticket Title: " + title;
+                    textBox3.Text = description;
+
+                }
+
+
                 UpdateByState();
             }
+        }
+
+        private bool TicketSelected()
+        {
+            return dataGridView2.SelectedCells.Count == 1;
+        }
+
+        // submit answer
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string id = label7.Text.Substring(11);
+            Console.WriteLine(id);
+
+            string response = textBox4.Text;
+
+            proxy.ChangeSecondaryTicketAnswer(id, response);
+
+            CustomOkMessageBox box = new CustomOkMessageBox("Response submitted with success");
+            box.Show();
+
+            state = 1;
         }
     }
 }

@@ -18,7 +18,6 @@ namespace TTService
         TTService()
         {
             FetchSecondaryTickets();
-
         }
 
 
@@ -137,6 +136,8 @@ namespace TTService
             return 0;
         }
 
+
+
         public DataTable GetTicketsSolver(string s)
         {
             //return db.GetTicketsSolver(s);
@@ -188,6 +189,11 @@ namespace TTService
             return 0;
         }
 
+        public int ChangeSecondaryTicketAnswer(string id, string response)
+        {
+            db.ChangeSecondaryTicketAnswer(id, response);
+            return 0;
+        }
 
         public DataTable GetSecondaryTickets()
         {

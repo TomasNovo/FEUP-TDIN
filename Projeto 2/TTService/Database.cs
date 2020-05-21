@@ -80,6 +80,14 @@ namespace TTService
             tickets.UpdateOne(filter, update);
         }
 
+        public void ChangeSecondaryTicketAnswer(string id, string response)
+        {
+            var filter = Builders<SecondaryTicket>.Filter.Eq("originalTicketId", new ObjectId(id));
+            var update = Builders<SecondaryTicket>.Update.Set("response", response);
+
+            secondaryTickets.UpdateOne(filter, update);
+        }
+
         public List<Ticket> GetTicketsSolver(string s)
         {
             return tickets.Find(x => x.solver == s).ToList();

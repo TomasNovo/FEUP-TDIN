@@ -40,6 +40,7 @@ namespace TTService
             return Channel.GetTicketsSolver(s);
         }
 
+        // Secondary Tickets
         public int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
         {
             return Channel.AddSecondaryTicket(originalTicketId, solver, secondarySolver, title, description);
@@ -60,6 +61,11 @@ namespace TTService
             return Channel.GetSecondaryTicketsBySecondarySolver(secondarySolver);
         }
 
-  
+        public int ChangeSecondaryTicketAnswer(string id, string response)
+        {
+            return Channel.ChangeSecondaryTicketAnswer(id, response);
+        }
+
+
     }
 }

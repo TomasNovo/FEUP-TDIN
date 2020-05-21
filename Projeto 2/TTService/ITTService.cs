@@ -43,6 +43,10 @@ namespace TTService
         [OperationContract]
         int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description);
 
+        [WebInvoke(Method = "POST", UriTemplate = "/secondaryTicketsAnswer", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        int ChangeSecondaryTicketAnswer(string id, string response);
+
         // Get Secondary Tickets
         [WebGet(UriTemplate = "/secondaryTickets", ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]

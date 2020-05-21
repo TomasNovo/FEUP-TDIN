@@ -88,6 +88,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TTClient\TTClient.csproj">
+      <Project>{E82D3856-CFC8-487C-9CBB-128934274E87}</Project>
+      <Name>TTClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TTService\TTService.csproj">
       <Project>{8ab4ed96-ef23-4d20-8819-bba00ae2770d}</Project>
       <Name>TTService</Name>
