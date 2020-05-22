@@ -474,14 +474,15 @@ namespace TTClient
         {
             DataTable all = proxy.GetTickets();
 
-            for(int i = 0; i < all.Rows.Count; i++)
-            {
-                if (!all.Rows[i][5].ToString().Equals(TicketStatus.Unassigned.ToString()))
-                {
-                    all.Rows.RemoveAt(i);
-                }
-            }
 
+            for (int i = all.Rows.Count - 1; i >= 0; i--)
+            {
+                DataRow dr = all.Rows[i];
+                if (!all.Rows[i][5].ToString().Equals(TicketStatus.Unassigned.ToString()))
+                    dr.Delete();
+            }
+            all.AcceptChanges();
+           
             dataGridView1.DataSource = all;
         }
 
