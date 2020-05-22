@@ -202,7 +202,9 @@
             this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(26)))), ((int)(((byte)(27)))));
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.GridColor = System.Drawing.Color.White;
             this.dataGridView2.Location = new System.Drawing.Point(486, 245);
             this.dataGridView2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataGridView2.Name = "dataGridView2";
