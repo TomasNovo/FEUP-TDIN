@@ -80,10 +80,16 @@ namespace TTService
             tickets.UpdateOne(filter, update);
         }
 
-        public void ChangeSecondaryTicketAnswer(string id, string response)
+        public void ChangeSecondaryTicketAnswer(string originalTicketId, string response)
         {
-            var filter = Builders<SecondaryTicket>.Filter.Eq("originalTicketId", new ObjectId(id));
-            var update = Builders<SecondaryTicket>.Update.Set("response", response);
+            var filter = Builders<SecondaryTicket>.Filter.Eq("originalTicketId", new ObjectId(originalTicketId));
+
+            List<SecondaryTicket> s = secondaryTickets.Find(x => x.originalTicketId == new ObjectId(originalTicketId)).ToList();
+
+            s[0].answers.RemoveAt(s[0].answers.Count - 1);
+            s[0].answers.Add(response);
+
+            var update = Builders<SecondaryTicket>.Update.Set("answers", s[0].answers);
 
             secondaryTickets.UpdateOne(filter, update);
         }
@@ -125,12 +131,30 @@ namespace TTService
             return (users.Find(x => x.username == username).ToList().Count == 1);
         }
 
-        public SecondaryTicket AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
+        public SecondaryTicket AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string question)
         {
-            SecondaryTicket st = new SecondaryTicket(ObjectId.GenerateNewId(), new ObjectId(originalTicketId), solver, secondarySolver, title, description);
+
+            SecondaryTicket st = new SecondaryTicket(ObjectId.GenerateNewId(), new ObjectId(originalTicketId), solver, secondarySolver, title, question);
             secondaryTickets.InsertOne(st);
 
             return st;
+        }
+
+        public SecondaryTicket AddSecondaryTicketNewQuestions(string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
+        {
+
+            SecondaryTicket st = new SecondaryTicket(ObjectId.GenerateNewId(), new ObjectId(originalTicketId), solver, secondarySolver, title, questions, answers);
+            secondaryTickets.InsertOne(st);
+
+            return st;
+        }
+
+
+        public int DeleteSecondaryTicket(string originalTicketId)
+        {
+            var filter = Builders<SecondaryTicket>.Filter.Eq("originalTicketId", new ObjectId(originalTicketId));
+            secondaryTickets.DeleteOne(filter);
+            return 0;
         }
 
         public List<SecondaryTicket> GetSecondaryTickets()
@@ -146,6 +170,11 @@ namespace TTService
         public List<SecondaryTicket> GetSecondaryTicketsBySecondarySolver(string secondarySolver)
         {
             return secondaryTickets.Find(x => x.secondarySolver == secondarySolver).ToList();
+        }
+
+        public List<SecondaryTicket> GetSecondaryTicketInfoByID(string id)
+        {
+            return secondaryTickets.Find(x => x.Id == new ObjectId(id)).ToList();
         }
 
         public void SetSecondaryTicketReceived(string id, bool value)

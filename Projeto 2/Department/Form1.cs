@@ -29,6 +29,12 @@ namespace Department
             proxy = new TTProxy();
             tickets = proxy.GetTickets();
 
+            panel3.AutoScroll = false;
+            panel3.HorizontalScroll.Enabled = false;
+            panel3.HorizontalScroll.Visible = false;
+            panel3.HorizontalScroll.Maximum = 0;
+            panel3.AutoScroll = true;
+
             UpdateByState();
 
         }
@@ -45,12 +51,13 @@ namespace Department
                 dataGridView2.Visible = false;
                 label5.Visible = false;
                 label7.Visible = false;
-                label6.Visible = false;
+                //label6.Visible = false;
                 label8.Visible = false;
-                textBox3.Visible = false;
+                //textBox3.Visible = false;
                 textBox4.Visible = false;
                 button1.Visible = false;
                 button13.Visible = false;
+                panel3.Visible = false;
 
                 //info
                 label2.Visible = false;
@@ -65,12 +72,13 @@ namespace Department
                 dataGridView2.Visible = false;
                 label5.Visible = false;
                 label7.Visible = false;
-                label6.Visible = false;
+                //label6.Visible = false;
                 label8.Visible = false;
-                textBox3.Visible = false;
+                //textBox3.Visible = false;
                 textBox4.Visible = false;
                 button1.Visible = false;
                 button13.Visible = false;
+                panel3.Visible = false;
 
                 //info
                 label2.Visible = true;
@@ -83,11 +91,12 @@ namespace Department
                 label1.Visible = true;
                 label5.Visible = false;
                 label7.Visible = false;
-                label6.Visible = false;
+                //label6.Visible = false;
                 label8.Visible = false;
-                textBox3.Visible = false;
+                //textBox3.Visible = false;
                 textBox4.Visible = false;
                 button13.Visible = true;
+                panel3.Visible = false;
 
                 label3.Text = "Select original ticket id to see its info or its talks";
                 label3.Visible = true;
@@ -105,13 +114,14 @@ namespace Department
                 dataGridView2.Visible = false;
                 label5.Visible = true;
                 label7.Visible = true;
-                label6.Visible = true;
+                //label6.Visible = true;
                 label8.Visible = true;
-                textBox3.ReadOnly = true;
-                textBox3.Visible = true;
+                //textBox3.ReadOnly = true;
+                //textBox3.Visible = true;
                 textBox4.Visible = true;
                 button1.Visible = true;
                 button13.Visible = true;
+                panel3.Visible = true;
                 socketClient.StartClient();
 
             }
@@ -199,15 +209,59 @@ namespace Department
                     int selectedrowindex = dataGridView2.SelectedCells[0].RowIndex;
                     DataGridViewRow selectedRow = dataGridView2.Rows[selectedrowindex];
                     string id = Convert.ToString(selectedRow.Cells["originalTicketId"].Value);
-                    string title = Convert.ToString(selectedRow.Cells["title"].Value); 
-                    string description = Convert.ToString(selectedRow.Cells["description"].Value);
+                    string title = Convert.ToString(selectedRow.Cells["title"].Value);
+                    string solver = Convert.ToString(selectedRow.Cells["solver"].Value);
 
-                    //proxy.AddSecondaryTicket(id, username, textBox4.Text, textBox2.Text, textBox3.Text);
-                     
+                    List<string> q = new List<string>();
+                    List<string> a = new List<string>();
+
+                    int questionAndAnswersSize = selectedRow.Cells.Count - 6;
+
+                    for(int i = 1; i <= questionAndAnswersSize; i++)
+                    {
+                        a.Add(Convert.ToString(selectedRow.Cells[selectedRow.Cells.Count - i].Value.ToString()));
+                        i++;
+                        q.Add(Convert.ToString(selectedRow.Cells[selectedRow.Cells.Count - i].Value.ToString()));
+                    }
+
+
+                    string question = Convert.ToString(selectedRow.Cells["solver"].Value);
+
                     label7.Text = "Ticket ID: " + id;
                     label5.Text = "Ticket Title: " + title;
-                    textBox3.Text = description;
 
+                    q.Reverse();
+                    a.Reverse();
+
+                    // Chat
+                    for (int i = 0; i < q.Count; i++)
+                    {
+                        TextBox temp = new TextBox();
+                        temp.ReadOnly = true;
+                        temp.Multiline = true;
+                        temp.Location = new Point(0, 0 + 40 * i);
+                        temp.Size = new Size(806, 20);
+                        temp.ForeColor = Color.White;
+                        temp.BackColor = Color.FromArgb(24, 26, 27);
+                        temp.Text = solver + ": " + q[i];
+                        temp.BorderStyle = BorderStyle.None;
+
+                        this.panel3.Controls.Add(temp);
+
+                        if (!a[i].Equals("waiting for answer"))
+                        {
+                            TextBox temp2 = new TextBox();
+                            temp2.ReadOnly = true;
+                            temp2.Multiline = true;
+                            temp2.Location = new Point(0, 20 + 40 * i);
+                            temp2.Size = new Size(806, 20);
+                            temp2.ForeColor = Color.White;
+                            temp2.BackColor = Color.FromArgb(24, 26, 27);
+                            temp2.BorderStyle = BorderStyle.None;
+                            temp2.Text = username + ": " + a[i];
+                            this.panel3.Controls.Add(temp2);
+                        }
+                    }
                 }
 
 
@@ -230,7 +284,7 @@ namespace Department
 
             proxy.ChangeSecondaryTicketAnswer(id, response);
 
-            CustomOkMessageBox box = new CustomOkMessageBox("Response submitted with success");
+            CustomOkMessageBox box = new CustomOkMessageBox("Answer submitted with success");
             box.Show();
 
             state = 1;

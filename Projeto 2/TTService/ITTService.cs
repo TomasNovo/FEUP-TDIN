@@ -41,26 +41,43 @@ namespace TTService
         // Add Secondary Tickets
         [WebInvoke(Method = "POST", UriTemplate = "/secondaryTickets", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description);
+        int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string question);
 
+        // Add new question to secondary ticket
+        [WebInvoke(Method = "POST", UriTemplate = "/secondaryTicketNewQuestion", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        int AddSecondaryTicketNewQuestions(string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers);
+
+        // Delete secondary ticket
+        [WebInvoke(Method = "POST", UriTemplate = "/secondaryTicketDelete", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        int DeleteSecondaryTicket(string originalTicketId);
+
+        // Add answer
         [WebInvoke(Method = "POST", UriTemplate = "/secondaryTicketsAnswer", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        int ChangeSecondaryTicketAnswer(string id, string response);
+        int ChangeSecondaryTicketAnswer(string originalTicketId, string response);
 
         // Get Secondary Tickets
         [WebGet(UriTemplate = "/secondaryTickets", ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
         DataTable GetSecondaryTickets();
 
-        // Get Secondary Tickets
+        // Get Secondary Tickets by Solver
         [WebGet(UriTemplate = "/secondaryTicketsBySolver/{solver}", ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
         DataTable GetSecondaryTicketsBySolver(string solver);
 
-        // Get Secondary Tickets
+        // Get Secondary Tickets by secondarySolver
         [WebGet(UriTemplate = "/secondaryTicketsBySecondarySolver/{secondarySolver}", ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
         DataTable GetSecondaryTicketsBySecondarySolver(string secondarySolver);
+
+        // Get Secondary Ticket by ID
+        //[WebGet(UriTemplate = "/secondaryTicket/{secondaryID}", ResponseFormat = WebMessageFormat.Json)]
+        //[OperationContract]
+        //List<SecondaryTicket> GetSecondaryTicketInfoByID(string secondaryID);
+
     }
 
 }

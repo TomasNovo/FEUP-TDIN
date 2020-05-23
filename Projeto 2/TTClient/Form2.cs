@@ -536,6 +536,37 @@ namespace TTClient
                 DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
                 string id = Convert.ToString(selectedRow.Cells["Id"].Value);
 
+                DataTable secondaryTickets = proxy.GetSecondaryTicketsBySolver(username);
+                for (int i = 0; i < secondaryTickets.Rows.Count; i++)
+                {
+                    if (secondaryTickets.Rows[i][1].Equals(id))
+                    {
+                        List<string> q = new List<string>();
+                        List<string> a = new List<string>();
+
+                        int questionAndAnswersSize = secondaryTickets.Columns.Count - 6;
+
+
+                        for (int u = 1; u <= questionAndAnswersSize; u++)
+                        {
+                            a.Add(Convert.ToString(secondaryTickets.Rows[i][secondaryTickets.Columns.Count - u].ToString()));
+                            u++;
+                            q.Add(Convert.ToString(secondaryTickets.Rows[i][secondaryTickets.Columns.Count - u].ToString()));
+                        }
+
+                        q.Add(textBox3.Text);
+                        a.Add("waiting for answer");
+
+                        proxy.DeleteSecondaryTicket(id);
+                        proxy.AddSecondaryTicketNewQuestions(id, username, textBox4.Text, textBox2.Text, q, a);
+
+                        textBox2.Text = "";
+                        textBox3.Text = "";
+                        textBox4.Text = "";
+                        return;
+                    }
+                }
+
                 proxy.AddSecondaryTicket(id, username, textBox4.Text, textBox2.Text, textBox3.Text);
 
                 textBox2.Text = "";

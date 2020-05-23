@@ -178,9 +178,20 @@ namespace TTService
             return db.GetUsers();
         }
 
-        public int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
+        public int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string question)
         {
-            SecondaryTicket st = db.AddSecondaryTicket(originalTicketId, solver, secondarySolver, title, description);
+            SecondaryTicket st = db.AddSecondaryTicket(originalTicketId, solver, secondarySolver, title, question);
+
+            db.ChangeTicketStatus(originalTicketId, TicketStatus.WaitingForAnswers);
+
+            //secondaryTickets.Enqueue(st);
+
+            return 0;
+        }
+
+        public int AddSecondaryTicketNewQuestions(string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
+        {
+            SecondaryTicket st = db.AddSecondaryTicketNewQuestions(originalTicketId, solver, secondarySolver, title, questions, answers);
 
             db.ChangeTicketStatus(originalTicketId, TicketStatus.WaitingForAnswers);
 
@@ -207,8 +218,6 @@ namespace TTService
             dt.Columns.Add("secondarysolver");
             dt.Columns.Add("date");
             dt.Columns.Add("title");
-            dt.Columns.Add("description");
-            dt.Columns.Add("response");
 
             for (int i = 0; i < tickets.Count; i++)
             {
@@ -221,8 +230,14 @@ namespace TTService
                 arr.Add(ticket.secondarySolver);
                 arr.Add(ticket.date.ToString());
                 arr.Add(ticket.title);
-                arr.Add(ticket.description);
-                arr.Add(ticket.response);
+
+                for(int u = 0; u < ticket.questions.Count; u++)
+                {
+                    dt.Columns.Add("question:" + u);
+                    dt.Columns.Add("answers: " + u);
+                    arr.Add(ticket.questions[u]);
+                    arr.Add(ticket.answers[u]);
+                }
 
                 dt.Rows.Add(arr.ToArray());
             }
@@ -242,8 +257,6 @@ namespace TTService
             dt.Columns.Add("secondarysolver");
             dt.Columns.Add("date");
             dt.Columns.Add("title");
-            dt.Columns.Add("description");
-            dt.Columns.Add("response");
 
             for (int i = 0; i < tickets.Count; i++)
             {
@@ -256,8 +269,15 @@ namespace TTService
                 arr.Add(ticket.secondarySolver);
                 arr.Add(ticket.date.ToString());
                 arr.Add(ticket.title);
-                arr.Add(ticket.description);
-                arr.Add(ticket.response);
+
+                for (int u = 0; u < ticket.questions.Count; u++)
+                {
+                    dt.Columns.Add("question:" + u);
+                    dt.Columns.Add("answers: " + u);
+                    arr.Add(ticket.questions[u]);
+                    arr.Add(ticket.answers[u]);
+                }
+
 
                 dt.Rows.Add(arr.ToArray());
             }
@@ -268,6 +288,7 @@ namespace TTService
         public DataTable GetSecondaryTicketsBySecondarySolver(string secondarySolver)
         {
             List<SecondaryTicket> tickets = db.GetSecondaryTicketsBySecondarySolver(secondarySolver);
+            Console.WriteLine(tickets.Count);
 
             DataTable dt = new DataTable("secondaryTickets");
 
@@ -277,8 +298,6 @@ namespace TTService
             dt.Columns.Add("secondarysolver");
             dt.Columns.Add("date");
             dt.Columns.Add("title");
-            dt.Columns.Add("description");
-            dt.Columns.Add("response");
 
             for (int i = 0; i < tickets.Count; i++)
             {
@@ -291,14 +310,31 @@ namespace TTService
                 arr.Add(ticket.secondarySolver);
                 arr.Add(ticket.date.ToString());
                 arr.Add(ticket.title);
-                arr.Add(ticket.description);
-                arr.Add(ticket.response);
+
+                for (int u = 0; u < ticket.questions.Count; u++)
+                {
+                    dt.Columns.Add("question:" + u);
+                    dt.Columns.Add("answers: " + u);
+                    arr.Add(ticket.questions[u]);
+                    arr.Add(ticket.answers[u]);
+                }
 
                 dt.Rows.Add(arr.ToArray());
             }
 
             return dt;
         }
+
+        public int DeleteSecondaryTicket(string originalTicketId)
+        {
+            db.DeleteSecondaryTicket(originalTicketId);
+            return 0;
+        }
+
+        //public List<SecondaryTicket> GetSecondaryTicketInfoByID(string secondaryID)
+        //{
+        //    return db.GetSecondaryTicketInfoByID(secondaryID);
+        //}
 
     }
 }

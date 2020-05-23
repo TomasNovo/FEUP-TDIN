@@ -20,10 +20,10 @@ namespace TTService
         public DateTime date { get; set; }
         public bool received { get; set; }
         public string title { get; set; }
-        public string description { get; set; }
-        public string response { get; set; }
+        public List<string> questions { get; set; }
+        public List<string> answers { get; set; }
 
-        public SecondaryTicket(ObjectId Id, ObjectId originalTicketId, string solver, string secondarySolver, string title, string description)
+        public SecondaryTicket(ObjectId Id, ObjectId originalTicketId, string solver, string secondarySolver, string title, string question)
         {
             this.Id = Id;
             this.originalTicketId = originalTicketId;
@@ -32,8 +32,36 @@ namespace TTService
             this.date = DateTime.Now;
             this.received = false;
             this.title = title;
-            this.description = description;
-            this.response = null;
+
+            this.questions = new List<string>();
+            this.answers = new List<string>();
+
+            questions.Add(question);
+            answers.Add("waiting for answer");
+        }
+
+        public SecondaryTicket(ObjectId Id, ObjectId originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
+        {
+            this.Id = Id;
+            this.originalTicketId = originalTicketId;
+            this.solver = solver;
+            this.secondarySolver = secondarySolver;
+            this.date = DateTime.Now;
+            this.received = false;
+            this.title = title;
+
+            this.questions = questions;
+            this.answers = answers;
+        }
+
+        public void AddQuestion(string q)
+        {
+            this.questions.Add(q);
+        }
+
+        public void AddResponse(string r)
+        {
+            this.answers.Add(r);
         }
     }
 }

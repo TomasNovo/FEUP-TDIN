@@ -41,9 +41,9 @@ namespace TTService
         }
 
         // Secondary Tickets
-        public int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string description)
+        public int AddSecondaryTicket(string originalTicketId, string solver, string secondarySolver, string title, string question)
         {
-            return Channel.AddSecondaryTicket(originalTicketId, solver, secondarySolver, title, description);
+            return Channel.AddSecondaryTicket(originalTicketId, solver, secondarySolver, title, question);
         }
 
         public DataTable GetSecondaryTickets()
@@ -66,6 +66,21 @@ namespace TTService
             return Channel.ChangeSecondaryTicketAnswer(id, response);
         }
 
+        public int DeleteSecondaryTicket(string originalTicketId)
+        {
+            return Channel.DeleteSecondaryTicket(originalTicketId);
+        }
 
-    }
+
+        public int AddSecondaryTicketNewQuestions(string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
+        {
+            return Channel.AddSecondaryTicketNewQuestions(originalTicketId, solver, secondarySolver, title, questions, answers);
+        }
+
+            //public List<SecondaryTicket> GetSecondaryTicketInfoByID(string secondaryID)
+            //{
+            //    return Channel.GetSecondaryTicketInfoByID(secondaryID);
+            //}
+
+        }
 }
