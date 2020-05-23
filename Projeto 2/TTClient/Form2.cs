@@ -227,6 +227,7 @@ namespace TTClient
                 button4.Visible = false;
                 textBox2.Visible = false;
                 textBox3.Visible = false;
+                button13.Visible = false;
 
                 label3.Visible = true;
                 textBox1.Visible = true;
@@ -248,6 +249,7 @@ namespace TTClient
                 button3.Visible = false;
                 listBox2.Visible = false;
                 dataGridView1.Visible = false;
+                button13.Visible = false;
 
                 button6.Visible = false;
 
@@ -282,6 +284,7 @@ namespace TTClient
                 textBox3.Visible = false;
                 dataGridView1.Visible = false;
                 button4.Visible = false;
+                button13.Visible = true;
 
                 label2.Visible = false;
                 label5.Visible = false;
@@ -302,6 +305,7 @@ namespace TTClient
                 label1.Text = "Ask a secondary question, " + username;
                 textBox2.Visible = true;
                 textBox3.Visible = true;
+                button13.Visible = true;
 
                 button1.Visible = false;
                 button3.Visible = false;
@@ -339,6 +343,7 @@ namespace TTClient
             }
             else if (state == 4) // resolve ticket
             {
+                button13.Visible = true;
                 label1.Visible = false;
                 button4.Visible = true;
                 button1.Visible = false;
@@ -561,5 +566,32 @@ namespace TTClient
             }
         }
 
+        // Ticket info
+        private void button13_Click(object sender, EventArgs e)
+        {
+            string username = "";
+            string id = "";
+            string title = "";
+            string description = "";
+            string date = "";
+
+            if (TicketSelected())
+            {
+                id = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["Id"].Value;
+                username = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["username"].Value;
+                title = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["title"].Value;
+                description = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["description"].Value;
+                date = (string)dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["date"].Value;
+            }
+            else
+            {
+                CustomOkMessageBox b = new CustomOkMessageBox("Please select a ticket by its ID!");
+                b.Show();
+                return;
+            }
+
+            TicketInfo box = new TicketInfo(id, username, date, title, description);
+            box.Show();
+        }
     }
 }

@@ -57,6 +57,7 @@
             this.button12 = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.label7 = new System.Windows.Forms.Label();
+            this.button13 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -361,9 +362,9 @@
             this.label6.ForeColor = System.Drawing.Color.White;
             this.label6.Location = new System.Drawing.Point(394, 206);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(115, 25);
+            this.label6.Size = new System.Drawing.Size(97, 25);
             this.label6.TabIndex = 25;
-            this.label6.Text = "Description:";
+            this.label6.Text = "Question:";
             this.label6.Visible = false;
             // 
             // button11
@@ -425,12 +426,26 @@
             this.label7.Text = "Ticket ID: ";
             this.label7.Visible = false;
             // 
+            // button13
+            // 
+            this.button13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(26)))), ((int)(((byte)(27)))));
+            this.button13.ForeColor = System.Drawing.Color.White;
+            this.button13.Location = new System.Drawing.Point(306, 522);
+            this.button13.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(212, 35);
+            this.button13.TabIndex = 31;
+            this.button13.Text = "View Ticket Info";
+            this.button13.UseVisualStyleBackColor = false;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(64)))), ((int)(((byte)(67)))));
             this.ClientSize = new System.Drawing.Size(1400, 589);
+            this.Controls.Add(this.button13);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.button12);
@@ -494,5 +509,6 @@
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button13;
     }
 }

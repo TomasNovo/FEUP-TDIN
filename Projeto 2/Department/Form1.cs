@@ -18,6 +18,7 @@ namespace Department
         int state = 0;
         string username;
         string department;
+        DataTable tickets;
 
         DepartmentSocketClient socketClient = new DepartmentSocketClient();
 
@@ -26,6 +27,7 @@ namespace Department
             InitializeComponent();
 
             proxy = new TTProxy();
+            tickets = proxy.GetTickets();
 
             UpdateByState();
 
@@ -48,6 +50,7 @@ namespace Department
                 textBox3.Visible = false;
                 textBox4.Visible = false;
                 button1.Visible = false;
+                button13.Visible = false;
 
                 //info
                 label2.Visible = false;
@@ -67,6 +70,7 @@ namespace Department
                 textBox3.Visible = false;
                 textBox4.Visible = false;
                 button1.Visible = false;
+                button13.Visible = false;
 
                 //info
                 label2.Visible = true;
@@ -76,12 +80,17 @@ namespace Department
             else if(state == 2) // view all questions to take
             {
                 dataGridView2.Visible = true;
+                label1.Visible = true;
                 label5.Visible = false;
                 label7.Visible = false;
                 label6.Visible = false;
                 label8.Visible = false;
                 textBox3.Visible = false;
                 textBox4.Visible = false;
+                button13.Visible = true;
+
+                label3.Text = "Select original ticket id to see its info or its talks";
+                label3.Visible = true;
 
                 button1.Visible = false;
 
@@ -102,6 +111,7 @@ namespace Department
                 textBox3.Visible = true;
                 textBox4.Visible = true;
                 button1.Visible = true;
+                button13.Visible = true;
                 socketClient.StartClient();
 
             }
@@ -224,6 +234,34 @@ namespace Department
             box.Show();
 
             state = 1;
+        }
+
+        // Ticket info
+        private void button13_Click(object sender, EventArgs e)
+        {
+            string username = "";
+            string id = "";
+            string title = "";
+            string description = "";
+            string date = "";
+
+
+            for (int i = 0; i < tickets.Rows.Count; i++)
+            {
+                if(tickets.Rows[i][0].Equals((string)dataGridView2.Rows[dataGridView2.SelectedCells[0].RowIndex].Cells["originalticketId"].Value))
+                {
+                    id = tickets.Rows[i][0].ToString();
+                    username = tickets.Rows[i][1].ToString();
+                    date = tickets.Rows[i][2].ToString();
+                    title = tickets.Rows[i][3].ToString();
+                    description = tickets.Rows[i][4].ToString();
+                }
+            }
+
+           
+
+            TicketInfo box = new TicketInfo(id, username, date, title, description);
+            box.Show();
         }
     }
 }
