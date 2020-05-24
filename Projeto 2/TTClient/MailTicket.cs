@@ -27,6 +27,11 @@ namespace TTClient
             this.solution = solution;
         }
 
+        public void setSolution(string s)
+        {
+            this.solution = s;
+        }
+
         public void sendMail()
         {
             try
@@ -43,7 +48,9 @@ namespace TTClient
                              +
                              this.description + "\n\n"
                              +
-                             "We propose the following solution: \n" + solution;
+                             "We propose the following solution: \n" 
+                             + 
+                             solution;
 
                 SmtpServer.Port = 587;
                 SmtpServer.Credentials = new System.Net.NetworkCredential("TicketFactoryTDIN@sapo.pt", "TDINamite420");

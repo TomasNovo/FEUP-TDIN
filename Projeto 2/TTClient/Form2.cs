@@ -389,12 +389,14 @@ namespace TTClient
                     }
                 }
 
+                label1.Text = "\nEnter mail content";
+                label1.Visible = true;
                 textBox3.Visible = true;
-                textBox2.Visible = true;
+                textBox2.Visible = false;
                 label5.Text = "Mail to: " + mail;
                 label5.Visible = true;
 
-                m = new MailTicket(id, title, description, mail, textBox3.Text);
+                m = new MailTicket(id, title, description, mail, "");
 
             }
             else if (state == 5) // my tickets
@@ -471,6 +473,7 @@ namespace TTClient
         //email send
         private void button4_Click(object sender, EventArgs e)
         {
+            m.setSolution(textBox3.Text);
             m.sendMail();
         }
 
