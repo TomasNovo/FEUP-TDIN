@@ -13,6 +13,10 @@ namespace TTService
         [OperationContract]
         int AddTicket(string author, string email, string title, string description);
 
+        [WebInvoke(Method = "POST", UriTemplate = "/ticketStatus", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        int ChangeTicketStatus(string id, TicketStatus status);
+
         [WebGet(UriTemplate = "/tickets/{author}", ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
         DataTable GetTicketsByUser(string author);

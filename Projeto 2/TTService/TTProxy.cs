@@ -77,10 +77,15 @@ namespace TTService
             return Channel.AddSecondaryTicketNewQuestions(originalTicketId, solver, secondarySolver, title, questions, answers);
         }
 
-            //public List<SecondaryTicket> GetSecondaryTicketInfoByID(string secondaryID)
-            //{
-            //    return Channel.GetSecondaryTicketInfoByID(secondaryID);
-            //}
-
+        public int ChangeTicketStatus(string id, TicketStatus status)
+        {
+            return Channel.ChangeTicketStatus(id, status);
         }
+
+        //public List<SecondaryTicket> GetSecondaryTicketInfoByID(string secondaryID)
+        //{
+        //    return Channel.GetSecondaryTicketInfoByID(secondaryID);
+        //}
+
+    }
 }

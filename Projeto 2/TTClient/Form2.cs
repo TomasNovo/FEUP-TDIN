@@ -475,6 +475,8 @@ namespace TTClient
         {
             m.setSolution(textBox3.Text);
             m.sendMail();
+
+            proxy.ChangeTicketStatus(m.getID(), TicketStatus.Solved);
         }
 
         // view unassigned

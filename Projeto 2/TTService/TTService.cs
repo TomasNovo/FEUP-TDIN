@@ -331,10 +331,11 @@ namespace TTService
             return 0;
         }
 
-        //public List<SecondaryTicket> GetSecondaryTicketInfoByID(string secondaryID)
-        //{
-        //    return db.GetSecondaryTicketInfoByID(secondaryID);
-        //}
+        public int ChangeTicketStatus(string id, TicketStatus status)
+        {
+            db.ChangeTicketStatus(id, status);
+            return 0;
+        }
 
     }
 }

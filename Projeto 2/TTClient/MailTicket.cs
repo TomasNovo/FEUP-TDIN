@@ -32,6 +32,11 @@ namespace TTClient
             this.solution = s;
         }
 
+        public string getID()
+        {
+            return this.id;
+        }
+
         public void sendMail()
         {
             try
