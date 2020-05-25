@@ -22,7 +22,6 @@
 <body style="background-color: #3c4043">
     <form id="form1" runat="server">
     <div>
-       <asp:Image ID="logo" runat="server"></asp:Image>
       <h1>Ticket Factory</h1>
       <table class="auto-style1">
         <tr>
@@ -55,13 +54,13 @@
         </tr>
       </table>
       <p>
-        <asp:Label ID="Label1" runat="server" Text="Result:" Font-Bold="True" Font-Names="Arial" ForeColor="#0000CC"></asp:Label>
+        <asp:Label ID="Label1" runat="server" Text="Result:" Font-Bold="True" Font-Names="Arial" ForeColor="#FFFFFF"></asp:Label>
       </p>
       <p>
-        <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Submitted problems" />
+        <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Submitted problems" ForeColor="#FFFFFF" style="background-color: #181a1b"/>
       </p>
       <p>
-        <asp:GridView ID="GridView1" runat="server"></asp:GridView>
+        <asp:GridView ID="GridView1" runat="server" ForeColor="#FFFFFF"></asp:GridView>
       </p>
       <p>
         <asp:Label ID="Label2" runat="server" Font-Bold="True" Font-Names="Arial" ForeColor="Red"></asp:Label>

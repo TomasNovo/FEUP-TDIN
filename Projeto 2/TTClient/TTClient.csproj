@@ -72,8 +72,7 @@
     <EmbeddedResource Include="CustomOkMessageBox.resx">
       <DependentUpon>CustomOkMessageBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SolverForm.resx">
-      <DependentUpon>SolverForm.cs</DependentUpon>
+
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

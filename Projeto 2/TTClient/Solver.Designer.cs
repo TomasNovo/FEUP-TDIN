@@ -1,6 +1,10 @@
 ﻿namespace TTClient
 {
+<<<<<<< HEAD:Projeto 2/TTClient/SolverForm.Designer.cs
     partial class SolverForm
+=======
+    partial class Solver
+>>>>>>> 8e4f59457939d4de575db3607755db84113efab2:Projeto 2/TTClient/Solver.Designer.cs
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +32,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+<<<<<<< HEAD:Projeto 2/TTClient/SolverForm.Designer.cs
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SolverForm));
+=======
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Solver));
+>>>>>>> 8e4f59457939d4de575db3607755db84113efab2:Projeto 2/TTClient/Solver.Designer.cs
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -188,7 +196,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(141, 23);
             this.button4.TabIndex = 12;
-            this.button4.Text = "SendEmailTest";
+            this.button4.Text = "Send Email";
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -451,7 +459,7 @@
             this.button13.UseVisualStyleBackColor = false;
             this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
-            // Form2
+            // Solver
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -480,9 +488,14 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
+<<<<<<< HEAD:Projeto 2/TTClient/SolverForm.Designer.cs
             this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form2";
             this.Text = "Solver Client";
+=======
+            this.Name = "Solver";
+            this.Text = "Solver";
+>>>>>>> 8e4f59457939d4de575db3607755db84113efab2:Projeto 2/TTClient/Solver.Designer.cs
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
