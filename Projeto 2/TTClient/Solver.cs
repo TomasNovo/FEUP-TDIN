@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace TTClient
 {
-    public partial class Form2 : Form
+    public partial class Solver : Form
     {
         TTProxy proxy;
         DataTable users;
@@ -16,7 +16,7 @@ namespace TTClient
         string username;
         MailTicket m = null;
 
-        public Form2()
+        public Solver()
         {
             InitializeComponent();
             proxy = new TTProxy();

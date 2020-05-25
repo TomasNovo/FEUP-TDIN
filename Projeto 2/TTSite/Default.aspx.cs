@@ -16,8 +16,6 @@ public partial class _Default : Page
 
         string image_src = System.IO.Directory.GetCurrentDirectory().ToString() + "\\t.png";
 
-        logo.Attributes["src"] = image_src;
-
         proxy = new TTProxy();
         if (!Page.IsPostBack)
         {
@@ -30,7 +28,7 @@ public partial class _Default : Page
         if (Username.Text == "")
         {
             Label1.ForeColor = Color.Red;
-            Label1.Text = "Result: Select an Author!";
+            Label1.Text = "Result: Insert an Author!";
             return;
         }
         
