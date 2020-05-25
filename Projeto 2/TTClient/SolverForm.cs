@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace TTClient
 {
-    public partial class Form2 : Form
+    public partial class SolverForm : Form
     {
         TTProxy proxy;
         DataTable users;
@@ -16,7 +16,7 @@ namespace TTClient
         string username;
         MailTicket m = null;
 
-        public Form2()
+        public SolverForm()
         {
             InitializeComponent();
             proxy = new TTProxy();
@@ -528,12 +528,6 @@ namespace TTClient
         // Submit question
         private void button11_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count > 1)
-            {
-                CustomOkMessageBox box = new CustomOkMessageBox("It's better if you assign select one ticket at time!");
-                box.Show();
-                return;
-            }
 
             if (TicketSelected())
             {
@@ -562,8 +556,7 @@ namespace TTClient
                         q.Add(textBox3.Text);
                         a.Add("waiting for answer");
 
-                        proxy.DeleteSecondaryTicket(id);
-                        proxy.AddSecondaryTicketNewQuestions(id, username, textBox4.Text, textBox2.Text, q, a);
+                        proxy.AddSecondaryTicketNewQuestions((string)secondaryTickets.Rows[i][0], (string)secondaryTickets.Rows[i][1], username, textBox4.Text, textBox2.Text, q, a);
 
                         textBox2.Text = "";
                         textBox3.Text = "";
@@ -578,6 +571,11 @@ namespace TTClient
                 textBox3.Text = "";
                 textBox4.Text = "";
 
+            }
+            else
+            {
+                CustomOkMessageBox box = new CustomOkMessageBox("It's better if you assign select one ticket at time!");
+                box.Show();
             }
         }
 
@@ -629,5 +627,6 @@ namespace TTClient
             TicketInfo box = new TicketInfo(id, username, date, title, description);
             box.Show();
         }
+
     }
 }

@@ -80,16 +80,17 @@ namespace TTService
             tickets.UpdateOne(filter, update);
         }
 
-        public void ChangeSecondaryTicketAnswer(string originalTicketId, string response)
+        public void ChangeSecondaryTicketAnswer(string id, string response)
         {
-            var filter = Builders<SecondaryTicket>.Filter.Eq("originalTicketId", new ObjectId(originalTicketId));
+            Console.WriteLine($"adding answer {response} to {id}");
 
-            List<SecondaryTicket> s = secondaryTickets.Find(x => x.originalTicketId == new ObjectId(originalTicketId)).ToList();
+            var filter = Builders<SecondaryTicket>.Filter.Eq("Id", new ObjectId(id));
 
-            s[0].answers.RemoveAt(s[0].answers.Count - 1);
-            s[0].answers.Add(response);
+            SecondaryTicket st = secondaryTickets.Find(x => x.Id == new ObjectId(id)).ToList()[0];
 
-            var update = Builders<SecondaryTicket>.Update.Set("answers", s[0].answers);
+            st.answers[st.answers.Count - 1] = response;
+
+            var update = Builders<SecondaryTicket>.Update.Set("answers", st.answers);
 
             secondaryTickets.UpdateOne(filter, update);
         }
@@ -140,13 +141,12 @@ namespace TTService
             return st;
         }
 
-        public SecondaryTicket AddSecondaryTicketNewQuestions(string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
+        public void AddSecondaryTicketNewQuestions(string id, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
         {
+            var filter = Builders<SecondaryTicket>.Filter.Eq("Id", new ObjectId(id));
+            var update = Builders<SecondaryTicket>.Update.Set("questions", questions).Set("answers", answers).Set("received", false);
 
-            SecondaryTicket st = new SecondaryTicket(ObjectId.GenerateNewId(), new ObjectId(originalTicketId), solver, secondarySolver, title, questions, answers);
-            secondaryTickets.InsertOne(st);
-
-            return st;
+            secondaryTickets.UpdateOne(filter, update);
         }
 
 
@@ -181,6 +181,8 @@ namespace TTService
         {
             var filter = Builders<SecondaryTicket>.Filter.Eq("Id", new ObjectId(id));
             var update = Builders<SecondaryTicket>.Update.Set("received", value);
+
+            Console.WriteLine($"Updated {id} to {value}");
 
             secondaryTickets.UpdateOne(filter, update);
         }

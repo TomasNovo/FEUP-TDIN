@@ -50,7 +50,7 @@ namespace TTService
         // Add new question to secondary ticket
         [WebInvoke(Method = "POST", UriTemplate = "/secondaryTicketNewQuestion", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        int AddSecondaryTicketNewQuestions(string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers);
+        int AddSecondaryTicketNewQuestions(string id, string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers);
 
         // Delete secondary ticket
         [WebInvoke(Method = "POST", UriTemplate = "/secondaryTicketDelete", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
@@ -81,6 +81,12 @@ namespace TTService
         //[WebGet(UriTemplate = "/secondaryTicket/{secondaryID}", ResponseFormat = WebMessageFormat.Json)]
         //[OperationContract]
         //List<SecondaryTicket> GetSecondaryTicketInfoByID(string secondaryID);
+
+        // Ping to start server
+        [WebGet(UriTemplate = "/ping", ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        void Ping();
+
 
     }
 

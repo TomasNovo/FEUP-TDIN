@@ -5,37 +5,21 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
+using System.ServiceModel;
 
 namespace TTService
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class TTService : ITTService
     {
 
-        private static Database db = new Database();
-        private static DepartmentQueue departmentQueue;
+        private Database db = new Database();
+        private DepartmentQueue departmentQueue = new DepartmentQueue();
 
-        TTService()
+        public TTService()
         {
-            FetchSecondaryTickets();
-        }
-
-
-        private void FetchSecondaryTickets()
-        {
-            departmentQueue = new DepartmentQueue();
             departmentQueue.db = db;
-
-            List<SecondaryTicket> tickets = db.GetSecondaryTickets();
-
-            for (int i = 0; i < tickets.Count; i++)
-            {
-                SecondaryTicket ticket = tickets[i];
-
-                if (!ticket.received)
-                    Console.WriteLine(departmentQueue.AddSecondaryTicket(ticket));
-            }
-
+            departmentQueue.FetchSecondaryTickets();
             departmentQueue.Listen();
         }
 
@@ -136,8 +120,6 @@ namespace TTService
             return 0;
         }
 
-
-
         public DataTable GetTicketsSolver(string s)
         {
             //return db.GetTicketsSolver(s);
@@ -189,9 +171,9 @@ namespace TTService
             return 0;
         }
 
-        public int AddSecondaryTicketNewQuestions(string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
+        public int AddSecondaryTicketNewQuestions(string id, string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
         {
-            SecondaryTicket st = db.AddSecondaryTicketNewQuestions(originalTicketId, solver, secondarySolver, title, questions, answers);
+            db.AddSecondaryTicketNewQuestions(id, solver, secondarySolver, title, questions, answers);
 
             db.ChangeTicketStatus(originalTicketId, TicketStatus.WaitingForAnswers);
 
@@ -247,42 +229,60 @@ namespace TTService
 
         public DataTable GetSecondaryTicketsBySolver(string solver)
         {
-            List<SecondaryTicket> tickets = db.GetSecondaryTicketsBySolver(solver);
-
-            DataTable dt = new DataTable("secondaryTickets");
-
-            dt.Columns.Add("id");
-            dt.Columns.Add("originalticketId");
-            dt.Columns.Add("solver");
-            dt.Columns.Add("secondarysolver");
-            dt.Columns.Add("date");
-            dt.Columns.Add("title");
-
-            for (int i = 0; i < tickets.Count; i++)
+            try
             {
-                SecondaryTicket ticket = tickets[i];
+                List<SecondaryTicket> tickets = db.GetSecondaryTicketsBySolver(solver);
 
-                List<string> arr = new List<string>();
-                arr.Add(ticket.Id.ToString());
-                arr.Add(ticket.originalTicketId.ToString());
-                arr.Add(ticket.solver);
-                arr.Add(ticket.secondarySolver);
-                arr.Add(ticket.date.ToString());
-                arr.Add(ticket.title);
+                DataTable dt = new DataTable("secondaryTickets");
 
-                for (int u = 0; u < ticket.questions.Count; u++)
+                dt.Columns.Add("id");
+                dt.Columns.Add("originalticketId");
+                dt.Columns.Add("solver");
+                dt.Columns.Add("secondarysolver");
+                dt.Columns.Add("date");
+                dt.Columns.Add("title");
+
+                for (int i = 0; i < tickets.Count; i++)
                 {
-                    dt.Columns.Add("question:" + u);
-                    dt.Columns.Add("answers: " + u);
-                    arr.Add(ticket.questions[u]);
-                    arr.Add(ticket.answers[u]);
+                    SecondaryTicket ticket = tickets[i];
+
+                    List<string> arr = new List<string>();
+                    arr.Add(ticket.Id.ToString());
+                    arr.Add(ticket.originalTicketId.ToString());
+                    arr.Add(ticket.solver);
+                    arr.Add(ticket.secondarySolver);
+                    arr.Add(ticket.date.ToString());
+                    arr.Add(ticket.title);
+
+                    for (int u = 0; u < ticket.questions.Count; u++)
+                    {
+                        if (!dt.Columns.Contains("question:" + u))
+                        {
+                            dt.Columns.Add("question:" + u);
+                        }
+
+                        if (!dt.Columns.Contains("answers: " + u))
+                        {
+                            dt.Columns.Add("answers: " + u);
+                        }
+
+                        arr.Add(ticket.questions[u]);
+                        arr.Add(ticket.answers[u]);
+                    }
+
+
+                    dt.Rows.Add(arr.ToArray());
                 }
 
+                return dt;
 
-                dt.Rows.Add(arr.ToArray());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
-            return dt;
+            return null;
         }
 
         public DataTable GetSecondaryTicketsBySecondarySolver(string secondarySolver)
@@ -335,6 +335,11 @@ namespace TTService
         {
             db.ChangeTicketStatus(id, status);
             return 0;
+        }
+
+        public void Ping()
+        {
+
         }
 
     }

@@ -12,7 +12,10 @@ namespace TTServer {
             //db.Register("zecas", "zecas@gmail.com");
 
             // For a REST WCF service host notice the use of WebServiceHost class instead of ServiceHost
-            WebServiceHost host = new WebServiceHost(typeof(TTService.TTService));
+
+            TTService.TTService service = new TTService.TTService();
+
+            WebServiceHost host = new WebServiceHost(service);
             host.Open();
             Console.WriteLine("TT service running");
             Console.WriteLine("Press ENTER to stop the service");

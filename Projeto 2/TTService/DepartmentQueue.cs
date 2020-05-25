@@ -17,20 +17,28 @@ namespace TTService
         private ConcurrentDictionary<string, List<SecondaryTicket>> secondaryTickets = new ConcurrentDictionary<string, List<SecondaryTicket>>();
         private Thread t;
         public Database db;
-      
+
+        private List<int> usedPorts;
+        
         public ManualResetEvent allDone = new ManualResetEvent(false);
         StringBuilder sb = new StringBuilder();
-
 
         public DepartmentQueue()
         {
 
-
         }
 
-        ~DepartmentQueue()
+        public void FetchSecondaryTickets()
         {
-            t.Interrupt();
+            List<SecondaryTicket> tickets = db.GetSecondaryTickets();
+
+            for (int i = 0; i < tickets.Count; i++)
+            {
+                SecondaryTicket ticket = tickets[i];
+
+                if (!ticket.received)
+                    Console.WriteLine(AddSecondaryTicket(ticket));
+            }
         }
 
         public bool AddSecondaryTicket(SecondaryTicket st)
@@ -41,7 +49,12 @@ namespace TTService
                     return false;
 
                 List<SecondaryTicket> old = new List<SecondaryTicket>(tickets);
-                tickets.Add(st);
+                int index = old.FindIndex(x => x.Id == st.Id);
+
+                if (index == -1)
+                    tickets.Add(st);
+                else
+                    tickets[index] = st;
 
                 if (!secondaryTickets.TryUpdate(st.secondarySolver, tickets, old))
                     return false;
@@ -76,7 +89,10 @@ namespace TTService
                 // Bind the socket to the local endpoint and listen for incoming connections.  
 
                 IPAddress ipAddress = IPAddress.Parse(GetLocalIPAddress());
-                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, 5000);
+                int port = new Random().Next(SocketConstants.lowerPortBound, SocketConstants.higherPortBound);
+
+                Console.WriteLine($"Port: {port}");
+                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
 
                 // Create a TCP/IP socket.  
                 Socket listener = new Socket(ipAddress.AddressFamily,
@@ -159,14 +175,33 @@ namespace TTService
                         content.Length, content);
 
                     // Handle request
-                    if (content.StartsWith("ID"))
+                    if (content.StartsWith(SocketConstants.ID))
                     {
-                        content = content.Replace("ID", "");
+                        content = content.Replace(SocketConstants.ID, "");
                         content = content.Trim();
 
                         SendTickets(handler, content);
                     }
 
+                    if (content.StartsWith(SocketConstants.ANSWER))
+                    {
+                        content = content.Replace(SocketConstants.ANSWER, "");
+                        content = content.Trim();
+
+                        string[] args = content.Split(' ');
+
+                        string ticketId = args[0];
+                        content = content.Replace(ticketId, "");
+                        content = content.Trim();
+
+                        db.ChangeSecondaryTicketAnswer(ticketId, content);
+
+                        FetchSecondaryTickets();
+
+                        // TODO: Setup event to receive answer
+
+                        Send(handler, SocketConstants.OK);
+                    }
                 }
                 else
                 {
@@ -199,7 +234,7 @@ namespace TTService
                 db.SetSecondaryTicketReceived(ticket.Id.ToString(), true);
             }
 
-            string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(departmentTickets);
+            string jsonString = $"SECONDARYTICKETS {Newtonsoft.Json.JsonConvert.SerializeObject(departmentTickets)}";
          
             secondaryTickets.TryRemove(departmentId, out List<SecondaryTicket> foobar);
 
@@ -239,11 +274,6 @@ namespace TTService
             {
                 Console.WriteLine(e.ToString());
             }
-        }
-
-        void Heartline()
-        {
-            Console.WriteLine("I'm alive!");
         }
 
         public static string GetLocalIPAddress()

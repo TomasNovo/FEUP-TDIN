@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -14,8 +16,9 @@ namespace Department
     public class DepartmentSocketClient
     {
 
-        public List<SecondaryTicket> secondaryTickets;
+        public List<SecondaryTicket> secondaryTickets = new List<SecondaryTicket>();
         public string department;
+        private string ticketFilePath;
 
         // ManualResetEvent instances signal completion.  
         private ManualResetEvent connectDone =
@@ -27,22 +30,41 @@ namespace Department
 
         public StringBuilder sb = new StringBuilder();
 
-        public DepartmentSocketClient()
+        public DepartmentSocketClient(string department)
         {
-
+            this.department = department;
+            ticketFilePath = $"tickets-{department}.json";
+            GetSecondaryTicketsFile();
         }
 
-        public void StartClient()
+        public void StartClient(string message)
         {
             // Connect to a remote device.  
             try
             {
                 // Establish the remote endpoint for the socket.  
-                // The name of the remote device is "host.contoso.com".  
-                //IPAddress ipAddress = IPAddress.Parse("http://localhost");
-                IPAddress ipAddress = IPAddress.Parse(GetLocalIPAddress());
+                // The name of the remote device is Fhost.contoso.com".  
 
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress, 5000);
+                IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+                List<TcpConnectionInformation> tcpActive = new List<TcpConnectionInformation>(ipGlobalProperties.GetActiveTcpConnections());
+                int port = 0;
+
+                foreach (TcpConnectionInformation tcpi in tcpActive)
+                {
+                    if (tcpi.LocalEndPoint.Port >= SocketConstants.lowerPortBound && tcpi.LocalEndPoint.Port <= SocketConstants.higherPortBound)
+                        port = tcpi.LocalEndPoint.Port;
+                }
+
+                List<IPEndPoint> tcpListening = new List<IPEndPoint>(ipGlobalProperties.GetActiveTcpListeners());
+
+                foreach (IPEndPoint tcpi in tcpListening)
+                {
+                    if (tcpi.Port >= SocketConstants.lowerPortBound && tcpi.Port <= SocketConstants.higherPortBound)
+                        port = tcpi.Port;
+                }
+
+                IPAddress ipAddress = IPAddress.Parse(DepartmentQueue.GetLocalIPAddress());
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.  
                 Socket client = new Socket(ipAddress.AddressFamily,
@@ -51,11 +73,11 @@ namespace Department
                 // Connect to the remote endpoint.  
                 client.BeginConnect(remoteEP,
                     new AsyncCallback(ConnectCallback), client);
-                connectDone.WaitOne();
+                //connectDone.WaitOne();
 
                 // Send test data to the remote device.  
-                Send(client, $"ID {department} <EOF>");
-                sendDone.WaitOne();
+                Send(client, $"{message} <EOF>");
+                //sendDone.WaitOne();
 
                 // Receive the response from the remote device.  
                 Receive(client);
@@ -88,7 +110,7 @@ namespace Department
                     client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.  
-                connectDone.Set();
+                //connectDone.Set();
             }
             catch (Exception e)
             {
@@ -143,7 +165,36 @@ namespace Department
                     // All the data has arrived; clear.  
                     sb.Clear();
 
-                    secondaryTickets = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SecondaryTicket>>(content);
+                    if (content.StartsWith(SocketConstants.SECONDARYTICKETS))
+                    {
+                        content = content.Replace(SocketConstants.SECONDARYTICKETS, "");
+                        content = content.Trim();
+
+                        List<SecondaryTicket> receivedTickets = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SecondaryTicket>>(content);
+
+                        // Update existing SecondaryTickets and add new ones
+                        for (int i = 0; i < receivedTickets.Count; i++)
+                        {
+                            SecondaryTicket newTicket = receivedTickets[i];
+                            int index = secondaryTickets.FindIndex((x) => x.Id == newTicket.Id);
+
+                            if (index == -1)
+                            {
+                                secondaryTickets.Add(newTicket);
+                            }
+                            else
+                            {
+                                secondaryTickets[index] = newTicket;
+                            }
+                        }
+
+                        UpdateSecondaryTicketsFile();
+                    }
+
+                    if (content.StartsWith(SocketConstants.OK))
+                    {
+
+                    }
 
                     // Signal that all bytes have been received.  
                     receiveDone.Set();
@@ -176,8 +227,8 @@ namespace Department
                 int bytesSent = client.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
+                //sendDone.Set();
                 // Signal that all bytes have been sent.  
-                sendDone.Set();
             }
             catch (Exception e)
             {
@@ -185,22 +236,31 @@ namespace Department
             }
         }
 
-        void Heartline()
+        public void UpdateSecondaryTicketsFile()
         {
-            Console.WriteLine("I'm alive!");
-        }
-
-        public static string GetLocalIPAddress()
-        {
-            string localIP;
-            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+            // Create a file to write to.
+            if (!File.Exists(ticketFilePath))
             {
-                socket.Connect("8.8.8.8", 65530);
-                IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
-                localIP = endPoint.Address.ToString();
+                File.Create(ticketFilePath);
+            }
 
-                return localIP;
+            using (FileStream fs = File.Open(ticketFilePath, FileMode.Truncate))
+            {
+                byte[] stream = Encoding.Unicode.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(secondaryTickets));
+                fs.Write(stream, 0, stream.Length);
             }
         }
+
+        public void GetSecondaryTicketsFile()
+        {
+            if (File.Exists(ticketFilePath))
+            {
+                string json = File.ReadAllText(ticketFilePath, Encoding.Unicode);
+
+                if (json != "")
+                    secondaryTickets = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SecondaryTicket>>(json);
+            }
+        }
+
     }
 }

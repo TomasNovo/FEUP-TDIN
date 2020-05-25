@@ -72,9 +72,9 @@ namespace TTService
         }
 
 
-        public int AddSecondaryTicketNewQuestions(string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
+        public int AddSecondaryTicketNewQuestions(string id, string originalTicketId, string solver, string secondarySolver, string title, List<string> questions, List<string> answers)
         {
-            return Channel.AddSecondaryTicketNewQuestions(originalTicketId, solver, secondarySolver, title, questions, answers);
+            return Channel.AddSecondaryTicketNewQuestions(id, originalTicketId, solver, secondarySolver, title, questions, answers);
         }
 
         public int ChangeTicketStatus(string id, TicketStatus status)
@@ -86,6 +86,11 @@ namespace TTService
         //{
         //    return Channel.GetSecondaryTicketInfoByID(secondaryID);
         //}
+
+        public void Ping()
+        {
+            Channel.Ping();
+        }
 
     }
 }

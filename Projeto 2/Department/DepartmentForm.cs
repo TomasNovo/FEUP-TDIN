@@ -12,7 +12,7 @@ using TTService;
 
 namespace Department
 {
-    public partial class Form1 : Form
+    public partial class DepartmentForm : Form
     {
         TTProxy proxy;
         int state = 0;
@@ -20,14 +20,14 @@ namespace Department
         string department;
         DataTable tickets;
 
-        DepartmentSocketClient socketClient = new DepartmentSocketClient();
+        DepartmentSocketClient socketClient;
 
-        public Form1()
+        public DepartmentForm()
         {
             InitializeComponent();
 
             proxy = new TTProxy();
-            tickets = proxy.GetTickets();
+            proxy.Ping();
 
             panel3.AutoScroll = false;
             panel3.HorizontalScroll.Enabled = false;
@@ -87,6 +87,8 @@ namespace Department
             }
             else if(state == 2) // view all questions to take
             {
+
+
                 dataGridView2.Visible = true;
                 label1.Visible = true;
                 label5.Visible = false;
@@ -122,8 +124,6 @@ namespace Department
                 button1.Visible = true;
                 button13.Visible = true;
                 panel3.Visible = true;
-                socketClient.StartClient();
-
             }
         }
 
@@ -161,7 +161,9 @@ namespace Department
         {
             username = textBox1.Text;
             department = textBox2.Text;
-            socketClient.department = department;
+
+            socketClient = new DepartmentSocketClient(department);
+            socketClient.StartClient($"{SocketConstants.ID} {department}");
 
             label4.Text += username;
             label2.Text += department;
@@ -171,6 +173,7 @@ namespace Department
 
             label1.Text = $"Welcome, {username} !";
 
+            button7_Click(this, EventArgs.Empty);
         }
 
         //received questions
@@ -182,10 +185,51 @@ namespace Department
                 selected(button7);
                 position(button7);
 
-                dataGridView2.DataSource = proxy.GetSecondaryTicketsBySecondarySolver(department);
+                GetSecondaryTicketsFromSocket();
 
                 UpdateByState();
             }
+        }
+
+        public void GetSecondaryTicketsFromSocket()
+        {
+            tickets = new DataTable("secondaryTickets");
+
+            tickets.Columns.Add("id");
+            tickets.Columns.Add("originalticketId");
+            tickets.Columns.Add("solver");
+            tickets.Columns.Add("secondarysolver");
+            tickets.Columns.Add("date");
+            tickets.Columns.Add("title");
+
+            for (int i = 0; i < socketClient.secondaryTickets.Count; i++)
+            {
+                SecondaryTicket ticket = socketClient.secondaryTickets[i];
+
+                List<string> arr = new List<string>();
+                arr.Add(ticket.Id.ToString());
+                arr.Add(ticket.originalTicketId.ToString());
+                arr.Add(ticket.solver);
+                arr.Add(ticket.secondarySolver);
+                arr.Add(ticket.date.ToString());
+                arr.Add(ticket.title);
+
+                for (int u = 0; u < ticket.questions.Count; u++)
+                {
+                    if (!tickets.Columns.Contains("question:" + u))
+                        tickets.Columns.Add("question:" + u);
+
+                    if (!tickets.Columns.Contains("answers: " + u))
+                        tickets.Columns.Add("answers: " + u);
+
+                    arr.Add(ticket.questions[u]);
+                    arr.Add(ticket.answers[u]);
+                }
+
+                tickets.Rows.Add(arr.ToArray());
+            }
+
+            dataGridView2.DataSource = tickets;
         }
 
         // ticket talks
@@ -212,23 +256,19 @@ namespace Department
                     string title = Convert.ToString(selectedRow.Cells["title"].Value);
                     string solver = Convert.ToString(selectedRow.Cells["solver"].Value);
 
-                    List<string> q = new List<string>();
-                    List<string> a = new List<string>();
+                    SecondaryTicket st = socketClient.secondaryTickets.Find(x => x.Id.ToString() == (string)selectedRow.Cells["id"].Value);
 
-                    int questionAndAnswersSize = selectedRow.Cells.Count - 6;
+                    List<string> q = st.questions;
+                    List<string> a = st.answers;
 
-                    for(int i = 1; i <= questionAndAnswersSize; i++)
-                    {
-                        a.Add(Convert.ToString(selectedRow.Cells[selectedRow.Cells.Count - i].Value.ToString()));
-                        i++;
-                        q.Add(Convert.ToString(selectedRow.Cells[selectedRow.Cells.Count - i].Value.ToString()));
-                    }
-
+                    q.Reverse();
+                    a.Reverse();
 
                     string question = Convert.ToString(selectedRow.Cells["solver"].Value);
 
                     label7.Text = "Ticket ID: " + id;
                     label5.Text = "Ticket Title: " + title;
+                    textBox4.Text = "";
 
                     q.Reverse();
                     a.Reverse();
@@ -258,12 +298,11 @@ namespace Department
                             temp2.ForeColor = Color.White;
                             temp2.BackColor = Color.FromArgb(24, 26, 27);
                             temp2.BorderStyle = BorderStyle.None;
-                            temp2.Text = username + ": " + a[i];
+                            temp2.Text = department + ": " + a[i];
                             this.panel3.Controls.Add(temp2);
                         }
                     }
                 }
-
 
                 UpdateByState();
             }
@@ -277,17 +316,24 @@ namespace Department
         // submit answer
         private void button1_Click(object sender, EventArgs e)
         {
-            string id = label7.Text.Substring(11);
-            Console.WriteLine(id);
+            int selectedrowindex = dataGridView2.SelectedCells[0].RowIndex;
+            DataGridViewRow selectedRow = dataGridView2.Rows[selectedrowindex];
+            string id = (string)selectedRow.Cells[0].Value;
 
             string response = textBox4.Text;
 
-            proxy.ChangeSecondaryTicketAnswer(id, response);
+            socketClient.StartClient($"{SocketConstants.ANSWER} {id} {response}");
+
+            List<SecondaryTicket> tickets = socketClient.secondaryTickets;
+            int index = tickets.FindIndex(x => x.Id.ToString() == id);
+
+            if (index != -1)
+                tickets[index].answers[tickets[index].answers.Count - 1] = response;
 
             CustomOkMessageBox box = new CustomOkMessageBox("Answer submitted with success");
             box.Show();
 
-            state = 1;
+            button10_Click(this, EventArgs.Empty);
         }
 
         // Ticket info
@@ -298,7 +344,6 @@ namespace Department
             string title = "";
             string description = "";
             string date = "";
-
 
             for (int i = 0; i < tickets.Rows.Count; i++)
             {
@@ -311,8 +356,6 @@ namespace Department
                     description = tickets.Rows[i][4].ToString();
                 }
             }
-
-           
 
             TicketInfo box = new TicketInfo(id, username, date, title, description);
             box.Show();

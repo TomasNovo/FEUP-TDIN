@@ -23,6 +23,11 @@ namespace TTService
         public List<string> questions { get; set; }
         public List<string> answers { get; set; }
 
+        public SecondaryTicket()
+        {
+
+        }
+
         public SecondaryTicket(ObjectId Id, ObjectId originalTicketId, string solver, string secondarySolver, string title, string question)
         {
             this.Id = Id;
