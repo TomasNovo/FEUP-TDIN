@@ -72,8 +72,6 @@
     <EmbeddedResource Include="CustomOkMessageBox.resx">
       <DependentUpon>CustomOkMessageBox.cs</DependentUpon>
     </EmbeddedResource>
-
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
