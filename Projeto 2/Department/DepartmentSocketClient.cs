@@ -20,11 +20,10 @@ namespace Department
         public string department;
         private string ticketFilePath;
 
+        public delegate void AfterReceive();
+        public AfterReceive afterReceive = null;
+
         // ManualResetEvent instances signal completion.  
-        private ManualResetEvent connectDone =
-            new ManualResetEvent(false);
-        private ManualResetEvent sendDone =
-            new ManualResetEvent(false);
         private ManualResetEvent receiveDone =
             new ManualResetEvent(false);
 
@@ -39,29 +38,19 @@ namespace Department
 
         public void StartClient(string message)
         {
+            StartClient(message, null);
+        }
+
+        public void StartClient(string message, AfterReceive ar)
+        {
             // Connect to a remote device.  
             try
             {
-                // Establish the remote endpoint for the socket.  
-                // The name of the remote device is Fhost.contoso.com".  
+                afterReceive = ar;
 
-                IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
-                List<TcpConnectionInformation> tcpActive = new List<TcpConnectionInformation>(ipGlobalProperties.GetActiveTcpConnections());
-                int port = 0;
+                receiveDone = new ManualResetEvent(false);
 
-                foreach (TcpConnectionInformation tcpi in tcpActive)
-                {
-                    if (tcpi.LocalEndPoint.Port >= SocketConstants.lowerPortBound && tcpi.LocalEndPoint.Port <= SocketConstants.higherPortBound)
-                        port = tcpi.LocalEndPoint.Port;
-                }
-
-                List<IPEndPoint> tcpListening = new List<IPEndPoint>(ipGlobalProperties.GetActiveTcpListeners());
-
-                foreach (IPEndPoint tcpi in tcpListening)
-                {
-                    if (tcpi.Port >= SocketConstants.lowerPortBound && tcpi.Port <= SocketConstants.higherPortBound)
-                        port = tcpi.Port;
-                }
+                int port = SocketConstants.port;
 
                 IPAddress ipAddress = IPAddress.Parse(DepartmentQueue.GetLocalIPAddress());
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
@@ -189,11 +178,18 @@ namespace Department
                         }
 
                         UpdateSecondaryTicketsFile();
+
                     }
 
                     if (content.StartsWith(SocketConstants.OK))
                     {
 
+                    }
+
+                    if (afterReceive != null)
+                    {
+                        afterReceive();
+                        afterReceive = null;
                     }
 
                     // Signal that all bytes have been received.  
@@ -238,17 +234,17 @@ namespace Department
 
         public void UpdateSecondaryTicketsFile()
         {
+            FileStream fs;
+
             // Create a file to write to.
             if (!File.Exists(ticketFilePath))
-            {
-                File.Create(ticketFilePath);
-            }
+                fs = File.Create(ticketFilePath);
+            else
+                fs = File.Open(ticketFilePath, FileMode.Truncate);
 
-            using (FileStream fs = File.Open(ticketFilePath, FileMode.Truncate))
-            {
-                byte[] stream = Encoding.Unicode.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(secondaryTickets));
-                fs.Write(stream, 0, stream.Length);
-            }
+            byte[] stream = Encoding.Unicode.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(secondaryTickets));
+            fs.Write(stream, 0, stream.Length);
+            fs.Close();
         }
 
         public void GetSecondaryTicketsFile()

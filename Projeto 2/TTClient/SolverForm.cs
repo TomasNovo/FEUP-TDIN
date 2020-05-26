@@ -12,6 +12,7 @@ namespace TTClient
     {
         TTProxy proxy;
         DataTable users;
+        List<List<string>> answers;
         int state = 0; // 0 = login // 1 = ?
         string username;
         MailTicket m = null;
@@ -467,6 +468,8 @@ namespace TTClient
             state = 1;
             UpdateByState();
 
+            StartSecondaryTicketsPolling();
+
             label1.Text = $"Welcome, {username} !";
         }
 
@@ -626,6 +629,86 @@ namespace TTClient
 
             TicketInfo box = new TicketInfo(id, username, date, title, description);
             box.Show();
+        }
+
+        private void StartSecondaryTicketsPolling()
+        {
+            System.Timers.Timer timer = new System.Timers.Timer();
+            timer.Interval = 1000;
+
+            timer.Elapsed += PollingEvent;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+        }
+
+        private void PollingEvent(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            DataTable dt = proxy.GetSecondaryTicketsBySolver(username);
+            List<List<string>> newAnswers = new List<List<string>>();
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                object[] row = dt.Rows[i].ItemArray;
+                List<string> newList = new List<string>();
+
+                for (int j = 0; j < row.Length; j++)
+                {
+                    string value = "";
+                    try
+                    {
+                        value = (string)row[j];
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
+
+                    if (dt.Columns[j].ColumnName.StartsWith("answer"))
+                    {
+                        newList.Add(value);
+                    }
+                }
+
+                newAnswers.Add(newList);
+            }
+
+            // Compare 
+            bool leave = false;
+            if (answers != null)
+            {
+                for (int i = 0; i < answers.Count && i < newAnswers.Count ; i++)
+                {
+                    for (int j = 0; j < answers[i].Count && j < newAnswers[i].Count; j++)
+                    {
+                        if (answers[i][j] != newAnswers[i][j])
+                        {
+                            InvokeIfRequired(() => 
+                            {
+                                CustomOkMessageBox box = new CustomOkMessageBox($"The secondary ticket \n'{dt.Rows[i][0]}'\n has been answered !");
+                                box.Show();
+                            });
+
+                            leave = true;
+                            break;
+                        }
+                    }
+
+                    if (leave)
+                        break;
+                }
+            }
+
+            answers = newAnswers;
+        }
+
+        private delegate void MainThreadCode();
+
+        private void InvokeIfRequired(MainThreadCode code)
+        {
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { code(); });
+            else
+                code();
         }
 
     }

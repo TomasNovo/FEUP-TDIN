@@ -38,9 +38,10 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(179, -4);
+            this.pictureBox1.Location = new System.Drawing.Point(99, -3);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(206, 192);
+            this.pictureBox1.Size = new System.Drawing.Size(137, 125);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
@@ -49,9 +50,10 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(64, 199);
+            this.label1.Location = new System.Drawing.Point(43, 127);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 25);
+            this.label1.Size = new System.Drawing.Size(46, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
             // 
@@ -60,9 +62,10 @@
             this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(26)))), ((int)(((byte)(27)))));
             this.button3.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
             this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(179, 250);
+            this.button3.Location = new System.Drawing.Point(119, 181);
+            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(124, 35);
+            this.button3.Size = new System.Drawing.Size(83, 23);
             this.button3.TabIndex = 6;
             this.button3.Text = "Ok";
             this.button3.UseVisualStyleBackColor = false;
@@ -70,13 +73,14 @@
             // 
             // CustomOkMessageBox
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(64)))), ((int)(((byte)(67)))));
-            this.ClientSize = new System.Drawing.Size(499, 328);
+            this.ClientSize = new System.Drawing.Size(333, 213);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.pictureBox1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "CustomOkMessageBox";
             this.Text = "CustomOkMessageBox";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

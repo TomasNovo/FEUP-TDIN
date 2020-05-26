@@ -82,6 +82,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SolverForm.resx">
+      <DependentUpon>SolverForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TicketInfo.resx">
       <DependentUpon>TicketInfo.cs</DependentUpon>
     </EmbeddedResource>

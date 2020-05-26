@@ -36,8 +36,8 @@ namespace TTService
             {
                 SecondaryTicket ticket = tickets[i];
 
-                if (!ticket.received)
-                    Console.WriteLine(AddSecondaryTicket(ticket));
+                //if (!ticket.received)
+                    AddSecondaryTicket(ticket);
             }
         }
 
@@ -82,19 +82,14 @@ namespace TTService
         {
             try
             {
-                // Establish the local endpoint for the socket.  
-                // The DNS name of the computer  
-                // running the listener is "host.contoso.com".
-
-                // Bind the socket to the local endpoint and listen for incoming connections.  
-
                 IPAddress ipAddress = IPAddress.Parse(GetLocalIPAddress());
-                int port = new Random().Next(SocketConstants.lowerPortBound, SocketConstants.higherPortBound);
+                //int port = new Random().Next(SocketConstants.lowerPortBound, SocketConstants.higherPortBound);
+                int port = SocketConstants.port;
 
                 Console.WriteLine($"Port: {port}");
                 IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
 
-                // Create a TCP/IP socket.  
+                // Create a TCP/IP socket.
                 Socket listener = new Socket(ipAddress.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
 
@@ -106,7 +101,7 @@ namespace TTService
                     // Set the event to nonsignaled state.  
                     allDone.Reset();
 
-                    // Start an asynchronous socket to listen for connections.  
+                    // Start an asynchronous socket to listen for connections.
                     Console.WriteLine("Waiting for a connection...");
                     listener.BeginAccept(
                         new AsyncCallback(AcceptCallback),
@@ -236,8 +231,6 @@ namespace TTService
 
             string jsonString = $"SECONDARYTICKETS {Newtonsoft.Json.JsonConvert.SerializeObject(departmentTickets)}";
          
-            secondaryTickets.TryRemove(departmentId, out List<SecondaryTicket> foobar);
-
             Send(handler, jsonString);
         }
 

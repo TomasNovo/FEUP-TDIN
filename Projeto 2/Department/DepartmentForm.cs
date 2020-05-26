@@ -14,7 +14,6 @@ namespace Department
 {
     public partial class DepartmentForm : Form
     {
-        TTProxy proxy;
         int state = 0;
         string username;
         string department;
@@ -25,9 +24,6 @@ namespace Department
         public DepartmentForm()
         {
             InitializeComponent();
-
-            proxy = new TTProxy();
-            proxy.Ping();
 
             panel3.AutoScroll = false;
             panel3.HorizontalScroll.Enabled = false;
@@ -168,7 +164,6 @@ namespace Department
             department = textBox2.Text;
 
             socketClient = new DepartmentSocketClient(department);
-            socketClient.StartClient($"{SocketConstants.ID} {department}");
 
             label4.Text += username;
             label2.Text += department;
@@ -190,51 +185,72 @@ namespace Department
                 selected(button7);
                 position(button7);
 
-                GetSecondaryTicketsFromSocket();
+                socketClient.StartClient($"{SocketConstants.ID} {department}", () =>
+                {
+                    InvokeIfRequired(() =>
+                    {
+                        GetSecondaryTicketsFromSocket();
+                        UpdateByState();
+                    });
+                });
 
-                UpdateByState();
             }
         }
 
         public void GetSecondaryTicketsFromSocket()
         {
-            tickets = new DataTable("secondaryTickets");
-
-            tickets.Columns.Add("id");
-            tickets.Columns.Add("originalticketId");
-            tickets.Columns.Add("solver");
-            tickets.Columns.Add("secondarysolver");
-            tickets.Columns.Add("date");
-            tickets.Columns.Add("title");
-
-            for (int i = 0; i < socketClient.secondaryTickets.Count; i++)
+            InvokeIfRequired(() =>
             {
-                SecondaryTicket ticket = socketClient.secondaryTickets[i];
+                tickets = new DataTable("secondaryTickets");
 
-                List<string> arr = new List<string>();
-                arr.Add(ticket.Id.ToString());
-                arr.Add(ticket.originalTicketId.ToString());
-                arr.Add(ticket.solver);
-                arr.Add(ticket.secondarySolver);
-                arr.Add(ticket.date.ToString());
-                arr.Add(ticket.title);
+                tickets.Columns.Add("id");
+                tickets.Columns.Add("originalticketId");
+                tickets.Columns.Add("solver");
+                tickets.Columns.Add("secondarysolver");
+                tickets.Columns.Add("date");
+                tickets.Columns.Add("title");
 
-                for (int u = 0; u < ticket.questions.Count; u++)
+                for (int i = 0; i < socketClient.secondaryTickets.Count; i++)
                 {
-                    if (!tickets.Columns.Contains("question:" + u))
-                        tickets.Columns.Add("question:" + u);
+                    SecondaryTicket ticket = socketClient.secondaryTickets[i];
 
-                    if (!tickets.Columns.Contains("answers: " + u))
-                        tickets.Columns.Add("answers: " + u);
+                    List<string> arr = new List<string>();
+                    arr.Add(ticket.Id.ToString());
+                    arr.Add(ticket.originalTicketId.ToString());
+                    arr.Add(ticket.solver);
+                    arr.Add(ticket.secondarySolver);
+                    arr.Add(ticket.date.ToString());
+                    arr.Add(ticket.title);
 
-                    arr.Add(ticket.questions[u]);
-                    arr.Add(ticket.answers[u]);
+                    for (int u = 0; u < ticket.questions.Count; u++)
+                    {
+                        if (!tickets.Columns.Contains("question:" + u))
+                            tickets.Columns.Add("question:" + u);
+
+                        if (!tickets.Columns.Contains("answers: " + u))
+                            tickets.Columns.Add("answers: " + u);
+
+                        arr.Add(ticket.questions[u]);
+                        arr.Add(ticket.answers[u]);
+                    }
+
+                    tickets.Rows.Add(arr.ToArray());
                 }
 
-                tickets.Rows.Add(arr.ToArray());
-            }
+                dataGridView2.DataSource = tickets;
+            });
 
-            dataGridView2.DataSource = tickets;
+           
+        }
+
+        private delegate void MainThreadCode();
+
+        private void InvokeIfRequired(MainThreadCode code)
+        {
+            if (InvokeRequired)
+                BeginInvoke((MethodInvoker)delegate { code(); });
+            else
+                code();
         }
 
         // ticket talks
@@ -266,19 +282,17 @@ namespace Department
                     List<string> q = st.questions;
                     List<string> a = st.answers;
 
-                    q.Reverse();
-                    a.Reverse();
-
                     string question = Convert.ToString(selectedRow.Cells["solver"].Value);
 
                     label7.Text = "Ticket ID: " + id;
                     label5.Text = "Ticket Title: " + title;
                     textBox4.Text = "";
 
-                    q.Reverse();
-                    a.Reverse();
+                    //q.Reverse();
+                    //a.Reverse();
 
                     // Chat
+                    this.panel3.Controls.Clear();
                     for (int i = 0; i < q.Count; i++)
                     {
                         TextBox temp = new TextBox();
@@ -327,18 +341,26 @@ namespace Department
 
             string response = textBox4.Text;
 
-            socketClient.StartClient($"{SocketConstants.ANSWER} {id} {response}");
+            socketClient.StartClient($"{SocketConstants.ANSWER} {id} {response}", () => 
+            {
+                InvokeIfRequired(() =>
+                {
+                    List<SecondaryTicket> tickets = socketClient.secondaryTickets;
+                    int index = tickets.FindIndex(x => x.Id.ToString() == id);
 
-            List<SecondaryTicket> tickets = socketClient.secondaryTickets;
-            int index = tickets.FindIndex(x => x.Id.ToString() == id);
+                    if (index != -1)
+                        tickets[index].answers[tickets[index].answers.Count - 1] = response;
 
-            if (index != -1)
-                tickets[index].answers[tickets[index].answers.Count - 1] = response;
+                    socketClient.UpdateSecondaryTicketsFile();
 
-            CustomOkMessageBox box = new CustomOkMessageBox("Answer submitted with success");
-            box.Show();
+                    CustomOkMessageBox box = new CustomOkMessageBox("Answer submitted with success");
+                    box.Show();
 
-            button10_Click(this, EventArgs.Empty);
+                    button10_Click(this, EventArgs.Empty);
+                });
+            }
+            );
+            
         }
 
         // Ticket info

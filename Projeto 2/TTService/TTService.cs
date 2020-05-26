@@ -166,7 +166,7 @@ namespace TTService
 
             db.ChangeTicketStatus(originalTicketId, TicketStatus.WaitingForAnswers);
 
-            //secondaryTickets.Enqueue(st);
+            departmentQueue.FetchSecondaryTickets();
 
             return 0;
         }
@@ -177,7 +177,7 @@ namespace TTService
 
             db.ChangeTicketStatus(originalTicketId, TicketStatus.WaitingForAnswers);
 
-            //secondaryTickets.Enqueue(st);
+            departmentQueue.FetchSecondaryTickets();
 
             return 0;
         }

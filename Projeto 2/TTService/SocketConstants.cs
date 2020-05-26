@@ -16,8 +16,6 @@ namespace TTService
         public static readonly string ANSWER = "ANSWER";
         public static readonly string ID = "ID";
 
-        public static readonly int lowerPortBound = 30000;
-        public static readonly int higherPortBound = 31000;
-
+        public static readonly int port = 5001;
     }
 }
