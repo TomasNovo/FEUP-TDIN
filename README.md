@@ -10,13 +10,13 @@ More info of this project can found [here](https://github.com/TomasNovo/FEUP-TDI
 ### Interfaces 
 
 #### Register
-![register](https://github.com/TomasNovo/FEUP-PLOG1819/blob/master/docs/prints/register.png)  
+![register](https://github.com/TomasNovo/FEUP-TDIN/blob/master/docs/prints/register.png)  
 
 #### Login
-![login](https://github.com/TomasNovo/FEUP-PLOG1819/blob/master/docs/prints/login.png)  
+![login](https://github.com/TomasNovo/FEUP-TDIN/blob/master/docs/prints/login.png)  
 
 #### Index
-![index](https://github.com/TomasNovo/FEUP-PLOG1819/blob/master/docs/prints/index.png)  
+![index](https://github.com/TomasNovo/FEUP-TDIN/blob/master/docs/prints/index.png)  
 
 #### Chat
-![chat](https://github.com/TomasNovo/FEUP-PLOG1819/blob/master/docs/prints/chat.png)  
+![chat](https://github.com/TomasNovo/FEUP-TDIN/blob/master/docs/prints/chat.png)  
