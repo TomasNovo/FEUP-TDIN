@@ -20,3 +20,34 @@ More info of this project can found [here](https://github.com/TomasNovo/FEUP-TDI
 
 #### Chat
 ![chat](https://github.com/TomasNovo/FEUP-TDIN/blob/master/ChatApp/docs/prints/chat.png)  
+
+## 2. Project 2 - TicketFactory
+
+For this project, we developed an enterprise distributed system where workers submit trouble tickets in a Web App and solvers assign to themselves some tickets with the objective of solving it. Solvers can view all tickets (by id, by user or by unassigned tickets) and can self assign some of them. If the solvers have doubts while solving the ticket, they can ask questions as secondary tickets to a secondary department. After the response from a member of other department or in case of no doubts, the solver can solve the ticket by sending an email to the worker that submitted the trouble ticket.
+
+#### Worker: Trouble Ticket Submission
+![submission](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/submission.png)
+
+#### Solver: Auth
+![solver1](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/solver1.png)  
+
+#### Solver: View Tickets
+![solver2](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/solver2.png)  
+
+#### Worker: View Ticket Info
+![ticket](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/ticket.png)
+
+#### Solver: Secondary Ticket Submission
+![solver3](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/solver3.png)  
+
+#### Solver: Trouble Ticket Resolution
+![solver4](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/solver4.png)  
+
+#### Department: Auth
+![dep1](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/dep1.png)  
+
+#### Department: View Secondary Tickets 
+![dep2](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/dep2.png)  
+
+#### Department: Secondary Ticket Resolution 
+![dep3](https://github.com/TomasNovo/FEUP-TDIN/blob/master/TicketFactory/docs/prints/dep3.png)  
